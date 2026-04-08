@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apprends Python de A à Z — 48 leçons interactives, éditeur de code intégré, système de progression et projets pratiques.">
+<meta name="theme-color" content="#7c3aed">
+<meta property="og:title" content="PyLearn — Apprends Python de A à Z">
+<meta property="og:description" content="48 leçons interactives pour maîtriser Python du niveau débutant à expert.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
 <title>PyLearn — Apprends Python de A à Z</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -771,14 +777,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);min-he
     <h1 class="brand-heading">Apprends Python<br>de A à Z</h1>
     <p class="brand-sub">24 leçons interactives pour maîtriser Python du niveau débutant à expert, avec un éditeur de code et une console intégrés.</p>
     <div class="brand-features">
-      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">library_books</span></div><span>24 leçons structurées en 8 modules</span></div>
+      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">library_books</span></div><span>48 leçons complètes en 11 modules</span></div>
       <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">code</span></div><span>Éditeur de code avec coloration syntaxique</span></div>
       <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span></div><span>Suivi de progression et série quotidienne</span></div>
       <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">emoji_events</span></div><span>Succès, XP et niveaux à débloquer</span></div>
     </div>
-    <div class="brand-stats">
-      <div><div class="brand-stat-val">24</div><div class="brand-stat-lbl">Leçons</div></div>
-      <div><div class="brand-stat-val">8</div><div class="brand-stat-lbl">Modules</div></div>
+      <div class="brand-stats">
+      <div><div class="brand-stat-val">48</div><div class="brand-stat-lbl">Leçons</div></div>
+      <div><div class="brand-stat-val">11</div><div class="brand-stat-lbl">Modules</div></div>
       <div><div class="brand-stat-val">∞</div><div class="brand-stat-lbl">Pratique</div></div>
     </div>
   </div>
@@ -915,7 +921,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);min-he
     <section class="page" id="page-courses">
       <div class="courses-top">
         <h1 class="courses-h"><span class="material-symbols-rounded" style="font-size:1.5rem;vertical-align:middle;margin-right:8px;color:var(--p4)">school</span>Cours Python</h1>
-        <p class="courses-sub">Maîtrise Python de A à Z — 24 leçons en 8 modules</p>
+        <p class="courses-sub">Maîtrise Python de A à Z — 48 leçons en 11 modules</p>
       </div>
       <div id="coursesMods"></div>
       <div class="btm-spacer"></div>
@@ -1702,6 +1708,252 @@ Les principales :<br>
          {kw:'__mul__(self, n)',desc:"Définit *. __rmul__ pour n * v (ordre inversé). Similaire pour - (__sub__), / (__truediv__), etc."},
          {kw:'__eq__(self, autre)',desc:"Définit ==. Sans __eq__, Python compare les identités des objets (référence mémoire), pas les valeurs."},
          {kw:'__len__(self)',desc:"Définit len(obj). Doit retourner un entier. Utilisé aussi par bool(obj) — False si len == 0."}]}
+    ]},
+    {id:'p4',title:'@property — Encapsulation et Validation',xp:85,steps:[
+      {type:'theory',heading:'🔐 Contrôler l\'accès aux attributs',
+       html:`L'<strong>encapsulation</strong> protège les données internes d'une classe. En Python, la convention :<br><br>
+• <code>attribut</code> — public (accessible partout)<br>
+• <code>_attribut</code> — "protégé" (convention : ne pas y toucher de l'extérieur)<br>
+• <code>__attribut</code> — "privé" (name mangling : Python renomme en <code>_Classe__attribut</code>)<br><br>
+Le décorateur <code>@property</code> permet de créer des <strong>propriétés calculées</strong> et des <strong>validateurs</strong> qui ressemblent à de simples attributs — l'API reste identique.`,
+       box:{type:'tip',label:'💡 Approche pythonique',text:'En Python, ne crée PAS de getAge()/setAge() dès le début. Commence avec un attribut simple. Si tu as besoin de validation plus tard, convertis-le en @property — l\'API extérieure ne change pas du tout !'}},
+      {type:'code',heading:'🔐 @property, getters, setters et propriétés calculées',
+       desc:'Ajoutons de la validation et des propriétés dérivées à nos classes :',
+       code:`class Temperature:\n    """Conversion automatique Celsius ↔ Fahrenheit ↔ Kelvin."""\n\n    def __init__(self, celsius=20):\n        self.celsius = celsius  # Appelle le setter !\n\n    @property\n    def celsius(self):\n        return self._celsius\n\n    @celsius.setter\n    def celsius(self, valeur):\n        if valeur < -273.15:\n            raise ValueError(f"Impossible: {valeur}°C (< zéro absolu)")\n        self._celsius = round(valeur, 2)\n\n    @property\n    def fahrenheit(self):           # Propriété calculée (read-only)\n        return round(self._celsius * 9/5 + 32, 2)\n\n    @property\n    def kelvin(self):\n        return round(self._celsius + 273.15, 2)\n\n    def __repr__(self):\n        return f"{self._celsius}°C = {self.fahrenheit}°F = {self.kelvin}K"\n\nt = Temperature(100)\nprint(f"Eau bouillante : {t}")\nt.celsius = -40\nprint(f"Même en F et C : {t}")\ntry:\n    t.celsius = -300\nexcept ValueError as e:\n    print(f"Erreur: {e}")\n\n# Classe Personne avec validation complète\nclass Personne:\n    def __init__(self, nom, age, email):\n        self.nom   = nom\n        self.age   = age\n        self.email = email\n\n    @property\n    def nom(self): return self.__nom\n    @nom.setter\n    def nom(self, v):\n        if not isinstance(v, str) or not v.strip():\n            raise ValueError("Nom invalide")\n        self.__nom = v.strip().title()\n\n    @property\n    def age(self): return self.__age\n    @age.setter\n    def age(self, v):\n        if not isinstance(v, int) or not 0 <= v <= 150:\n            raise ValueError(f"Age invalide: {v}")\n        self.__age = v\n\n    @property\n    def email(self): return self.__email\n    @email.setter\n    def email(self, v):\n        import re\n        if not re.match(r"[^@]+@[^@]+\\.[^@]+", v):\n            raise ValueError(f"Email invalide: {v}")\n        self.__email = v.lower()\n\n    @property\n    def est_majeur(self):  # Propriété dérivée\n        return self.__age >= 18\n\n    def __repr__(self):\n        statut = "majeur" if self.est_majeur else "mineur"\n        return f"Personne({self.nom}, {self.age} ans, {statut})"\n\np = Personne("alice DUPONT", 25, "Alice@Example.COM")\nprint(f"\\n{p}")\nprint(f"Email normalisé: {p.email}")`,
+       output:`Eau bouillante : 100°C = 212.0°F = 373.15K\nMême en F et C : -40°C = -40.0°F = 233.15K\nErreur: Impossible: -300°C (< zéro absolu)\n\nPersonne(Alice Dupont, 25 ans, majeur)\nEmail normalisé: alice@example.com`,
+       explains:[
+         {kw:'@property',desc:"Transforme une méthode en attribut calculé (getter). Appel : obj.celsius (sans parenthèses)."},
+         {kw:'@celsius.setter',desc:"Définit le code exécuté lors de obj.celsius = valeur. Permet validation, transformation, effets de bord."},
+         {kw:'self.celsius = v dans __init__',desc:"Utilise le setter (pas d'underscore) pour que la validation soit appliquée dès la construction."},
+         {kw:'__attribut',desc:"Double underscore : name mangling. Python renomme en _Classe__attribut. Vraiment difficile d'accéder de l'extérieur."},
+         {kw:'Propriété calculée',desc:"@property sans setter = read-only. Calculée à la volée à partir d'autres attributs. Toujours à jour."}]}
+    ]},
+    {id:'p5',title:'Dataclasses & Classes Abstraites',xp:90,steps:[
+      {type:'theory',heading:'🏭 Structures modernes de données en Python',
+       html:`Le décorateur <code>@dataclass</code> (Python 3.7+) génère automatiquement <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code> et bien d'autres méthodes, éliminant le code répétitif.<br><br>
+Les <strong>classes abstraites</strong> (ABC) définissent des <strong>contrats/interfaces</strong> :<br>
+• Une classe héritant de <code>ABC</code> ne peut pas être instanciée directement<br>
+• Les méthodes <code>@abstractmethod</code> DOIVENT être implémentées par les sous-classes<br>
+• Garantit une cohérence dans les hiérarchies de classes`,
+       box:{type:'info',label:'📌 Quand utiliser quoi ?',text:'@dataclass = conteneur de données structurées (Point, Config, Produit, Résultat). ABC = interface/contrat (Forme → Cercle/Rectangle, Animal → Chien/Chat). Les deux peuvent être combinés : @dataclass + ABC.'}},
+      {type:'code',heading:'🏭 @dataclass et ABC — code moderne et propre',
+       desc:'Deux outils qui éliminent le boilerplate et garantissent la cohérence :',
+       code:`from dataclasses import dataclass, field\nfrom abc import ABC, abstractmethod\nimport math\n\n# === DATACLASS ===\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def distance_origine(self) -> float:\n        return math.sqrt(self.x**2 + self.y**2)\n\n    def distance(self, autre: 'Point') -> float:\n        return math.sqrt((self.x-autre.x)**2 + (self.y-autre.y)**2)\n\n@dataclass(order=True)  # Permet <, >, <=, >=\nclass Produit:\n    prix: float          # Clé de tri (1er champ)\n    nom:  str\n    stock: int = 0\n    tags: list = field(default_factory=list)  # Jamais list=[]\n\np1, p2 = Point(3, 4), Point(0, 0)\nprint(f"Points   : {p1} et {p2}")\nprint(f"Distance : {p1.distance(p2):.1f}")\nprint(f"p1 == p2 : {p1 == p2}\\n")  # __eq__ auto !\n\nproduits = [Produit(59.99,"Clavier"), Produit(29.99,"Souris"), Produit(349.99,"Écran",3)]\nprint("Triés par prix:", sorted(produits))\n\n# === CLASSE ABSTRAITE (ABC) ===\nclass Forme(ABC):\n    @abstractmethod\n    def aire(self) -> float: ...\n\n    @abstractmethod\n    def perimetre(self) -> float: ...\n\n    def description(self) -> str:\n        return f"{type(self).__name__:<12} | Aire: {self.aire():>8.3f} | Périmètre: {self.perimetre():.3f}"\n\nclass Cercle(Forme):\n    def __init__(self, r): self.r = r\n    def aire(self): return math.pi * self.r**2\n    def perimetre(self): return 2 * math.pi * self.r\n\nclass Rectangle(Forme):\n    def __init__(self, l, h): self.l, self.h = l, h\n    def aire(self): return self.l * self.h\n    def perimetre(self): return 2*(self.l+self.h)\n\nclass Triangle(Forme):\n    def __init__(self, a, b, c): self.a, self.b, self.c = a, b, c\n    def aire(self):\n        s = (self.a+self.b+self.c)/2\n        return math.sqrt(s*(s-self.a)*(s-self.b)*(s-self.c))\n    def perimetre(self): return self.a+self.b+self.c\n\nprint()\nfor f in [Cercle(5), Rectangle(4,6), Triangle(3,4,5)]:\n    print(" ", f.description())`,
+       output:`Points   : Point(x=3, y=4) et Point(x=0, y=0)\nDistance : 5.0\np1 == p2 : False\n\nTriés par prix: [Produit(prix=29.99, nom='Souris', ...), Produit(prix=59.99, ...), Produit(prix=349.99, ...)]\n\n  Cercle       | Aire:   78.540 | Périmètre: 31.416\n  Rectangle    | Aire:   24.000 | Périmètre: 20.000\n  Triangle     | Aire:    6.000 | Périmètre: 12.000`,
+       explains:[
+         {kw:'@dataclass',desc:"Génère __init__, __repr__, __eq__ automatiquement. Gain de temps énorme et moins d'erreurs. Python 3.7+."},
+         {kw:'x: float',desc:"Annotation de type — requise par @dataclass. Sert de documentation et d'aide à l'IDE. Non vérifiée à l'exécution."},
+         {kw:'field(default_factory=list)',desc:"Pour les valeurs par défaut mutables. JAMAIS tags: list = [] — cette liste serait partagée entre TOUTES les instances !"},
+         {kw:'@dataclass(order=True)',desc:"Génère __lt__, __le__, __gt__, __ge__ basés sur l'ordre des champs. Permet sorted() et comparaisons."},
+         {kw:'class X(ABC):',desc:"Classe abstraite — ne peut pas être instanciée directement. Définit un contrat pour toutes les sous-classes."},
+         {kw:'@abstractmethod',desc:"Méthode obligatoire. Toute sous-classe qui ne l'implémente pas lèvera TypeError à l'instanciation."}]}
+    ]}
+  ]},
+
+  algo:{title:'Algorithmique & Récursivité',icon:'🧮',color:'#5b21b6',bg:'rgba(91,33,182,.15)',lessons:[
+    {id:'al1',title:'La Récursivité',xp:85,steps:[
+      {type:'theory',heading:'🔁 Fonctions qui s\'appellent elles-mêmes',
+       html:`Une fonction <strong>récursive</strong> s'appelle elle-même pour résoudre un problème en le décomposant en sous-problèmes plus simples.<br><br>
+Toute récursion nécessite :<br>
+• Un <strong>cas de base</strong> — condition d'arrêt (sinon : récursion infinie !)<br>
+• Un <strong>cas récursif</strong> — l'appel vers un problème plus petit<br><br>
+La récursion est élégante pour les problèmes naturellement récursifs : arbres, fractales, algorithmes "diviser pour régner".`,
+       box:{type:'warning',label:'⚠️ Limite de récursion',text:'Python limite la profondeur à ~1000 appels par défaut (sys.getrecursionlimit()). Au-delà : RecursionError. Pour les grandes profondeurs, préfère une boucle itérative. La récursion a aussi un surcoût mémoire (stack).'}},
+      {type:'code',heading:'🔁 Récursion — exemples classiques et avancés',
+       desc:'Les algorithmes récursifs sont souvent plus lisibles que leurs équivalents itératifs :',
+       code:`# Factorielle — classique\ndef factorielle(n):\n    if n <= 1: return 1          # Cas de base\n    return n * factorielle(n-1)  # Cas récursif\n\nfor i in [0, 1, 5, 10]:\n    print(f"  {i}! = {factorielle(i):,}")\n\n# Fibonacci avec mémoïsation\nfrom functools import lru_cache\n\n@lru_cache(maxsize=None)  # Cache les résultats !\ndef fibonacci(n):\n    if n < 2: return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(f"\\nFibonacci(30) = {fibonacci(30):,}")\nprint(f"Fibonacci(50) = {fibonacci(50):,}")\n\n# Tour de Hanoï\ndef hanoi(n, source, cible, auxiliaire):\n    if n == 1:\n        print(f"  Déplace disque 1 : {source} → {cible}")\n        return\n    hanoi(n-1, source, auxiliaire, cible)\n    print(f"  Déplace disque {n} : {source} → {cible}")\n    hanoi(n-1, auxiliaire, cible, source)\n\nprint("\\nTour de Hanoï (3 disques):")\nhanoi(3, "A", "C", "B")\n\n# Parcours d'une structure imbriquée\ndef aplatir(lst):\n    """Aplatit une liste imbriquée arbitrairement."""\n    resultat = []\n    for elem in lst:\n        if isinstance(elem, list):\n            resultat.extend(aplatir(elem))  # Récursion !\n        else:\n            resultat.append(elem)\n    return resultat\n\nimbrique = [1, [2, 3], [4, [5, [6, 7]]], 8]\nprint(f"\\nImbriqué : {imbrique}")\nprint(f"Aplati   : {aplatir(imbrique)}")`,
+       output:`  0! = 1\n  1! = 1\n  5! = 120\n  10! = 3,628,800\n\nFibonacci(30) = 832,040\nFibonacci(50) = 12,586,269,025\n\nTour de Hanoï (3 disques):\n  Déplace disque 1 : A → C\n  Déplace disque 2 : A → B\n  Déplace disque 1 : C → B\n  Déplace disque 3 : A → C\n  Déplace disque 1 : B → A\n  Déplace disque 2 : B → C\n  Déplace disque 1 : A → C\n\nImbriqué : [1, [2, 3], [4, [5, [6, 7]]], 8]\nAplati   : [1, 2, 3, 4, 5, 6, 7, 8]`,
+       explains:[
+         {kw:'if n <= 1: return 1',desc:"Cas de base — condition d'arrêt. OBLIGATOIRE sinon récursion infinie → RecursionError."},
+         {kw:'@lru_cache',desc:"Mémoïsation automatique : cache les résultats déjà calculés. fibonacci(50) sans cache = 2^50 appels. Avec cache = 50 appels !"},
+         {kw:'functools.lru_cache',desc:"LRU = Least Recently Used. Garde les N derniers résultats en mémoire. maxsize=None = cache illimité."},
+         {kw:'isinstance(elem, list)',desc:"Vérifie si elem est une liste (et donc doit être aplati). La récursion permet de gérer n'importe quelle profondeur."},
+         {kw:'resultat.extend()',desc:"extend() ajoute tous les éléments d'un itérable. Plus efficace que append() pour ajouter une liste."}]}
+    ]},
+    {id:'al2',title:'Algorithmes de Tri',xp:80,steps:[
+      {type:'theory',heading:'📊 Comprendre les algorithmes de tri',
+       html:`Comprendre les algorithmes de tri est fondamental en informatique. Chacun a ses forces et ses faiblesses selon le contexte.<br><br>
+Algorithmes de base :<br>
+• <strong>Tri à bulles</strong> — simple mais O(n²) — pédagogique uniquement<br>
+• <strong>Tri par sélection</strong> — O(n²) — simple, peu d'échanges<br>
+• <strong>Tri par insertion</strong> — O(n²) mais rapide pour presque-trié<br>
+• <strong>Tri rapide (quicksort)</strong> — O(n log n) en moyenne<br>
+• <strong>Tri fusion (mergesort)</strong> — O(n log n) garanti<br><br>
+En pratique : <code>list.sort()</code> et <code>sorted()</code> de Python utilisent <strong>Timsort</strong>, un algorithme hybride très optimisé.`,
+       box:{type:'info',label:'📌 Complexité temporelle',text:'O(n²) = temps quadratique (très lent pour grandes données). O(n log n) = bien meilleur. Pour 1 million d\'éléments : O(n²) = 1 billion d\'opérations, O(n log n) ≈ 20 millions. Énorme différence !'}},
+      {type:'code',heading:'📊 Implémenter et comparer les algorithmes',
+       desc:'Implémentons les algorithmes et comparons leurs performances :',
+       code:`import time, random\n\n# Tri à bulles\ndef tri_bulles(lst):\n    arr = lst[:]\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\n# Tri par insertion\ndef tri_insertion(lst):\n    arr = lst[:]\n    for i in range(1, len(arr)):\n        cle = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > cle:\n            arr[j+1] = arr[j]\n            j -= 1\n        arr[j+1] = cle\n    return arr\n\n# Tri fusion (merge sort)\ndef tri_fusion(lst):\n    if len(lst) <= 1: return lst[:]\n    mid = len(lst) // 2\n    gauche = tri_fusion(lst[:mid])\n    droite = tri_fusion(lst[mid:])\n    # Fusionner les deux moitiés triées\n    resultat, i, j = [], 0, 0\n    while i < len(gauche) and j < len(droite):\n        if gauche[i] <= droite[j]: resultat.append(gauche[i]); i += 1\n        else: resultat.append(droite[j]); j += 1\n    return resultat + gauche[i:] + droite[j:]\n\n# Test\ndata = [64, 34, 25, 12, 22, 11, 90, 5, 41, 7]\nprint("Original :", data)\nprint("Bulles   :", tri_bulles(data))\nprint("Insertion:", tri_insertion(data))\nprint("Fusion   :", tri_fusion(data))\nprint("Python   :", sorted(data))\n\n# Benchmark\nrandom.seed(42)\nn = 2000\ngrand = [random.randint(1, 10000) for _ in range(n)]\n\ndef mesurer(nom, fn, data):\n    debut = time.perf_counter()\n    fn(data)\n    return f"{nom:<12}: {(time.perf_counter()-debut)*1000:.2f}ms"\n\nprint(f"\\n=== Benchmark ({n} éléments) ===")\nprint(mesurer("Bulles",    tri_bulles,    grand))\nprint(mesurer("Insertion", tri_insertion, grand))\nprint(mesurer("Fusion",    tri_fusion,    grand))\nprint(mesurer("Python",    sorted,        grand))`,
+       output:`Original : [64, 34, 25, 12, 22, 11, 90, 5, 41, 7]\nBulles   : [5, 7, 11, 12, 22, 25, 34, 41, 64, 90]\nInsertion: [5, 7, 11, 12, 22, 25, 34, 41, 64, 90]\nFusion   : [5, 7, 11, 12, 22, 25, 34, 41, 64, 90]\nPython   : [5, 7, 11, 12, 22, 25, 34, 41, 64, 90]\n\n=== Benchmark (2000 éléments) ===\nBulles      : 248.30ms\nInsertion   : 89.15ms\nFusion      : 4.20ms\nPython      : 0.15ms`,
+       explains:[
+         {kw:'arr = lst[:]',desc:"Crée une copie de la liste pour ne pas modifier l'originale. Toujours faire ça dans les fonctions de tri."},
+         {kw:'arr[j], arr[j+1] = arr[j+1], arr[j]',desc:"Échange de deux éléments en une ligne — idiome Python élégant. Pas besoin de variable temporaire."},
+         {kw:'O(n²) vs O(n log n)',desc:"Tri à bulles/insertion = O(n²). Fusion/quicksort = O(n log n). Pour 2000 éléments : 248ms vs 4ms. Massif !"},
+         {kw:'sorted()',desc:"La fonction sort intégrée de Python utilise Timsort — O(n log n) garanti, optimisé en C. Toujours plus rapide que nos implémentations."},
+         {kw:'Diviser pour régner',desc:"Merge sort divise en deux moitiés, trie chacune récursivement, puis fusionne. Paradigme fondamental en algorithmique."}]}
+    ]},
+    {id:'al3',title:'Recherche et Structures de Données',xp:80,steps:[
+      {type:'theory',heading:'🔎 Trouver des données efficacement',
+       html:`La façon dont tu cherches des données est aussi importante que la façon dont tu les stockes.<br><br>
+<strong>Algorithmes de recherche :</strong><br>
+• <strong>Recherche linéaire</strong> — O(n) — parcourt tout<br>
+• <strong>Recherche binaire</strong> — O(log n) — nécessite une liste triée<br><br>
+<strong>Structures de données :</strong><br>
+• <strong>Pile (Stack)</strong> — LIFO (dernier entré, premier sorti)<br>
+• <strong>File (Queue)</strong> — FIFO (premier entré, premier sorti)<br>
+• <strong>Dict/HashTable</strong> — O(1) pour chercher, insérer, supprimer<br><br>
+<strong>Complexité :</strong> O(1) constant &lt; O(log n) logarithmique &lt; O(n) linéaire &lt; O(n²) quadratique`,
+       box:{type:'tip',label:'💡 Recherche binaire',text:'La recherche binaire est 1000x plus rapide qu\'une recherche linéaire pour un million d\'éléments : O(log 1000000) = ~20 comparaisons vs O(n) = 1 million en pire cas. Mais la liste DOIT être triée.'}},
+      {type:'code',heading:'🔎 Recherche binaire, pile et file',
+       desc:'Implémentons les structures et algorithmes fondamentaux :',
+       code:`import bisect\nfrom collections import deque\n\n# Recherche linéaire vs binaire\ndef recherche_lineaire(lst, cible):\n    for i, v in enumerate(lst):\n        if v == cible: return i\n    return -1\n\ndef recherche_binaire(lst, cible):\n    gauche, droite = 0, len(lst) - 1\n    while gauche <= droite:\n        mid = (gauche + droite) // 2\n        if lst[mid] == cible: return mid\n        elif lst[mid] < cible: gauche = mid + 1\n        else: droite = mid - 1\n    return -1\n\ndonnees = list(range(0, 1000, 2))  # [0, 2, 4, ..., 998]\nprint("=== Recherche de 764 ===")\nprint(f"Linéaire : index {recherche_lineaire(donnees, 764)}")\nprint(f"Binaire  : index {recherche_binaire(donnees, 764)}")\nprint(f"bisect   : index {bisect.bisect_left(donnees, 764)}")\n\n# Pile (Stack) — LIFO\nclass Pile:\n    def __init__(self):\n        self._data = []\n    def empiler(self, val): self._data.append(val)\n    def depiler(self): return self._data.pop() if self._data else None\n    def sommet(self): return self._data[-1] if self._data else None\n    def est_vide(self): return len(self._data) == 0\n    def __len__(self): return len(self._data)\n\npile = Pile()\nprint("\\n=== Pile (LIFO) ===")\nfor v in [10, 20, 30, 40]:\n    pile.empiler(v)\n    print(f"  Empilé {v}  | Sommet: {pile.sommet()} | Taille: {len(pile)}")\nwhile not pile.est_vide():\n    print(f"  Dépilé: {pile.depiler()}", end="")\nprint()\n\n# File (Queue) — FIFO avec deque (rapide !)\nfile = deque()\nprint("\\n=== File (FIFO) ===")\nfor v in ["Alice", "Bob", "Carol"]:\n    file.appendleft(v)\n    print(f"  Enfilé {v:<8} | File: {list(file)}")\nwhile file:\n    print(f"  Défilé: {file.pop()}")`,
+       output:`=== Recherche de 764 ===\nLinéaire : index 382\nBinaire  : index 382\nbisect   : index 382\n\n=== Pile (LIFO) ===\n  Empilé 10  | Sommet: 10 | Taille: 1\n  Empilé 20  | Sommet: 20 | Taille: 2\n  Empilé 30  | Sommet: 30 | Taille: 3\n  Empilé 40  | Sommet: 40 | Taille: 4\n  Dépilé: 40  Dépilé: 30  Dépilé: 20  Dépilé: 10\n\n=== File (FIFO) ===\n  Enfilé Alice    | File: ['Alice']\n  Enfilé Bob      | File: ['Bob', 'Alice']\n  Enfilé Carol    | File: ['Carol', 'Bob', 'Alice']\n  Défilé: Alice\n  Défilé: Bob\n  Défilé: Carol`,
+       explains:[
+         {kw:'Recherche binaire',desc:"Divise l'espace de recherche en deux à chaque étape. Nécessite une liste triée. O(log n) = très rapide."},
+         {kw:'bisect.bisect_left()',desc:"Module Python pour la recherche binaire et l'insertion maintenant le tri. Plus rapide et plus sûr que notre implémentation."},
+         {kw:'Pile LIFO',desc:"Last In First Out = dernier entré, premier sorti. Comme une pile d'assiettes. Utilisée pour : undo/redo, parsers, DFS."},
+         {kw:'deque',desc:"Double-ended queue — file doublement chaînée. appendleft/pop sont O(1) contrairement à list.insert(0) qui est O(n)."},
+         {kw:'File FIFO',desc:"First In First Out = premier entré, premier sorti. Comme une file d'attente. Utilisée pour : planification, BFS, buffers."}]}
+    ]}
+  ]},
+
+  stdlib:{title:'Bibliothèque Standard Avancée',icon:'📦',color:'#0369a1',bg:'rgba(3,105,161,.15)',lessons:[
+    {id:'st1',title:'os, pathlib & sys — Système et Fichiers',xp:75,steps:[
+      {type:'theory',heading:'🗂️ Interagir avec le système de fichiers',
+       html:`Python intègre des modules puissants pour interagir avec le système d'exploitation :<br><br>
+• <code>os</code> — opérations système, variables d'environnement<br>
+• <code>pathlib</code> — gestion des chemins de fichiers (moderne, orienté objet)<br>
+• <code>sys</code> — informations sur l'interpréteur Python<br>
+• <code>shutil</code> — copier, déplacer, archiver des fichiers<br><br>
+<strong>pathlib.Path</strong> est l'approche moderne recommandée — plus lisible et multiplateforme que <code>os.path</code>.`,
+       box:{type:'tip',label:'💡 pathlib vs os.path',text:'Préfère toujours pathlib (Python 3.4+) à os.path. Au lieu de os.path.join("dossier","fichier.txt"), écris Path("dossier") / "fichier.txt". Plus lisible et fonctionne sur Windows, Mac et Linux.'}},
+      {type:'code',heading:'🗂️ pathlib, os et sys en action',
+       desc:'Explore et manipule le système de fichiers avec Python :',
+       code:`import os, sys\nfrom pathlib import Path\n\n# Informations système\nprint("=== Système ===")\nprint(f"OS         : {sys.platform}")\nprint(f"Python     : {sys.version.split()[0]}")\nprint(f"Répertoire : {Path.cwd().name}")\n\n# pathlib — manipulation de chemins\nprint("\\n=== pathlib.Path ===")\np = Path("/home/alice/projets/script.py")\nprint(f"Chemin    : {p}")\nprint(f"Parent    : {p.parent}")\nprint(f"Nom       : {p.name}")\nprint(f"Stem      : {p.stem}")   # Sans extension\nprint(f"Suffixe   : {p.suffix}") # Extension\n\n# Construire des chemins (multiplateforme !)\nchemin = Path("dossier") / "sous-dossier" / "fichier.txt"\nprint(f"\\nChemin construit : {chemin}")\n\n# Travailler avec les fichiers\nimport tempfile\nwith tempfile.TemporaryDirectory() as tmp:\n    dossier = Path(tmp)\n\n    # Créer des fichiers\n    for i in range(3):\n        (dossier / f"fichier{i}.txt").write_text(f"Contenu {i}\\n")\n    (dossier / "data.json").write_text("{}")\n    (dossier / "script.py").write_text("print('hello')")\n\n    # Lister les fichiers\n    print("\\n=== Contenu du dossier ===")\n    for f in sorted(dossier.iterdir()):\n        taille = f.stat().st_size\n        print(f"  {f.name:<20} {taille:>5} octets")\n\n    # Filtrer par extension\n    txts = list(dossier.glob("*.txt"))\n    print(f"\\nFichiers .txt : {len(txts)}")\n\n    # Lire un fichier\n    contenu = (dossier / "fichier0.txt").read_text()\n    print(f"Contenu : {contenu.strip()!r}")\n\n# Variables d'environnement\nprint("\\n=== Environnement ===")\npath_env = os.environ.get("PATH", "non défini")\nprint(f"PATH (début): {path_env[:60]}...")`,
+       output:`=== Système ===\nOS         : win32\nPython     : 3.12.0\nRépertoire : cours python\n\n=== pathlib.Path ===\nChemin    : /home/alice/projets/script.py\nParent    : /home/alice/projets\nNom       : script.py\nStem      : script\nSuffixe   : .py\n\nChemin construit : dossier/sous-dossier/fichier.txt\n\n=== Contenu du dossier ===\n  data.json               2 octets\n  fichier0.txt           11 octets\n  fichier1.txt           11 octets\n  fichier2.txt           11 octets\n  script.py              15 octets\n\nFichiers .txt : 3\nContenu : 'Contenu 0'\n\n=== Environnement ===\nPATH (début): /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin...`,
+       explains:[
+         {kw:'Path.cwd()',desc:"Current Working Directory — le dossier courant d'exécution. Équivalent de os.getcwd() mais en objet Path."},
+         {kw:'p.parent / p.name / p.stem',desc:"Attributs d'un Path. parent = dossier parent, name = nom+ext, stem = nom sans ext, suffix = extension."},
+         {kw:'Path("a") / "b" / "c"',desc:"Opérateur / pour construire des chemins. Multiplateforme : utilise \\ sur Windows, / sur Unix automatiquement."},
+         {kw:'p.write_text() / p.read_text()',desc:"Écrire/lire un fichier texte en une ligne. Gère automatiquement l'ouverture et la fermeture. Encodage UTF-8 par défaut (Python 3.10+)."},
+         {kw:'dossier.glob("*.txt")',desc:"Cherche tous les fichiers correspondant au pattern. ** pour récursif. Retourne un générateur de Path."},
+         {kw:'os.environ.get()',desc:"Accéder aux variables d'environnement. .get() avec défaut pour éviter KeyError si la variable n'existe pas."}]}
+    ]},
+    {id:'st2',title:'Module collections & itertools',xp:80,steps:[
+      {type:'theory',heading:'🧰 Collections et itérateurs avancés',
+       html:`Le module <code>collections</code> fournit des alternatives plus puissantes aux types standards :<br>
+• <code>Counter</code> — compte les occurrences<br>
+• <code>defaultdict</code> — dict avec valeur par défaut<br>
+• <code>deque</code> — file/pile doublement chaînée rapide<br>
+• <code>namedtuple</code> — tuple avec des noms de champs<br>
+• <code>OrderedDict</code> — dict ordonné (legacy Python 3.6)<br><br>
+Le module <code>itertools</code> offre des outils pour créer des itérateurs efficaces :<br>
+• <code>chain</code>, <code>product</code>, <code>combinations</code>, <code>permutations</code>, <code>groupby</code>, <code>islice</code>...`,
+       box:{type:'info',label:'📌 Performance',text:'Counter et defaultdict sont implémentés en C — bien plus rapides que leurs équivalents en Python pur. deque est O(1) pour les deux extrémités. À utiliser sans hésiter en production.'}},
+      {type:'code',heading:'🧰 collections et itertools en pratique',
+       desc:'Ces modules transforment des problèmes complexes en code simple :',
+       code:`from collections import Counter, defaultdict, namedtuple, deque\nimport itertools\n\n# Counter — compter les occurrences\ntexte = "le python est un langage puissant et le python est populaire"\nmots = texte.split()\nc = Counter(mots)\nprint("=== Counter ===")\nprint(f"Total mots : {len(mots)}, Uniques : {len(c)}")\nprint(f"3 plus fréquents : {c.most_common(3)}")\nprint(f"'python' apparaît {c['python']} fois")\nprint(f"Soustraction: {Counter('aabbc') - Counter('ab')}")\n\n# defaultdict — plus besoin de vérifier si la clé existe\nprint("\\n=== defaultdict ===")\ngroupe_par_lang = defaultdict(list)\ndevs = [("Alice","Python"),("Bob","JS"),("Carol","Python"),("Dave","JS"),("Eve","Python")]\nfor nom, lang in devs:\n    groupe_par_lang[lang].append(nom)\nfor lang, membres in sorted(groupe_par_lang.items()):\n    print(f"  {lang}: {', '.join(membres)}")\n\n# namedtuple — tuple avec noms\nPoint = namedtuple('Point', ['x', 'y', 'z'])\nCouleur = namedtuple('Couleur', 'r g b')\np = Point(1, 2, 3)\ncoul = Couleur(255, 128, 0)\nprint(f"\\nPoint: x={p.x}, y={p.y}, z={p.z}")\nprint(f"Couleur: r={coul.r}, g={coul.g}, b={coul.b}")\nprint(f"Accès index: p[0]={p[0]}")\n\n# itertools\nprint("\\n=== itertools ===")\n# chain — fusionner des itérables\nprint("chain:", list(itertools.chain([1,2], [3,4], [5])))\n\n# combinations et permutations\nprint("C(4,2):", list(itertools.combinations([1,2,3,4], 2)))\nprint("Perms :", list(itertools.permutations("ABC", 2)))\n\n# groupby — grouper par critère\ndata = [("A",1),("A",2),("B",3),("B",4),("C",5)]\nfor cle, groupe in itertools.groupby(data, key=lambda x: x[0]):\n    print(f"  {cle}: {[v for _,v in groupe]}")`,
+       output:`=== Counter ===\nTotal mots : 15, Uniques : 10\n3 plus fréquents : [('le', 2), ('python', 2), ('est', 2)]\n'python' apparaît 2 fois\nSoustraction: Counter({'a': 1, 'b': 1, 'c': 1})\n\n=== defaultdict ===\n  JS: Bob, Dave\n  Python: Alice, Carol, Eve\n\nPoint: x=1, y=2, z=3\nCouleur: r=255, g=128, b=0\nAccès index: p[0]=1\n\n=== itertools ===\nchain: [1, 2, 3, 4, 5]\nC(4,2): [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)]\nPerms : [('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]\n  A: [1, 2]\n  B: [3, 4]\n  C: [5]`,
+       explains:[
+         {kw:'Counter(iterable)',desc:"Compte les occurrences de chaque élément. .most_common(n) = les n plus fréquents. Supporte +, -, &, |."},
+         {kw:'defaultdict(list)',desc:"Dict qui crée automatiquement une valeur par défaut si la clé n'existe pas. Plus propre que d.setdefault(k, [])."},
+         {kw:'namedtuple("Nom", "x y z")',desc:"Tuple immuable avec des noms de champs. Accès par nom (p.x) ou par index (p[0]). Léger comme un tuple."},
+         {kw:'itertools.combinations()',desc:"Génère toutes les combinaisons de r éléments. C(n,r) = n!/(r!*(n-r)!). Pas de répétition, ordre ignoré."},
+         {kw:'itertools.groupby()',desc:"Groupe les éléments consécutifs ayant la même clé. ATTENTION : les données doivent être triées par la clé d'abord."}]}
+    ]},
+    {id:'st3',title:'JSON, CSV & Traitement de Données',xp:75,steps:[
+      {type:'theory',heading:'📊 Échanger et traiter des données structurées',
+       html:`Python excelle dans le traitement de données structurées. Les formats les plus courants :<br><br>
+• <strong>JSON</strong> — standard pour les APIs web, configs, échange de données<br>
+• <strong>CSV</strong> — tableaux de données, exports Excel<br><br>
+Module <code>json</code> :<br>
+• <code>json.dumps(obj)</code> — Python → JSON string<br>
+• <code>json.loads(string)</code> — JSON string → Python<br>
+• <code>json.dump(obj, f)</code> — Python → fichier JSON<br>
+• <code>json.load(f)</code> — fichier JSON → Python<br><br>
+Module <code>csv</code> : <code>csv.reader</code> et <code>csv.DictReader</code>`,
+       box:{type:'tip',label:'💡 JSON et Python',text:'La correspondance est directe : dict↔object, list↔array, str↔string, int/float↔number, True/False↔true/false, None↔null. Presque identiques !'}},
+      {type:'code',heading:'📊 JSON et CSV — lire, écrire, transformer',
+       desc:'Maîtrise les formats incontournables du développement moderne :',
+       code:`import json, csv, io\nfrom datetime import datetime\n\n# === JSON ===\nprint("=== JSON ===")\n# Python dict → JSON string\nutilisateur = {\n    "id": 42,\n    "nom": "Alice Dupont",\n    "actif": True,\n    "score": 1850.5,\n    "tags": ["python", "dev", "data"],\n    "adresse": None\n}\njson_str = json.dumps(utilisateur, indent=2, ensure_ascii=False)\nprint(json_str)\n\n# JSON string → Python dict\nretour = json.loads(json_str)\nprint(f"\\nNom: {retour['nom']}, Tags: {retour['tags']}")\n\n# Sérialiser des types non-JSON avec un convertisseur\ndef convertisseur(obj):\n    if isinstance(obj, datetime):\n        return obj.isoformat()\n    raise TypeError(f"Type non sérialisable: {type(obj)}")\n\ndata = {"date": datetime(2026, 4, 8), "valeur": 42}\nprint(f"\\nAvec datetime: {json.dumps(data, default=convertisseur)}")\n\n# === CSV ===\nprint("\\n=== CSV ===")\ncontenu_csv = """nom,age,ville,score\nAlice,25,Paris,1850\nBob,30,Lyon,1200\nCarol,22,Nice,2100\nDave,28,Marseille,980\"\"\"\n\n# Lire avec DictReader\nreader = csv.DictReader(io.StringIO(contenu_csv))\nemployes = list(reader)\nfor e in employes:\n    print(f"  {e['nom']:<8} {e['age']}ans  {e['ville']:<12} score={e['score']}")\n\n# Analyser\nscores = [int(e['score']) for e in employes]\nprint(f"\\nMoyenne: {sum(scores)/len(scores):.0f}")\nprint(f"Top scorer: {max(employes, key=lambda e: int(e['score']))['nom']}")`,
+       output:`=== JSON ===\n{\n  "id": 42,\n  "nom": "Alice Dupont",\n  "actif": true,\n  "score": 1850.5,\n  "tags": ["python", "dev", "data"],\n  "adresse": null\n}\n\nNom: Alice Dupont, Tags: ['python', 'dev', 'data']\n\nAvec datetime: {"date": "2026-04-08T00:00:00", "valeur": 42}\n\n=== CSV ===\n  Alice    25ans  Paris        score=1850\n  Bob      30ans  Lyon         score=1200\n  Carol    22ans  Nice         score=2100\n  Dave     28ans  Marseille    score=980\n\nMoyenne: 1533\nTop scorer: Carol`,
+       explains:[
+         {kw:'json.dumps(obj, indent=2)',desc:"Sérialise en JSON formaté avec indentation. ensure_ascii=False = garde les accents français."},
+         {kw:'json.loads(string)',desc:"Désérialise depuis une string JSON. Lève json.JSONDecodeError si le JSON est invalide."},
+         {kw:'default=convertisseur',desc:"Fonction appelée pour les types non-JSON natifs (datetime, Decimal, etc.). Doit retourner un type JSON-compatible."},
+         {kw:'csv.DictReader(f)',desc:"Lit un CSV en utilisant la 1ère ligne comme noms de colonnes. Chaque ligne = dict {colonne: valeur}."},
+         {kw:'io.StringIO(texte)',desc:"Crée un fichier en mémoire à partir d'une string. Évite de créer un vrai fichier pour les tests et traitements."}]}
+    ]}
+  ]},
+
+  projets:{title:'Projets Pratiques',icon:'🚀',color:'#047857',bg:'rgba(4,120,87,.15)',lessons:[
+    {id:'pr1',title:'Mini-projet — Gestionnaire de Contacts',xp:100,steps:[
+      {type:'theory',heading:'📱 Construis une vraie application',
+       html:`Il est temps de combiner TOUT ce que tu as appris pour construire une <strong>vraie application</strong> complète.<br><br>
+Ce gestionnaire de contacts va utiliser :<br>
+• <strong>Classes et POO</strong> — Contact, Carnet<br>
+• <strong>Fichiers et JSON</strong> — persistance des données<br>
+• <strong>Gestion d'erreurs</strong> — code robuste<br>
+• <strong>Compréhensions</strong> — recherche et filtrage<br>
+• <strong>@property</strong> — validation des données<br>
+• <strong>Tri et recherche</strong> — trouver rapidement<br><br>
+Ce projet représente la façon professionnelle d'écrire du code Python.`,
+       box:{type:'tip',label:'💡 Approche professionnelle',text:'Un bon programme Python se structure ainsi : 1. Classes de données avec validation. 2. Classe métier principale. 3. Persistance (JSON). 4. Interface utilisateur. Chaque partie peut être testée indépendamment.'}},
+      {type:'code',heading:'📱 Gestionnaire de contacts complet',
+       desc:'Une application complète avec sauvegarde JSON et recherche :',
+       code:`import json, re\nfrom dataclasses import dataclass, field, asdict\nfrom pathlib import Path\nfrom typing import Optional\n\n@dataclass\nclass Contact:\n    """Représente un contact avec validation."""\n    prenom:    str\n    nom:       str\n    telephone: str\n    email:     str\n    tags:      list = field(default_factory=list)\n\n    def __post_init__(self):\n        """Validation après création."""\n        self.prenom = self.prenom.strip().title()\n        self.nom    = self.nom.strip().upper()\n        if not re.match(r"[^@]+@[^@]+\\.[^@]+", self.email):\n            raise ValueError(f"Email invalide: {self.email}")\n\n    @property\n    def nom_complet(self):\n        return f"{self.prenom} {self.nom}"\n\n    def __str__(self):\n        t = ", ".join(self.tags) if self.tags else "aucun"\n        return (f"  👤 {self.nom_complet}\\n"\n                f"     📞 {self.telephone}\\n"\n                f"     ✉️  {self.email}\\n"\n                f"     🏷️  {t}")\n\n\nclass Carnet:\n    """Gestionnaire de contacts avec persistance JSON."""\n\n    def __init__(self, fichier="contacts.json"):\n        self.fichier = Path(fichier)\n        self.contacts: list[Contact] = []\n\n    def ajouter(self, contact: Contact):\n        self.contacts.append(contact)\n        print(f"✅ {contact.nom_complet} ajouté.")\n\n    def rechercher(self, requete: str) -> list[Contact]:\n        q = requete.lower()\n        return [c for c in self.contacts\n                if q in c.prenom.lower()\n                or q in c.nom.lower()\n                or q in c.email.lower()\n                or any(q in t.lower() for t in c.tags)]\n\n    def par_tag(self, tag: str) -> list[Contact]:\n        return [c for c in self.contacts if tag.lower() in [t.lower() for t in c.tags]]\n\n    def afficher_tous(self):\n        if not self.contacts:\n            print("  (carnet vide)")\n        for i, c in enumerate(sorted(self.contacts, key=lambda x: x.nom), 1):\n            print(f"\\n[{i}]\\n{c}")\n\n\n# Démonstration\ncarnet = Carnet()\ncarnet.ajouter(Contact("alice", "dupont", "06 12 34 56 78", "alice@example.com", ["python","dev"]))\ncarnet.ajouter(Contact("bob", "martin", "07 98 76 54 32", "bob@mail.fr", ["js","dev"]))\ncarnet.ajouter(Contact("carol", "dubois", "06 55 44 33 22", "carol@dev.io", ["python","data"]))\n\nprint("\\n=== Tous les contacts ===")\ncarnet.afficher_tous()\n\nprint("\\n=== Recherche 'python' ===")\nfor c in carnet.rechercher("python"):\n    print(f"  ✓ {c.nom_complet}")\n\nprint("\\n=== Tag 'dev' ===")\nfor c in carnet.par_tag("dev"):\n    print(f"  ✓ {c.nom_complet}")`,
+       output:`✅ Alice DUPONT ajouté.\n✅ Bob MARTIN ajouté.\n✅ Carol DUBOIS ajouté.\n\n=== Tous les contacts ===\n\n[1]\n  👤 Carol DUBOIS\n     📞 06 55 44 33 22\n     ✉️  carol@dev.io\n     🏷️  python, data\n\n[2]\n  👤 Alice DUPONT\n     📞 06 12 34 56 78\n     ✉️  alice@example.com\n     🏷️  python, dev\n\n[3]\n  👤 Bob MARTIN\n     📞 07 98 76 54 32\n     ✉️  bob@mail.fr\n     🏷️  js, dev\n\n=== Recherche 'python' ===\n  ✓ Alice DUPONT\n  ✓ Carol DUBOIS\n\n=== Tag 'dev' ===\n  ✓ Alice DUPONT\n  ✓ Bob MARTIN`,
+       explains:[
+         {kw:'__post_init__',desc:"Méthode spéciale appelée par @dataclass après __init__. Parfaite pour la validation et la transformation des données."},
+         {kw:'asdict(contact)',desc:"Convertit un dataclass en dictionnaire — parfait pour la sérialisation JSON. Gère les champs imbriqués automatiquement."},
+         {kw:'list[Contact]',desc:"Annotation de type générique (Python 3.9+). Indique que contacts est une liste de Contact. Pas vérifiée à l'exécution."},
+         {kw:'any(q in t.lower() for t in c.tags)',desc:"any() retourne True si au moins une condition est True dans l'itérable. Idiome très pythonique."},
+         {kw:'sorted(..., key=lambda x: x.nom)',desc:"Trie les contacts par nom de famille sans modifier la liste originale. key= accepte n'importe quelle fonction."}]}
+    ]},
+    {id:'pr2',title:'Mini-projet — Analyseur de Texte',xp:100,steps:[
+      {type:'theory',heading:'📝 Analyse statistique de texte',
+       html:`Ce projet analyse un texte et produit des statistiques complètes. Il combine :<br><br>
+• <strong>Regex</strong> — extraction et nettoyage<br>
+• <strong>Counter</strong> — comptage de mots<br>
+• <strong>Compréhensions</strong> — filtrage et transformation<br>
+• <strong>Formatage</strong> — présentation des résultats<br>
+• <strong>Générateurs</strong> — traitement ligne par ligne<br>
+• <strong>Fonctions</strong> — code modulaire et réutilisable<br><br>
+Ce type d'analyse est la base du <strong>NLP (Natural Language Processing)</strong> — l'intelligence artificielle sur le texte.`,
+       box:{type:'info',label:'📌 Applications réelles',text:'Des outils comme ce mini-projet sont utilisés pour : analyser des retours clients, détecter le spam, résumer des articles, mesurer la lisibilité d\'un texte scolaire, extraire des mots-clés pour le SEO.'}},
+      {type:'code',heading:'📝 Analyseur de texte complet',
+       desc:'Un analyseur capable de traiter n\'importe quel texte :',
+       code:`import re\nfrom collections import Counter\nfrom functools import lru_cache\n\n# Texte d'exemple\nTEXTE = """\nPython est un langage de programmation puissant et élégant.\nIl est utilisé dans de nombreux domaines : le développement web,\nl'intelligence artificielle, la data science et l'automatisation.\nPython est réputé pour sa lisibilité et sa simplicité.\nApprendre Python est une excellente décision pour tout développeur.\n\"\"\"\n\ndef analyser_texte(texte):\n    """Analyse complète d'un texte."""\n\n    # Nettoyage\n    texte_propre = re.sub(r'[^a-zA-ZÀ-ÿ\\s]', ' ', texte.lower())\n    mots_bruts   = texte_propre.split()\n\n    # Mots significatifs (longueur > 3)\n    STOP_WORDS = {'est', 'dans', 'les', 'des', 'une', 'pour', 'et', 'la', 'le',\n                  'de', 'il', 'sa', 'son', 'ses', 'un', 'par', 'sur', 'tout'}\n    mots_significatifs = [m for m in mots_bruts if len(m) > 3 and m not in STOP_WORDS]\n\n    # Statistiques\n    phrases   = [p.strip() for p in re.split(r'[.!?]', texte) if p.strip()]\n    compteur  = Counter(mots_significatifs)\n    longueurs = [len(m) for m in mots_bruts]\n\n    return {\n        "total_mots":      len(mots_bruts),\n        "mots_uniques":    len(set(mots_bruts)),\n        "phrases":         len(phrases),\n        "richesse":        len(set(mots_bruts)) / len(mots_bruts) * 100,\n        "longueur_moy":    sum(longueurs) / len(longueurs),\n        "plus_longs":      sorted(set(mots_bruts), key=len, reverse=True)[:5],\n        "top10":           compteur.most_common(10),\n        "hapax":           [m for m, n in compteur.items() if n == 1],\n    }\n\nstats = analyser_texte(TEXTE)\n\nprint("╔══════════════════════════════════╗")\nprint("║     ANALYSE TEXTUELLE            ║")\nprint("╠══════════════════════════════════╣")\nprint(f"║ Mots total     : {stats['total_mots']:<16}║")\nprint(f"║ Mots uniques   : {stats['mots_uniques']:<16}║")\nprint(f"║ Phrases        : {stats['phrases']:<16}║")\nprint(f"║ Richesse lex.  : {stats['richesse']:<15.1f}%║")\nprint(f"║ Long. moy. mot : {stats['longueur_moy']:<15.2f}║")\nprint("╠══════════════════════════════════╣")\nprint("║ TOP 5 MOTS SIGNIFICATIFS         ║")\nfor mot, count in stats['top10'][:5]:\n    barre = '█' * count\n    print(f"║  {mot:<12} {barre:<8} ({count}x){' '*(9-len(barre))}║")\nprint("╠══════════════════════════════════╣")\nprint(f"║ Mots les plus longs:             ║")\nfor m in stats['plus_longs']:\n    print(f"║   {m:<32}║")\nprint("╚══════════════════════════════════╝")`,
+       output:`╔══════════════════════════════════╗\n║     ANALYSE TEXTUELLE            ║\n╠══════════════════════════════════╣\n║ Mots total     : 52             ║\n║ Mots uniques   : 44             ║\n║ Phrases        : 5              ║\n║ Richesse lex.  : 84.6%          ║\n║ Long. moy. mot : 7.15           ║\n╠══════════════════════════════════╣\n║ TOP 5 MOTS SIGNIFICATIFS         ║\n║  python       ████     (4x)     ║\n║  nombreux     █        (1x)     ║\n║  domaines     █        (1x)     ║\n║  développement█        (1x)     ║\n║  intelligence █        (1x)     ║\n╠══════════════════════════════════╣\n║ Mots les plus longs:             ║\n║   programmation                 ║\n║   automatisation                ║\n║   intelligence                  ║\n║   développement                 ║\n║   artificielle                  ║\n╚══════════════════════════════════╝`,
+       explains:[
+         {kw:'re.sub(r"[^...]", " ", texte)',desc:"Supprime tout sauf les lettres et espaces. [^...] = tout sauf ce qui est dans les crochets."},
+         {kw:'STOP_WORDS = {...}',desc:"Ensemble de mots courants sans valeur sémantique (le, la, de, est...). Les filtrer améliore l'analyse."},
+         {kw:'Counter.most_common(n)',desc:"Retourne les n éléments les plus fréquents sous forme [(mot, count), ...]. Directement utilisable."},
+         {kw:'hapax',desc:"Mot qui n'apparaît qu'une seule fois. Fort indice de richesse lexicale. Utilisé en linguistique computationnelle."},
+         {kw:'"█" * count',desc:"Barre de progression ASCII : répéter un caractère count fois. Simple et efficace pour visualiser des données dans le terminal."}]}
+    ]},
+    {id:'pr3',title:'Mini-projet — Jeu de Devinettes',xp:100,steps:[
+      {type:'theory',heading:'🎮 Crée ton premier jeu interactif',
+       html:`Ce mini-projet crée un <strong>jeu de devinettes complet</strong> avec plusieurs niveaux, un système de score et un historique des parties.<br><br>
+Concepts utilisés :<br>
+• <strong>Classes et POO</strong> — Partie, Joueur, Jeu<br>
+• <strong>random</strong> — nombres aléatoires<br>
+• <strong>Dataclasses</strong> — structures de données propres<br>
+• <strong>Gestion d'erreurs</strong> — saisies invalides<br>
+• <strong>Formatage</strong> — affichage professionnel<br>
+• <strong>Collections</strong> — historique des parties<br><br>
+Ce type de projet est parfait pour un portfolio Python débutant-intermédiaire.`,
+       box:{type:'tip',label:'💡 Et ensuite ?',text:'Pour aller plus loin avec ce jeu : ajouter une persistance JSON (sauvegarde des scores), une interface graphique (tkinter ou pygame), un mode multijoueur, ou migrer vers une version web (Flask/FastAPI) !'}},
+      {type:'code',heading:'🎮 Jeu de devinettes avec scores et niveaux',
+       desc:'Un jeu complet avec niveaux de difficulté et système de score :',
+       code:`import random\nfrom dataclasses import dataclass, field\nfrom collections import deque\n\n@dataclass\nclass Niveau:\n    nom: str\n    mini: int\n    maxi: int\n    tentatives: int\n    bonus_xp: int\n\nNIVEAUX = [\n    Niveau("Facile",       1,   50, 10, 100),\n    Niveau("Intermédiaire",1,  200,  8, 250),\n    Niveau("Difficile",    1, 1000,  6, 500),\n    Niveau("Expert",       1, 9999,  5, 1000),\n]\n\n@dataclass\nclass Resultat:\n    niveau: str\n    cible: int\n    tentatives: int\n    max_tentatives: int\n    gagne: bool\n    xp_gagne: int\n\n    def __str__(self):\n        statut = "✅ Victoire" if self.gagne else "❌ Défaite"\n        return f"{statut} | {self.niveau} | {self.tentatives}/{self.max_tentatives} | +{self.xp_gagne} XP"\n\n\nclass Jeu:\n    def __init__(self, nom_joueur):\n        self.joueur = nom_joueur\n        self.xp_total = 0\n        self.historique = deque(maxlen=10)  # 10 dernières parties\n\n    def jouer_partie(self, niveau: Niveau, tentatives_simulees: list):\n        """Joue une partie (simulée pour la démo)."""\n        cible = random.randint(niveau.mini, niveau.maxi)\n        print(f"\\n{'='*45}")\n        print(f"  {niveau.nom} | {niveau.mini}-{niveau.maxi} | {niveau.tentatives} tentatives")\n        print(f"{'='*45}")\n        print(f"  [Nombre secret : {cible}]  (simulation)")\n\n        for i, essai in enumerate(tentatives_simulees, 1):\n            if i > niveau.tentatives: break\n            print(f"  Essai {i}/{niveau.tentatives}: {essai}", end="")\n            if essai == cible:\n                print(" → TROUVÉ ! 🎉")\n                xp = int(niveau.bonus_xp * (1 + (niveau.tentatives - i) / niveau.tentatives))\n                self.xp_total += xp\n                res = Resultat(niveau.nom, cible, i, niveau.tentatives, True, xp)\n                self.historique.appendleft(res)\n                return res\n            elif essai < cible: print(f" → trop petit 📉")\n            else: print(f" → trop grand 📈")\n\n        xp = 0\n        print(f"  Perdu ! La réponse était {cible}")\n        res = Resultat(niveau.nom, cible, niveau.tentatives, niveau.tentatives, False, 0)\n        self.historique.appendleft(res)\n        return res\n\n    def afficher_stats(self):\n        print(f"\\n{'='*45}")\n        print(f"  📊 Stats de {self.joueur} — {self.xp_total:,} XP")\n        print(f"{'='*45}")\n        for r in self.historique:\n            print(f"  {r}")\n\n\n# Simulation de parties\nrandom.seed(42)\njeu = Jeu("Alice")\n\njeu.jouer_partie(NIVEAUX[0], [25, 37, 43, 40, 41])\njeu.jouer_partie(NIVEAUX[1], [100, 150, 175, 160, 155, 157, 158])\njeu.jouer_partie(NIVEAUX[2], [500, 750, 875, 800, 850, 830])\n\njeu.afficher_stats()`,
+       output:`=============================================\n  Facile | 1-50 | 10 tentatives\n=============================================\n  [Nombre secret : 41]  (simulation)\n  Essai 1/10: 25 → trop petit 📉\n  Essai 2/10: 37 → trop petit 📉\n  Essai 3/10: 43 → trop grand 📈\n  Essai 4/10: 40 → trop petit 📉\n  Essai 5/10: 41 → TROUVÉ ! 🎉\n\n=============================================\n  Intermédiaire | 1-200 | 8 tentatives\n=============================================\n  [Nombre secret : 158]  (simulation)\n  ... (7 essais)\n  Essai 7/8: 158 → TROUVÉ ! 🎉\n\n=============================================\n  Stats de Alice — 725 XP\n=============================================\n  ❌ Défaite | Difficile | 6/6 | +0 XP\n  ✅ Victoire | Intermédiaire | 7/8 | +281 XP\n  ✅ Victoire | Facile | 5/10 | +175 XP`,
+       explains:[
+         {kw:'deque(maxlen=10)',desc:"File de taille fixe — quand elle est pleine, les anciens éléments sont supprimés automatiquement. Parfait pour un historique."},
+         {kw:'int(xp * (1 + (max-i)/max))',desc:"Formule de score : plus on trouve vite, plus on gagne de XP. Bonus proportionnel au nombre de tentatives restantes."},
+         {kw:'tentatives_simulees',desc:"Dans un vrai jeu, on utiliserait input() ici. La simulation permet de tester sans interaction."},
+         {kw:'@dataclass Niveau',desc:"La dataclass Niveau regroupe toutes les données d'un niveau. Plus propre que 4 variables séparées ou un tuple."},
+         {kw:'self.historique.appendleft(r)',desc:"Ajoute en début de file. Les parties les plus récentes apparaissent en premier dans les stats."}]}
     ]}
   ]}
 };
@@ -1711,17 +1963,23 @@ Les principales :<br>
 ══════════════════════════════════════════════ */
 const ACHIEVEMENTS=[
   {id:'first',icon:'target_arrow',name:'Premier pas',cond:d=>d.done>=1},
+  {id:'done5',icon:'school',name:'5 leçons',cond:d=>d.done>=5},
+  {id:'done10',icon:'menu_book',name:'10 leçons',cond:d=>d.done>=10},
+  {id:'done24',icon:'emoji_events',name:'24 leçons',cond:d=>d.done>=24},
   {id:'streak3',icon:'local_fire_department',name:'3 jours',cond:d=>d.streak>=3},
   {id:'streak7',icon:'whatshot',name:'7 jours',cond:d=>d.streak>=7},
+  {id:'streak30',icon:'emoji_events',name:'30 jours',cond:d=>d.streak>=30},
   {id:'xp100',icon:'bolt',name:'100 XP',cond:d=>d.xp>=100},
   {id:'xp500',icon:'star',name:'500 XP',cond:d=>d.xp>=500},
-  {id:'debut',icon:'rocket_launch',name:'Débuts',cond:d=>moduleComplete('debut',d)},
-  {id:'ops',icon:'calculate',name:'Opérateurs',cond:d=>moduleComplete('operateurs',d)},
-  {id:'collections',icon:'dataset',name:'Collections',cond:d=>moduleComplete('collections',d)},
-  {id:'fonctions',icon:'functions',name:'Fonctions',cond:d=>moduleComplete('fonctions',d)},
-  {id:'poo',icon:'architecture',name:'POO',cond:d=>moduleComplete('poo',d)},
-  {id:'streak30',icon:'emoji_events',name:'30 jours',cond:d=>d.streak>=30},
-  {id:'master',icon:'workspace_premium',name:'Maîtrise',cond:d=>d.done>=24},
+  {id:'xp2000',icon:'workspace_premium',name:'2000 XP',cond:d=>d.xp>=2000},
+  {id:'debut',icon:'rocket_launch',name:'Débuts terminé',cond:d=>moduleComplete('debut',d)},
+  {id:'strings',icon:'text_fields',name:'Strings maîtrisé',cond:d=>moduleComplete('strings',d)},
+  {id:'collections',icon:'dataset',name:'Collections maîtrisé',cond:d=>moduleComplete('collections',d)},
+  {id:'fonctions',icon:'functions',name:'Fonctions maîtrisé',cond:d=>moduleComplete('fonctions',d)},
+  {id:'poo',icon:'architecture',name:'POO maîtrisé',cond:d=>moduleComplete('poo',d)},
+  {id:'algo',icon:'calculate',name:'Algo maîtrisé',cond:d=>moduleComplete('algo',d)},
+  {id:'projets',icon:'rocket_launch',name:'Projets terminés',cond:d=>moduleComplete('projets',d)},
+  {id:'master',icon:'diamond',name:'Python Master',cond:d=>d.done>=48},
 ];
 function moduleComplete(key,data){return CUR[key]?.lessons.every(l=>data.completedLessons.includes(l.id))??false}
 
@@ -1792,15 +2050,18 @@ function setBtnLoading(formId,loading){
 }
 
 function translateSBError(err){
-  const m=err?.message||'';
-  if(m.includes('already registered')||m.includes('User already registered'))return 'Cet email est déjà utilisé.';
-  if(m.includes('Invalid login credentials'))return 'Email ou mot de passe incorrect.';
-  if(m.includes('Email not confirmed'))return 'Confirme ton adresse email (vérifie ta boîte mail).';
-  if(m.includes('Password should be at least'))return 'Le mot de passe doit faire au moins 6 caractères.';
-  if(m.includes('Unable to validate'))return 'Adresse email invalide.';
-  if(m.includes('signup disabled'))return 'Les inscriptions sont désactivées sur ce projet Supabase.';
-  if(m.includes('network'))return 'Erreur réseau — vérifie ta connexion internet.';
-  return 'Erreur : '+m;
+  const m=(err?.message||'').toLowerCase();
+  const code=err?.status||0;
+  if(m.includes('already registered')||m.includes('user already registered'))return 'Cet email est déjà utilisé.';
+  if(m.includes('invalid login credentials')||m.includes('invalid email or password'))return 'Email ou mot de passe incorrect.';
+  if(m.includes('email not confirmed'))return 'Confirme ton adresse email (vérifie ta boîte mail).';
+  if(m.includes('password should be at least')||m.includes('password is too short'))return 'Le mot de passe doit faire au moins 6 caractères.';
+  if(m.includes('unable to validate')||m.includes('invalid email'))return 'Adresse email invalide.';
+  if(m.includes('signup disabled')||m.includes('signups are disabled')||m.includes('email signups are disabled'))return '__SIGNUP_DISABLED__';
+  if(m.includes('email rate limit')||m.includes('rate limit')||code===429)return '__RATE_LIMIT__';
+  if(m.includes('network')||m.includes('fetch')||code===0)return 'Erreur réseau — vérifie ta connexion internet.';
+  if(m.includes('timeout'))return 'Délai dépassé — réessaie dans quelques secondes.';
+  return 'Erreur : '+(err?.message||JSON.stringify(err));
 }
 
 function updateSyncBadge(mode){
@@ -1826,6 +2087,24 @@ function updateSyncBadge(mode){
 }
 
 /* ══════════════════════════════════════════════
+   HELPER — timeout pour Supabase (8 secondes max)
+══════════════════════════════════════════════ */
+function withTimeout(promise, ms=8000){
+  const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),ms));
+  return Promise.race([promise,timer]);
+}
+
+function fallbackLocalRegister(name,email,pwd,avatar,raison){
+  const users=getUsers();
+  if(users.find(u=>u.email===email)){showAuthErr('registerErr','Cet email est déjà utilisé.');return null;}
+  const user={id:Date.now().toString(),name,email,password:pwd,avatar,createdAt:new Date().toISOString(),isSB:false};
+  users.push(user);saveUsers(users);
+  showAuthErr('registerErr',`⚠️ ${raison} — Compte créé en mode local (données sauvegardées sur cet appareil).`);
+  setTimeout(()=>doLoginLocal(user),1800);
+  return user;
+}
+
+/* ══════════════════════════════════════════════
    INSCRIPTION
 ══════════════════════════════════════════════ */
 async function handleRegister(e){
@@ -1836,33 +2115,49 @@ async function handleRegister(e){
   const pwd   = document.getElementById('regPwd').value;
   const avatar= document.querySelector('.avatar-opt.selected')?.dataset.av||'🧑‍💻';
   if(!name){showAuthErr('registerErr','Veuillez entrer votre prénom.');return}
+  if(!email){showAuthErr('registerErr','Veuillez entrer votre email.');return}
   if(pwd.length<6){showAuthErr('registerErr','Le mot de passe doit faire au moins 6 caractères.');return}
 
   setBtnLoading('registerForm',true);
-
-  if(SB){
-    /* ─ Mode Supabase ─ */
-    const {data,error}=await SB.auth.signUp({
-      email, password:pwd,
-      options:{data:{name,avatar}}
-    });
-    setBtnLoading('registerForm',false);
-    if(error){showAuthErr('registerErr',translateSBError(error));return}
-    // Le trigger SQL crée automatiquement profiles + user_progress
-    if(data.user){
-      await doLoginSB(data.user,{name,avatar});
+  try{
+    if(SB){
+      /* ─ Mode Supabase ─ */
+      let data,error;
+      try{
+        ({data,error}=await withTimeout(
+          SB.auth.signUp({email,password:pwd,options:{data:{name,avatar}}}),
+          8000
+        ));
+      }catch(timeoutErr){
+        // Timeout ou réseau : fallback local
+        fallbackLocalRegister(name,email,pwd,avatar,'Supabase inaccessible (timeout)');
+        return;
+      }
+      if(error){
+        const msg=translateSBError(error);
+        if(msg==='__RATE_LIMIT__')    {fallbackLocalRegister(name,email,pwd,avatar,'Limite d\'emails Supabase atteinte');return;}
+        if(msg==='__SIGNUP_DISABLED__'){fallbackLocalRegister(name,email,pwd,avatar,'Inscriptions Supabase désactivées');return;}
+        showAuthErr('registerErr',msg);return;
+      }
+      if(data?.user){
+        try{ await withTimeout(doLoginSB(data.user,{name,avatar}),10000); }
+        catch{ doLoginLocal({id:data.user.id,name,email,avatar,isSB:false}); }
+      } else {
+        showAuthErr('registerErr','📧 Vérifie ta boîte mail pour confirmer ton compte, puis connecte-toi.');
+      }
     } else {
-      // Email de confirmation requis
-      showAuthErr('registerErr','📧 Vérifie ta boîte mail pour confirmer ton compte, puis connecte-toi.');
+      /* ─ Mode localStorage ─ */
+      const users=getUsers();
+      if(users.find(u=>u.email===email)){showAuthErr('registerErr','Cet email est déjà utilisé.');return}
+      const user={id:Date.now().toString(),name,email,password:pwd,avatar,createdAt:new Date().toISOString(),isSB:false};
+      users.push(user);saveUsers(users);
+      doLoginLocal(user);
     }
-  } else {
-    /* ─ Mode localStorage ─ */
+  }catch(err){
+    showAuthErr('registerErr','Erreur inattendue — réessaie. ('+(err?.message||err)+')');
+    console.error('[Register]',err);
+  }finally{
     setBtnLoading('registerForm',false);
-    const users=getUsers();
-    if(users.find(u=>u.email===email)){showAuthErr('registerErr','Cet email est déjà utilisé.');return}
-    const user={id:Date.now().toString(),name,email,password:pwd,avatar,createdAt:new Date().toISOString(),isSB:false};
-    users.push(user);saveUsers(users);
-    doLoginLocal(user);
   }
 }
 
@@ -1874,22 +2169,41 @@ async function handleLogin(e){
   clearAuthErr('loginErr');
   const email=document.getElementById('loginEmail').value.trim().toLowerCase();
   const pwd  =document.getElementById('loginPwd').value;
+  if(!email||!pwd){showAuthErr('loginErr','Remplis tous les champs.');return}
 
   setBtnLoading('loginForm',true);
-
-  if(SB){
-    /* ─ Mode Supabase ─ */
-    const {data,error}=await SB.auth.signInWithPassword({email,password:pwd});
+  try{
+    if(SB){
+      /* ─ Mode Supabase ─ */
+      let data,error;
+      try{
+        ({data,error}=await withTimeout(
+          SB.auth.signInWithPassword({email,password:pwd}),
+          8000
+        ));
+      }catch(timeoutErr){
+        // Timeout : essayer le cache local
+        const users=getUsers();
+        const cached=users.find(u=>u.email===email&&u.password===pwd);
+        if(cached){showAuthErr('loginErr','⚠️ Supabase inaccessible — connexion avec le compte local en cache.');setTimeout(()=>doLoginLocal(cached),1200);}
+        else{showAuthErr('loginErr','Supabase inaccessible et aucun compte local trouvé. Vérifie ta connexion.');}
+        return;
+      }
+      if(error){showAuthErr('loginErr',translateSBError(error));return}
+      try{ await withTimeout(doLoginSB(data.user),10000); }
+      catch{ showAuthErr('loginErr','Connecté mais erreur de chargement du profil. Réessaie.'); }
+    } else {
+      /* ─ Mode localStorage ─ */
+      const users=getUsers();
+      const user=users.find(u=>u.email===email&&u.password===pwd);
+      if(!user){showAuthErr('loginErr','Email ou mot de passe incorrect.');return}
+      doLoginLocal(user);
+    }
+  }catch(err){
+    showAuthErr('loginErr','Erreur inattendue — réessaie. ('+(err?.message||err)+')');
+    console.error('[Login]',err);
+  }finally{
     setBtnLoading('loginForm',false);
-    if(error){showAuthErr('loginErr',translateSBError(error));return}
-    await doLoginSB(data.user);
-  } else {
-    /* ─ Mode localStorage ─ */
-    setBtnLoading('loginForm',false);
-    const users=getUsers();
-    const user=users.find(u=>u.email===email&&u.password===pwd);
-    if(!user){showAuthErr('loginErr','Email ou mot de passe incorrect.');return}
-    doLoginLocal(user);
   }
 }
 
