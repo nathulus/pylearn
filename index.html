@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyLearn — Apprends Python de A à Z</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.46.2/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   VARIABLES
+═══════════════════════════════════════════════ */
+:root{
+  --bg0:#07070f;--bg1:#0e0e1c;--bg2:#14142a;--bg3:#1b1b38;--bg4:#22223f;
+  --p9:#1e0a4a;--p8:#3b0f8c;--p7:#5b21b6;--p6:#7c3aed;--p5:#8b5cf6;--p4:#a78bfa;--p3:#c4b5fd;--p2:#ddd6fe;
+  --pk:#ec4899;--pk2:#f472b6;
+  --g4:#4ade80;--g5:#22c55e;
+  --y4:#facc15;--o4:#fb923c;--o5:#f97316;
+  --r4:#f87171;--b4:#60a5fa;--b5:#3b82f6;
+  --t1:#f0eeff;--t2:#a8a7c8;--t3:#6564a0;--t4:#3f3f6a;
+  --bd:#1e1e3a;--bd2:#2e2e58;
+  --gp: 0 0 28px rgba(124,58,237,.32);
+  --gps:0 0 55px rgba(124,58,237,.50);
+  --go: 0 0 22px rgba(251,146,60,.38);
+  --nh:68px; --dnh:70px;
+  --r1:6px;--r2:10px;--r3:14px;--r4r:20px;--r5:28px;
+  --ease:all .28s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg0);color:var(--t1);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--p7);border-radius:3px}
+
+/* ═══════════════════════════════════════════════
+   AUTH SCREEN
+═══════════════════════════════════════════════ */
+#authScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg0);
+  display:flex;align-items:stretch;
+}
+.auth-brand{
+  display:none;flex:1;
+  background:linear-gradient(145deg,#0c0c22 0%,#160a38 60%,#0c0c22 100%);
+  border-right:1px solid var(--bd);
+  padding:60px 50px;
+  flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.auth-brand::before{
+  content:'';position:absolute;top:-30%;right:-20%;
+  width:450px;height:450px;
+  background:radial-gradient(circle,rgba(124,58,237,.22) 0%,transparent 70%);
+  pointer-events:none;
+}
+.auth-brand::after{
+  content:'';position:absolute;bottom:-20%;left:-10%;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(236,72,153,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.brand-logo{
+  font-size:1.6rem;font-weight:900;
+  background:linear-gradient(135deg,var(--p3),var(--pk2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:32px;letter-spacing:-.5px;
+}
+.brand-heading{
+  font-size:2.4rem;font-weight:900;letter-spacing:-1px;line-height:1.15;
+  margin-bottom:16px;
+  background:linear-gradient(145deg,var(--t1) 40%,var(--p3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.brand-sub{color:var(--t2);font-size:.95rem;line-height:1.7;margin-bottom:40px}
+.brand-features{display:flex;flex-direction:column;gap:14px}
+.brand-feat{
+  display:flex;align-items:center;gap:12px;
+  color:var(--t2);font-size:.88rem;
+}
+.feat-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.25);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+  flex-shrink:0;
+}
+.brand-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin-top:48px;padding-top:40px;border-top:1px solid var(--bd);
+}
+.brand-stat-val{font-size:1.6rem;font-weight:900;color:var(--p4);letter-spacing:-.5px}
+.brand-stat-lbl{font-size:.72rem;color:var(--t3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+
+/* Auth form panel */
+.auth-panel{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:32px 24px;width:100%;overflow-y:auto;
+}
+.auth-card{width:100%;max-width:420px}
+.auth-logo-mobile{
+  font-size:1.4rem;font-weight:900;text-align:center;
+  background:linear-gradient(135deg,var(--p3),var(--pk2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:28px;
+}
+.auth-tabs{
+  display:flex;background:var(--bg2);border-radius:var(--r3);
+  padding:4px;gap:4px;margin-bottom:28px;
+}
+.auth-tab{
+  flex:1;background:none;border:none;cursor:pointer;
+  padding:10px;border-radius:10px;
+  font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;
+  color:var(--t3);transition:var(--ease);
+}
+.auth-tab.active{background:var(--bg3);color:var(--t1);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* Forms */
+.auth-form{display:none;flex-direction:column;gap:16px}
+.auth-form.active{display:flex}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:.78rem;font-weight:600;color:var(--t2);letter-spacing:.3px;text-transform:uppercase}
+.form-input{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--r2);padding:12px 14px;
+  color:var(--t1);font-family:'Inter',sans-serif;font-size:.9rem;
+  transition:var(--ease);outline:none;width:100%;
+}
+.form-input:focus{border-color:var(--p6);box-shadow:0 0 0 3px rgba(124,58,237,.18)}
+.form-input::placeholder{color:var(--t4)}
+.form-input.error{border-color:var(--r4);box-shadow:0 0 0 3px rgba(248,113,113,.18)}
+
+/* Avatar picker */
+.avatar-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
+}
+.avatar-opt{
+  width:100%;aspect-ratio:1;border-radius:10px;
+  background:var(--bg3);border:2px solid transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;cursor:pointer;transition:var(--ease);
+}
+.avatar-opt:hover{background:var(--bg4);border-color:var(--p6)}
+.avatar-opt.selected{border-color:var(--p5);background:rgba(124,58,237,.2);box-shadow:0 0 12px rgba(124,58,237,.35)}
+
+.form-error{
+  background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);
+  border-radius:var(--r2);padding:10px 14px;
+  font-size:.82rem;color:var(--r4);display:none;
+}
+.form-error.show{display:block}
+
+.btn-auth{
+  background:linear-gradient(135deg,var(--p7),var(--p6));
+  border:none;color:white;
+  padding:13px;border-radius:var(--r2);
+  font-family:'Inter',sans-serif;font-size:.95rem;font-weight:700;
+  cursor:pointer;transition:var(--ease);margin-top:4px;
+}
+.btn-auth:hover{transform:translateY(-2px);box-shadow:var(--gps)}
+.btn-auth:active{transform:translateY(0)}
+
+.auth-divider{
+  display:flex;align-items:center;gap:12px;margin:4px 0;
+}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
+.auth-divider span{font-size:.75rem;color:var(--t3)}
+
+.auth-switch{
+  text-align:center;font-size:.82rem;color:var(--t3);
+}
+.auth-switch span{color:var(--p4);cursor:pointer;font-weight:600;transition:var(--ease)}
+.auth-switch span:hover{color:var(--p3)}
+
+@media(min-width:768px){
+  .auth-brand{display:flex}
+  .auth-panel{flex:none;width:460px}
+  .auth-logo-mobile{display:none}
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN APP
+═══════════════════════════════════════════════ */
+#mainApp{display:none}
+
+/* Particles */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ptcl{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite}
+@keyframes floatUp{
+  0%{opacity:0;transform:translateY(100vh) scale(0)}
+  10%{opacity:.6}90%{opacity:.2}
+  100%{opacity:0;transform:translateY(-5vh) scale(1)}
+}
+
+/* Toast */
+.toast{
+  position:fixed;top:14px;left:50%;
+  transform:translateX(-50%) translateY(-110px);
+  background:linear-gradient(135deg,var(--p7),var(--p6));
+  color:white;padding:11px 20px;border-radius:50px;
+  font-size:.85rem;font-weight:600;
+  z-index:8000;transition:transform .38s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 4px 24px rgba(124,58,237,.5);
+  display:flex;align-items:center;gap:8px;
+  max-width:calc(100vw - 32px);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.xp-pop{
+  position:fixed;bottom:88px;right:16px;
+  background:linear-gradient(135deg,var(--o5),var(--y4));
+  color:#1a0600;padding:10px 18px;border-radius:50px;
+  font-size:1.05rem;font-weight:900;
+  z-index:8000;opacity:0;
+  transform:translateY(24px) scale(.85);
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:var(--go);
+}
+.xp-pop.show{opacity:1;transform:translateY(0) scale(1)}
+
+/* ═══════════════════════════════════════════════
+   DESKTOP NAV
+═══════════════════════════════════════════════ */
+.nav-desk{
+  display:none;
+  position:fixed;top:13px;left:50%;transform:translateX(-50%);
+  z-index:1000;
+  background:rgba(20,20,42,.88);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1px solid var(--bd2);border-radius:50px;
+  padding:7px 18px;
+  align-items:center;gap:4px;
+  box-shadow:var(--gp),0 8px 40px rgba(0,0,0,.55);
+}
+.nd-logo{
+  font-size:1rem;font-weight:900;letter-spacing:-.4px;
+  background:linear-gradient(135deg,var(--p3),var(--pk2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-right:10px;white-space:nowrap;
+}
+.nd-items{display:flex;align-items:center;gap:2px}
+.nd-btn{
+  background:none;border:none;cursor:pointer;
+  padding:7px 14px;border-radius:50px;
+  color:var(--t2);font-family:'Inter',sans-serif;
+  font-size:.82rem;font-weight:600;
+  display:flex;align-items:center;gap:5px;
+  transition:var(--ease);
+}
+.nd-btn:hover{background:rgba(124,58,237,.14);color:var(--p3)}
+.nd-btn.active{background:linear-gradient(135deg,var(--p7),var(--p6));color:white;box-shadow:0 0 16px rgba(124,58,237,.42)}
+.nd-user{
+  display:flex;align-items:center;gap:8px;
+  margin-left:10px;padding-left:14px;
+  border-left:1px solid var(--bd);
+}
+.nd-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p7),var(--pk));
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  border:1.5px solid var(--p5);
+}
+.nd-name{font-size:.78rem;font-weight:600;color:var(--t2)}
+.nd-logout{
+  background:none;border:none;cursor:pointer;
+  color:var(--t3);font-size:.75rem;padding:4px 8px;
+  border-radius:6px;font-family:'Inter',sans-serif;
+  transition:var(--ease);
+}
+.nd-logout:hover{color:var(--r4);background:rgba(248,113,113,.1)}
+/* Sync status badge */
+.sync-badge{
+  font-size:.68rem;padding:3px 8px;border-radius:50px;font-weight:700;
+  transition:var(--ease);white-space:nowrap;letter-spacing:.2px;
+}
+.sync-badge.cloud{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);color:var(--g4)}
+.sync-badge.local{background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.22);color:var(--y4)}
+.sync-badge.syncing{background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:var(--p4);animation:sbPulse 1s ease-in-out infinite}
+@keyframes sbPulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* Button loading */
+.btn-auth:disabled{opacity:.65;cursor:not-allowed;transform:none!important}
+.btn-auth .btn-spinner{
+  display:inline-block;width:14px;height:14px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.3);border-top-color:white;
+  animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Storage info in profile */
+.storage-info{
+  margin:12px 18px;padding:12px 14px;
+  background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r3);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.storage-mode{font-size:.8rem;font-weight:600;display:flex;align-items:center;gap:7px}
+.storage-sub{font-size:.7rem;color:var(--t3);margin-top:2px}
+
+/* ═══ GOOGLE MATERIAL SYMBOLS ═══ */
+.material-symbols-rounded{
+  font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;
+  user-select:none;line-height:1;display:inline-flex;
+  align-items:center;justify-content:center;
+}
+/* Nav desktop */
+.nd-btn .mi{font-size:1.1rem;margin-right:4px;vertical-align:middle}
+/* Nav mobile */
+.nm-icon{font-size:1.5rem!important;transition:var(--ease)}
+/* Stats */
+.stat-ico .mi{font-size:1.6rem;color:var(--p4)}
+/* Lesson status */
+.lst-ico{font-size:1rem}
+/* Buttons icons */
+.btn-ic{font-size:1rem;margin-right:4px;vertical-align:middle}
+.back-ic{font-size:1.1rem;margin-right:4px;vertical-align:middle}
+/* Run button */
+.run-ic{font-size:.95rem;vertical-align:middle}
+/* Console */
+.con-ic{font-size:.85rem;vertical-align:middle}
+/* Chevron */
+.chev-ic{font-size:1.2rem;color:var(--t3);transition:var(--ease);vertical-align:middle}
+.hm-card:hover .chev-ic{color:var(--p4)}
+.litem:hover .chev-ic{color:var(--p4)}
+/* Sync badge icons */
+.sync-badge .mi{font-size:.75rem;vertical-align:middle;margin-right:2px}
+/* Profile stats icons */
+.ps-ico{font-size:1rem;vertical-align:middle;margin-right:3px}
+/* Feat icons in auth */
+.feat-ico .mi{font-size:1rem;color:var(--p4)}
+/* Logout */
+.logout-ic{font-size:1rem;vertical-align:middle;margin-right:5px}
+/* XP popup */
+.xp-pop-ic{font-size:1rem;vertical-align:middle;margin-right:3px}
+/* Toast icon */
+.toast-ic{font-size:1rem;vertical-align:middle}
+/* Section title icon */
+.sec-title-ic{font-size:1rem;color:var(--p4);vertical-align:middle;margin-right:4px}
+/* Continuation card */
+.con-arr-ic{font-size:1.1rem;color:var(--p4);vertical-align:middle}
+/* Module icon text */
+.mod-ico-txt{font-size:1.1rem}
+
+/* ═══════════════════════════════════════════════
+   MOBILE NAV
+═══════════════════════════════════════════════ */
+.nav-mob{
+  display:flex;
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:1000;
+  background:rgba(11,11,22,.97);
+  backdrop-filter:blur(22px);
+  border-top:1px solid var(--bd);
+  height:var(--nh);
+  justify-content:space-around;align-items:center;
+  padding:0 6px;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.nm-btn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 12px;border-radius:var(--r2);
+  color:var(--t3);font-family:'Inter',sans-serif;
+  font-size:.6rem;font-weight:600;
+  transition:var(--ease);min-width:55px;
+}
+.nm-icon{font-size:1.3rem;transition:var(--ease)}
+.nm-btn.active{color:var(--p4)}
+.nm-btn.active .nm-icon{transform:translateY(-3px);filter:drop-shadow(0 0 8px rgba(167,139,250,.7))}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.main{
+  padding-bottom:calc(var(--nh) + 14px);
+  min-height:100vh;position:relative;z-index:1;
+}
+.page{display:none;animation:pgIn .32s cubic-bezier(.4,0,.2,1)}
+.page.active{display:block}
+@keyframes pgIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════════════ */
+.sec-title{
+  font-size:.95rem;font-weight:700;color:var(--t1);
+  margin:20px 18px 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
+
+.pbar-bg{background:var(--bg1);border-radius:50px;height:6px;overflow:hidden;position:relative}
+.pbar-fill{
+  height:100%;border-radius:50px;
+  background:linear-gradient(90deg,var(--p7),var(--p4));
+  transition:width 1.1s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.pbar-fill::after{
+  content:'';position:absolute;right:-1px;top:-3.5px;
+  width:13px;height:13px;
+  background:var(--p3);border-radius:50%;
+  box-shadow:0 0 10px var(--p4);
+}
+
+.badge{font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:50px;text-transform:uppercase;letter-spacing:.4px}
+.badge-pu{background:linear-gradient(135deg,var(--p7),var(--p6));color:white}
+.badge-or{background:linear-gradient(135deg,var(--o5),var(--y4));color:#1a0600}
+.badge-gn{background:linear-gradient(135deg,var(--g5),var(--g4));color:#041a04}
+
+/* ═══════════════════════════════════════════════
+   HOME PAGE
+═══════════════════════════════════════════════ */
+.home-top{
+  padding:26px 18px 14px;
+  background:linear-gradient(180deg,rgba(124,58,237,.09) 0%,transparent 100%);
+}
+.greet-time{font-size:.78rem;color:var(--t3);margin-bottom:2px;letter-spacing:.3px}
+.greet-name{
+  font-size:1.65rem;font-weight:900;letter-spacing:-.5px;
+  background:linear-gradient(140deg,var(--t1) 30%,var(--p3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Streak */
+.streak-card{
+  margin:14px 18px;
+  background:linear-gradient(135deg,#161630,#180f40);
+  border:1px solid var(--bd2);border-radius:var(--r4r);
+  padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+  box-shadow:var(--gp);
+}
+.streak-card::before{
+  content:'';position:absolute;top:-40%;right:-8%;
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(124,58,237,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.streak-left{display:flex;align-items:center;gap:14px}
+.flame-wrap{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.flame-glow{
+  position:absolute;width:52px;height:52px;border-radius:50%;
+  background:radial-gradient(circle,rgba(251,146,60,.45) 0%,rgba(124,58,237,.2) 50%,transparent 70%);
+  animation:pGlow 1.6s ease-in-out infinite;
+}
+.flame-em{font-size:2rem;animation:flicker .9s ease-in-out infinite;position:relative;z-index:1}
+@keyframes flicker{
+  0%{transform:scale(1) rotate(-2deg);filter:brightness(1)}
+  20%{transform:scale(1.07) rotate(2.5deg);filter:brightness(1.18)}
+  40%{transform:scale(.97) rotate(-1deg);filter:brightness(.93)}
+  60%{transform:scale(1.05) rotate(2deg);filter:brightness(1.1)}
+  80%{transform:scale(.98) rotate(-.5deg);filter:brightness(1)}
+  100%{transform:scale(1) rotate(-2deg);filter:brightness(1)}
+}
+@keyframes pGlow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}}
+.streak-info h2{
+  font-size:1.9rem;font-weight:900;letter-spacing:-1px;line-height:1;
+  background:linear-gradient(135deg,var(--o4),var(--y4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.streak-info p{color:var(--t2);font-size:.78rem;margin-top:3px}
+.streak-days{display:flex;gap:5px;flex-wrap:wrap}
+.sday{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700}
+.sday-done{background:linear-gradient(135deg,var(--p7),var(--p5));color:white}
+.sday-today{background:linear-gradient(135deg,var(--o5),var(--y4));color:#1a0600;animation:dayPulse 1.3s ease-in-out infinite}
+.sday-soon{background:var(--bg1);border:1px solid var(--bd);color:var(--t3)}
+@keyframes dayPulse{0%,100%{box-shadow:0 0 7px rgba(251,146,60,.4)}50%{box-shadow:0 0 20px rgba(251,146,60,.85)}}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 18px}
+.stat-c{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--r3);padding:13px 8px;text-align:center;
+  transition:var(--ease);cursor:default;
+}
+.stat-c:hover{border-color:var(--p7);transform:translateY(-2px);box-shadow:0 4px 16px rgba(124,58,237,.2)}
+.stat-ico{font-size:1.3rem;margin-bottom:5px}
+.stat-val{font-size:1.35rem;font-weight:900;color:var(--p4);letter-spacing:-.4px}
+.stat-lbl{font-size:.6rem;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+
+/* Continue card */
+.continue-c{
+  margin:0 18px;
+  background:linear-gradient(135deg,var(--bg2),rgba(124,58,237,.07));
+  border:1px solid var(--p7);border-radius:var(--r4r);
+  padding:16px 18px;cursor:pointer;transition:var(--ease);
+}
+.continue-c:hover{transform:translateY(-3px);box-shadow:var(--gps)}
+.con-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.con-arr{color:var(--p4);font-size:1rem}
+.con-title{font-size:1rem;font-weight:700;margin-bottom:3px}
+.con-sub{font-size:.75rem;color:var(--t2);margin-bottom:12px}
+
+/* Home module cards */
+.home-mods{display:flex;flex-direction:column;gap:9px;margin:0 18px}
+.hm-card{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--r4r);padding:14px;
+  cursor:pointer;transition:var(--ease);
+  display:flex;align-items:center;gap:12px;
+}
+.hm-card:hover{border-color:var(--bd2);background:var(--bg3);transform:translateX(4px)}
+.hm-icon{width:44px;height:44px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.hm-info{flex:1}
+.hm-name{font-size:.88rem;font-weight:700;margin-bottom:3px}
+.hm-meta{font-size:.7rem;color:var(--t2);margin-bottom:7px}
+.chev{color:var(--t3);transition:var(--ease)}
+.hm-card:hover .chev{color:var(--p4);transform:translateX(4px)}
+
+/* ═══════════════════════════════════════════════
+   COURSES PAGE
+═══════════════════════════════════════════════ */
+.courses-top{
+  padding:26px 18px 14px;
+  background:linear-gradient(180deg,rgba(124,58,237,.09) 0%,transparent 100%);
+}
+.courses-h{font-size:1.55rem;font-weight:900;letter-spacing:-.4px}
+.courses-sub{color:var(--t2);font-size:.82rem;margin-top:3px}
+
+.course-mod{margin:18px 18px}
+.mod-hdr{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.mod-ico{width:36px;height:36px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.mod-ttl{font-size:.95rem;font-weight:700}
+.mod-cnt{font-size:.7rem;color:var(--t3);margin-top:1px}
+
+.lesson-list{display:flex;flex-direction:column;gap:6px}
+.litem{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--r3);padding:12px 14px;
+  display:flex;align-items:center;gap:11px;
+  cursor:pointer;transition:var(--ease);
+}
+.litem:hover{border-color:var(--bd2);background:var(--bg3);transform:translateX(3px)}
+.lst{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;flex-shrink:0}
+.lst-done{background:linear-gradient(135deg,var(--p7),var(--p5));color:white}
+.lst-cur{background:linear-gradient(135deg,var(--o5),var(--y4));color:#1a0600;animation:dayPulse 1.6s ease-in-out infinite}
+.lst-todo{background:var(--bg1);border:1px solid var(--bd);color:var(--t3)}
+.linfo{flex:1}
+.llbl{font-size:.83rem;font-weight:600}
+.lxp{font-size:.67rem;color:var(--p4);margin-top:2px}
+
+/* ═══════════════════════════════════════════════
+   LESSON PAGE
+═══════════════════════════════════════════════ */
+.lesson-hdr{
+  padding:16px 18px 14px;
+  background:linear-gradient(180deg,rgba(124,58,237,.1) 0%,transparent 100%);
+  border-bottom:1px solid var(--bd);
+}
+.back-btn{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:none;color:var(--p4);
+  font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;
+  cursor:pointer;padding:0;margin-bottom:12px;transition:var(--ease);
+}
+.back-btn:hover{color:var(--p3);gap:9px}
+.lesson-main-ttl{font-size:1.3rem;font-weight:800;letter-spacing:-.3px}
+.lp-row{display:flex;align-items:center;gap:11px;margin-top:11px}
+.lp-bar{flex:1;background:var(--bg1);border-radius:50px;height:5px;overflow:hidden}
+.lp-fill{height:100%;background:linear-gradient(90deg,var(--p7),var(--p4));border-radius:50px;transition:width .5s ease}
+.lp-lbl{font-size:.7rem;color:var(--t3);white-space:nowrap}
+
+.lesson-body{padding:20px 18px}
+
+/* Theory */
+.thy-block{margin-bottom:24px}
+.thy-h{font-size:1rem;font-weight:700;color:var(--p3);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.thy-txt{color:var(--t2);line-height:1.85;font-size:.875rem}
+.thy-txt strong{color:var(--p3);font-weight:600}
+.thy-txt code{
+  background:rgba(124,58,237,.13);border:1px solid rgba(124,58,237,.25);
+  border-radius:4px;padding:1px 5px;
+  font-family:'Fira Code',monospace;font-size:.82em;color:var(--p3);
+}
+
+.ibox{border-left:3px solid var(--p5);background:rgba(124,58,237,.07);border-radius:0 var(--r1) var(--r1) 0;padding:11px 14px;margin:12px 0}
+.ibox.tip{border-left-color:var(--g4);background:rgba(74,222,128,.05)}
+.ibox.warning{border-left-color:var(--y4);background:rgba(250,204,21,.05)}
+.ibox-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;color:var(--p4)}
+.ibox.tip .ibox-lbl{color:var(--g4)}.ibox.warning .ibox-lbl{color:var(--y4)}
+.ibox-txt{font-size:.82rem;color:var(--t2);line-height:1.65}
+
+/* Editor */
+.editor-wrap{
+  margin:18px 0;border-radius:var(--r3);
+  overflow:hidden;border:1px solid var(--bd2);
+  box-shadow:0 4px 32px rgba(0,0,0,.55);
+}
+.ed-top{
+  background:#1a1a2e;padding:9px 13px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.ed-dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#ffbd2e}.dot-g{background:#28ca41}
+.ed-fname{font-size:.68rem;color:var(--t3);font-family:'Fira Code',monospace}
+.run-btn{
+  background:linear-gradient(135deg,var(--p7),var(--p6));
+  border:none;color:white;padding:5px 13px;border-radius:50px;
+  font-size:.7rem;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:5px;transition:var(--ease);
+}
+.run-btn:hover{box-shadow:0 0 14px rgba(124,58,237,.6);transform:translateY(-1px)}
+.run-btn:active{transform:translateY(0)}
+.run-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+.ed-code{background:#282a36}
+.ed-code pre{margin:0}
+.ed-code pre code.hljs{
+  font-family:'Fira Code',monospace!important;
+  font-size:.8rem!important;padding:16px!important;
+  background:#282a36!important;line-height:1.7!important;
+}
+
+/* Console */
+.con-wrap{border-top:1px solid rgba(255,255,255,.04)}
+.con-top{
+  background:#14142a;padding:6px 13px;
+  display:flex;align-items:center;gap:7px;
+}
+.con-dot-live{width:6px;height:6px;border-radius:50%;background:var(--g4);box-shadow:0 0 7px rgba(74,222,128,.6)}
+.con-lbl{font-size:.65rem;color:var(--t3);font-family:'Fira Code',monospace}
+.con-body{background:#0d1117;padding:13px 15px;min-height:54px;font-family:'Fira Code',monospace;font-size:.78rem}
+.con-out{color:var(--g4);line-height:1.85;white-space:pre-wrap}
+.con-out.empty{color:var(--t3);font-style:italic}
+.caret{display:inline-block;width:7px;height:1em;background:var(--g4);vertical-align:text-bottom;margin-left:2px;animation:cblink 1s step-end infinite}
+@keyframes cblink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Explain */
+.xpl-box{margin-top:12px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r3);padding:13px}
+.xpl-ttl{font-size:.68rem;font-weight:700;color:var(--p4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;display:flex;align-items:center;gap:5px}
+.xpl-items{display:flex;flex-direction:column;gap:7px}
+.xpl-row{display:flex;align-items:flex-start;gap:9px}
+.kwd{
+  background:rgba(124,58,237,.13);border:1px solid rgba(124,58,237,.26);
+  color:var(--p3);font-family:'Fira Code',monospace;
+  font-size:.73rem;padding:2px 7px;border-radius:4px;
+  white-space:nowrap;flex-shrink:0;margin-top:1px;
+}
+.kwd-desc{font-size:.78rem;color:var(--t2);line-height:1.55}
+
+/* Lesson nav */
+.lesson-nav{display:flex;gap:9px;margin:24px 18px}
+.btn-prim{
+  flex:1;background:linear-gradient(135deg,var(--p7),var(--p5));
+  border:none;color:white;padding:13px 20px;border-radius:var(--r3);
+  font-size:.88rem;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-prim:hover{transform:translateY(-2px);box-shadow:var(--gps)}
+.btn-sec{
+  background:var(--bg2);border:1px solid var(--bd);color:var(--t2);
+  padding:13px 18px;border-radius:var(--r3);
+  font-size:.88rem;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:var(--ease);
+}
+.btn-sec:hover{border-color:var(--bd2);color:var(--t1)}
+
+/* ═══════════════════════════════════════════════
+   PROFILE PAGE
+═══════════════════════════════════════════════ */
+.prof-top{
+  padding:26px 18px 18px;text-align:center;
+  background:linear-gradient(180deg,rgba(124,58,237,.12) 0%,transparent 100%);
+}
+.av-wrap{width:84px;height:84px;margin:0 auto 12px;position:relative}
+.av-circle{
+  width:84px;height:84px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p7),var(--pk));
+  display:flex;align-items:center;justify-content:center;font-size:2.1rem;
+  border:2.5px solid var(--p5);box-shadow:0 0 26px rgba(124,58,237,.42);
+}
+.av-badge{
+  position:absolute;bottom:0;right:0;width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--o5),var(--y4));
+  border:2px solid var(--bg0);
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;
+}
+.prof-name{font-size:1.3rem;font-weight:800;letter-spacing:-.4px}
+.prof-lvl{color:var(--p4);font-size:.8rem;margin-top:3px}
+
+.prof-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--bd);
+  margin:18px 18px;border-radius:var(--r4r);overflow:hidden;
+}
+.ps{background:var(--bg2);padding:16px 8px;text-align:center}
+.ps-val{font-size:1.35rem;font-weight:900;color:var(--p4);letter-spacing:-.4px}
+.ps-lbl{font-size:.62rem;color:var(--t3);margin-top:3px}
+
+.xp-sec{margin:14px 18px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r4r);padding:16px}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.xp-ttl{font-size:.86rem;font-weight:700}
+.xp-val{font-size:.8rem;color:var(--p4);font-weight:600}
+.xp-bg{background:var(--bg0);border-radius:50px;height:9px;overflow:hidden}
+.xp-fill{
+  height:100%;border-radius:50px;
+  background:linear-gradient(90deg,var(--p7),var(--p4),var(--pk));
+  transition:width 1.5s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.xp-fill::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  animation:shimmer 2.5s linear infinite;
+}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.xp-hint{font-size:.7rem;color:var(--t3);margin-top:6px}
+
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:0 18px}
+.ach-c{
+  background:var(--bg2);border:1px solid var(--bd);
+  border-radius:var(--r3);padding:13px 8px;text-align:center;transition:var(--ease);
+}
+.ach-c.unlocked{border-color:var(--p7);background:rgba(124,58,237,.06)}
+.ach-c.locked{opacity:.3;filter:grayscale(.8)}
+.ach-ico{font-size:1.6rem;margin-bottom:4px}
+.ach-nm{font-size:.63rem;font-weight:600;color:var(--t2)}
+
+/* Logout btn in profile */
+.logout-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin:18px 18px 0;
+  background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);
+  color:var(--r4);padding:12px;border-radius:var(--r3);
+  font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:var(--ease);width:calc(100% - 36px);
+}
+.logout-btn:hover{background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.4)}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — DESKTOP
+═══════════════════════════════════════════════ */
+@media(min-width:768px){
+  .nav-mob{display:none}
+  .nav-desk{display:flex}
+  .main{padding-bottom:44px;padding-top:calc(var(--dnh) + 24px);max-width:880px;margin:0 auto}
+  .toast{top:86px}
+  .xp-pop{bottom:20px}
+  .home-top,.courses-top{padding:34px 36px 14px}
+  .streak-card{margin:14px 36px}
+  .stats-row{margin:14px 36px}
+  .sec-title{margin:20px 36px 10px}
+  .continue-c{margin:0 36px}
+  .home-mods{margin:0 36px;display:grid;grid-template-columns:repeat(2,1fr)}
+  .course-mod{margin:18px 36px}
+  .lesson-hdr{padding:18px 36px 14px}
+  .lesson-body{padding:22px 36px}
+  .lesson-nav{margin:24px 36px}
+  .prof-top{padding:30px 36px 18px}
+  .prof-stats{margin:18px 36px}
+  .xp-sec{margin:14px 36px}
+  .ach-grid{margin:0 36px;grid-template-columns:repeat(4,1fr)}
+  .logout-btn{margin:18px 36px 0;width:calc(100% - 72px)}
+}
+.btm-spacer{height:18px}
+</style>
+</head>
+<body>
+
+<!-- ═══════ AUTH SCREEN ═══════ -->
+<div id="authScreen">
+  <div class="auth-brand">
+    <div class="brand-logo">🐍 PyLearn</div>
+    <h1 class="brand-heading">Apprends Python<br>de A à Z</h1>
+    <p class="brand-sub">24 leçons interactives pour maîtriser Python du niveau débutant à expert, avec un éditeur de code et une console intégrés.</p>
+    <div class="brand-features">
+      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">library_books</span></div><span>24 leçons structurées en 8 modules</span></div>
+      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">code</span></div><span>Éditeur de code avec coloration syntaxique</span></div>
+      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span></div><span>Suivi de progression et série quotidienne</span></div>
+      <div class="brand-feat"><div class="feat-icon"><span class="material-symbols-rounded" style="font-size:1.1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">emoji_events</span></div><span>Succès, XP et niveaux à débloquer</span></div>
+    </div>
+    <div class="brand-stats">
+      <div><div class="brand-stat-val">24</div><div class="brand-stat-lbl">Leçons</div></div>
+      <div><div class="brand-stat-val">8</div><div class="brand-stat-lbl">Modules</div></div>
+      <div><div class="brand-stat-val">∞</div><div class="brand-stat-lbl">Pratique</div></div>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-logo-mobile">🐍 PyLearn</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
+        <button class="auth-tab" onclick="switchTab('register')">Inscription</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-error" id="loginErr"></div>
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="ex : pierre@mail.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-input" id="loginPwd" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-auth">Connexion →</button>
+        <div class="auth-switch">Pas encore de compte ? <span onclick="switchTab('register')">S'inscrire</span></div>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-error" id="registerErr"></div>
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" id="regName" placeholder="ex : Pierre" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="ex : pierre@mail.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-input" id="regPwd" placeholder="Minimum 6 caractères" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Choisis ton avatar</label>
+          <div class="avatar-grid" id="avatarGrid"></div>
+        </div>
+        <button type="submit" class="btn-auth">Créer mon compte →</button>
+        <div class="auth-switch">Déjà un compte ? <span onclick="switchTab('login')">Se connecter</span></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MAIN APP ═══════ -->
+<div id="mainApp">
+  <div id="particles"></div>
+  <div class="toast" id="toast"><span id="tIco" style="display:inline-flex;align-items:center;margin-right:6px"></span><span id="tMsg">—</span></div>
+  <div class="xp-pop" id="xpPop"><span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:3px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">bolt</span>+50 XP</div>
+
+  <!-- Desktop nav -->
+  <nav class="nav-desk" id="navDesk">
+    <span class="nd-logo">🐍 PyLearn</span>
+    <div class="nd-items">
+      <button class="nd-btn active" onclick="showPage('home')" id="dn-home">
+        <span class="mi material-symbols-rounded">home</span> Accueil
+      </button>
+      <button class="nd-btn" onclick="showPage('courses')" id="dn-courses">
+        <span class="mi material-symbols-rounded">school</span> Cours
+      </button>
+      <button class="nd-btn" onclick="showPage('profile')" id="dn-profile">
+        <span class="mi material-symbols-rounded">person</span> Profil
+      </button>
+    </div>
+    <div class="nd-user">
+      <div class="nd-avatar" id="ndAvatar">🧑</div>
+      <span class="nd-name" id="ndName">—</span>
+      <span class="sync-badge local" id="syncBadge" title="Mode de stockage">
+        <span class="mi material-symbols-rounded">storage</span> Local
+      </span>
+      <button class="nd-logout" onclick="logout()">
+        <span class="material-symbols-rounded" style="font-size:.85rem;vertical-align:middle;margin-right:3px">logout</span>Déconnexion
+      </button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- ═ HOME ═ -->
+    <section class="page active" id="page-home">
+      <div class="home-top">
+        <p class="greet-time" id="greetTime">Bonjour 👋</p>
+        <h1 class="greet-name" id="greetName">—</h1>
+      </div>
+      <div class="streak-card">
+        <div class="streak-left">
+          <div class="flame-wrap">
+            <div class="flame-glow"></div>
+            <span class="material-symbols-rounded flame-em" style="font-size:2rem;font-variation-settings:'FILL' 1,'wght' 700,'GRAD' 0,'opsz' 24;color:#fb923c;filter:drop-shadow(0 0 10px rgba(251,146,60,.6))">local_fire_department</span>
+          </div>
+          <div class="streak-info"><h2 id="streakNum">0</h2><p>jours d'affilée</p></div>
+        </div>
+        <div class="streak-days" id="streakDays"></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-c">
+          <div class="stat-ico"><span class="material-symbols-rounded mi" style="font-size:1.6rem;color:#fb923c">bolt</span></div>
+          <div class="stat-val" id="st-xp">0</div><div class="stat-lbl">XP Total</div>
+        </div>
+        <div class="stat-c">
+          <div class="stat-ico"><span class="material-symbols-rounded mi" style="font-size:1.6rem;color:var(--b4)">menu_book</span></div>
+          <div class="stat-val" id="st-done">0</div><div class="stat-lbl">Leçons</div>
+        </div>
+        <div class="stat-c">
+          <div class="stat-ico"><span class="material-symbols-rounded mi" style="font-size:1.6rem;color:var(--y4)">emoji_events</span></div>
+          <div class="stat-val" id="st-lvl">1</div><div class="stat-lbl">Niveau</div>
+        </div>
+      </div>
+      <h3 class="sec-title">
+        <span class="material-symbols-rounded sec-title-ic">play_circle</span>Continuer là où j'en suis
+      </h3>
+      <div class="continue-c" id="conCard">
+        <div class="con-top">
+          <span class="badge badge-or" id="conBadge">En cours</span>
+          <span class="con-arr"><span class="con-arr-ic material-symbols-rounded">arrow_forward</span></span>
+        </div>
+        <div class="con-title" id="conTitle">—</div>
+        <div class="con-sub" id="conSub">—</div>
+        <div class="pbar-bg"><div class="pbar-fill" id="conBar" style="width:0%"></div></div>
+      </div>
+      <h3 class="sec-title"><span class="material-symbols-rounded sec-title-ic">grid_view</span>Tous les modules</h3>
+      <div class="home-mods" id="homeMods"></div>
+      <div class="btm-spacer"></div>
+    </section>
+
+    <!-- ═ COURSES ═ -->
+    <section class="page" id="page-courses">
+      <div class="courses-top">
+        <h1 class="courses-h"><span class="material-symbols-rounded" style="font-size:1.5rem;vertical-align:middle;margin-right:8px;color:var(--p4)">school</span>Cours Python</h1>
+        <p class="courses-sub">Maîtrise Python de A à Z — 24 leçons en 8 modules</p>
+      </div>
+      <div id="coursesMods"></div>
+      <div class="btm-spacer"></div>
+    </section>
+
+    <!-- ═ LESSON ═ -->
+    <section class="page" id="page-lesson">
+      <div class="lesson-hdr">
+        <button class="back-btn" onclick="showPage('courses')">
+          <span class="back-ic material-symbols-rounded">arrow_back</span> Retour aux cours
+        </button>
+        <h1 class="lesson-main-ttl" id="lsTitle">—</h1>
+        <div class="lp-row">
+          <div class="lp-bar"><div class="lp-fill" id="lpFill" style="width:0%"></div></div>
+          <span class="lp-lbl" id="lpLbl">Étape 1/1</span>
+        </div>
+      </div>
+      <div class="lesson-body" id="lsBody"></div>
+      <div class="lesson-nav" id="lsNav"></div>
+      <div class="btm-spacer"></div>
+    </section>
+
+    <!-- ═ PROFILE ═ -->
+    <section class="page" id="page-profile">
+      <div class="prof-top">
+        <div class="av-wrap">
+          <div class="av-circle" id="profAv">🧑</div>
+          <div class="av-badge"><span class="material-symbols-rounded" style="font-size:.9rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">star</span></div>
+        </div>
+        <h1 class="prof-name" id="profName">—</h1>
+        <p class="prof-lvl" id="profLvl">Niveau 1 · Débutant</p>
+      </div>
+      <div class="prof-stats">
+        <div class="ps">
+          <div class="ps-val" id="ps-streak">0</div>
+          <div class="ps-lbl"><span class="material-symbols-rounded ps-ico" style="color:#fb923c">local_fire_department</span>Série</div>
+        </div>
+        <div class="ps">
+          <div class="ps-val" id="ps-xp">0</div>
+          <div class="ps-lbl"><span class="material-symbols-rounded ps-ico" style="color:#fb923c">bolt</span>XP</div>
+        </div>
+        <div class="ps">
+          <div class="ps-val" id="ps-done">0</div>
+          <div class="ps-lbl"><span class="material-symbols-rounded ps-ico" style="color:var(--b4)">menu_book</span>Leçons</div>
+        </div>
+      </div>
+      <div class="xp-sec">
+        <div class="xp-row">
+          <span class="xp-ttl"><span class="material-symbols-rounded" style="font-size:.95rem;vertical-align:middle;margin-right:5px;color:#fb923c">bolt</span>Progression XP</span>
+          <span class="xp-val" id="xpValTxt">0/200 XP</span>
+        </div>
+        <div class="xp-bg"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+        <p class="xp-hint" id="xpHint">Encore 200 XP pour le Niveau 2</p>
+      </div>
+      <div class="storage-info" id="storageInfo">
+        <div>
+          <div class="storage-mode" id="storageModeEl"><span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:5px;color:var(--y4)">storage</span>Mode local</div>
+          <div class="storage-sub" id="storageSubEl">Données sauvegardées dans le navigateur</div>
+        </div>
+        <span class="sync-badge local" id="profileSyncBadge">Local</span>
+      </div>
+      <h3 class="sec-title"><span class="material-symbols-rounded sec-title-ic">military_tech</span>Succès</h3>
+      <div class="ach-grid" id="achGrid"></div>
+      <button class="logout-btn" onclick="logout()">
+        <span class="material-symbols-rounded logout-ic">logout</span>Se déconnecter
+      </button>
+      <div class="btm-spacer"></div>
+    </section>
+  </main>
+
+  <!-- Mobile nav -->
+  <nav class="nav-mob">
+    <button class="nm-btn active" onclick="showPage('home')" id="mn-home">
+      <span class="nm-icon material-symbols-rounded">home</span><span>Accueil</span>
+    </button>
+    <button class="nm-btn" onclick="showPage('courses')" id="mn-courses">
+      <span class="nm-icon material-symbols-rounded">school</span><span>Cours</span>
+    </button>
+    <button class="nm-btn" onclick="showPage('profile')" id="mn-profile">
+      <span class="nm-icon material-symbols-rounded">person</span><span>Profil</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CURRICULUM — 24 LEÇONS, 8 MODULES
+══════════════════════════════════════════════════════════════ */
+const CUR = {
+  debut:{title:'Débuter avec Python',icon:'🚀',color:'#7c3aed',bg:'rgba(124,58,237,.15)',lessons:[
+    {id:'d1',title:"Qu'est-ce que Python ?",xp:40,steps:[
+      {type:'theory',heading:'🐍 Python — Le langage universel',
+       html:`Python est un <strong>langage de programmation</strong> créé en 1991 par Guido van Rossum. C'est aujourd'hui l'un des langages les plus populaires au monde, utilisé dans des dizaines de domaines :<br><br>
+• 🌐 <strong>Web</strong> — Instagram, Pinterest, YouTube utilisent Python<br>
+• 🤖 <strong>IA & Machine Learning</strong> — TensorFlow, PyTorch, scikit-learn<br>
+• 📊 <strong>Data Science</strong> — pandas, NumPy, matplotlib<br>
+• 🎮 <strong>Jeux vidéo</strong> — Pygame, moteurs de script<br>
+• 🔬 <strong>Sciences & recherche</strong> — calcul scientifique, simulations<br>
+• 🛡️ <strong>Cybersécurité</strong> — scripts d'automatisation, pentesting<br><br>
+Sa syntaxe est <strong>propre et lisible</strong> — souvent décrite comme "du pseudo-code qui s'exécute réellement".`,
+       box:{type:'info',label:'💡 Philosophie Python',text:'Python suit le "Zen de Python" : il doit y avoir UNE seule façon évidente de faire les choses. La lisibilité du code compte plus que la concision.'}},
+      {type:'code',heading:'👋 Hello World — Ton premier programme',
+       desc:'En Python, afficher du texte est incroyablement simple. La fonction <code>print()</code> est la première chose à apprendre :',
+       code:`# Mon premier programme Python\n# Les lignes commençant par # sont des commentaires\n\nprint("Hello, World!")\nprint("Bienvenue dans Python !")\nprint("Je vais devenir un développeur Python.")\n\n# On peut aussi faire des calculs directement\nprint("\\n-- Calculs rapides --")\nprint(2 + 2)\nprint(10 * 5)\nprint(100 / 4)`,
+       output:`Hello, World!\nBienvenue dans Python !\nJe vais devenir un développeur Python.\n\n-- Calculs rapides --\n4\n50\n25.0`,
+       explains:[
+         {kw:'#',desc:"Commentaire — Python ignore tout ce qui suit le # sur la ligne. Sert à documenter et expliquer le code. Bonne pratique indispensable !"},
+         {kw:'print()',desc:"Fonction intégrée d'affichage. Prend un ou plusieurs arguments et les affiche dans la console, séparés par des espaces."},
+         {kw:'"..."',desc:"Chaîne de caractères (string). Doit être entourée de guillemets simples ' ou doubles \". Les deux fonctionnent."},
+         {kw:'\\n',desc:"Caractère de retour à la ligne. Utilisé à l'intérieur d'une chaîne pour créer une ligne vide."}]}
+    ]},
+    {id:'d2',title:'Variables et Types de Données',xp:50,steps:[
+      {type:'theory',heading:'📦 Stocker des informations avec les variables',
+       html:`Une <strong>variable</strong> est un conteneur nommé qui stocke une valeur. Python détecte automatiquement le type — pas besoin de le déclarer.<br><br>
+Les <strong>4 types fondamentaux</strong> :<br>
+• <code>str</code> — Texte entre guillemets : <code>"Alice"</code>, <code>'Bonjour'</code><br>
+• <code>int</code> — Nombre entier : <code>42</code>, <code>-10</code>, <code>0</code><br>
+• <code>float</code> — Nombre décimal : <code>3.14</code>, <code>-0.5</code>, <code>1.0</code><br>
+• <code>bool</code> — Booléen : <code>True</code> ou <code>False</code> (majuscule obligatoire)`,
+       box:{type:'tip',label:'✅ Convention de nommage',text:"En Python, les variables s'écrivent en snake_case : prénom_utilisateur, nombre_de_jours, prix_total. Pas de majuscules, pas de tirets, pas d'accents."}},
+      {type:'code',heading:'📦 Créer et utiliser des variables',
+       desc:'Voici comment déclarer et manipuler différents types de variables :',
+       code:`# Déclaration de variables\nprenom      = "Alice"\nnombre_vies = 3\npoids       = 62.5\nest_actif   = True\n\n# Affichage basique\nprint(prenom)\nprint(nombre_vies)\n\n# Réassignation — la variable change de valeur\nnombre_vies = nombre_vies - 1\nprint("Vies restantes :", nombre_vies)\n\n# Vérifier le type\nprint("\\nType de prenom   :", type(prenom))\nprint("Type de poids    :", type(poids))\nprint("Type de est_actif:", type(est_actif))\n\n# Affectation multiple\nx = y = z = 0\na, b, c = 10, 20, 30\nprint("\\na =", a, "| b =", b, "| c =", c)`,
+       output:`Alice\n3\nVies restantes : 2\n\nType de prenom   : <class 'str'>\nType de poids    : <class 'float'>\nType de est_actif: <class 'bool'>\n\na = 10 | b = 20 | c = 30`,
+       explains:[
+         {kw:'=',desc:"Opérateur d'assignation. Stocke la valeur de droite dans la variable à gauche. N'est PAS une égalité mathématique."},
+         {kw:'str',desc:"String — chaîne de caractères. Séquence de lettres, chiffres ou symboles entre guillemets."},
+         {kw:'int',desc:"Integer — nombre entier sans virgule. Peut être positif, négatif ou nul."},
+         {kw:'float',desc:"Floating point — nombre à virgule. Python utilise . et non , pour la décimale."},
+         {kw:'bool',desc:"Boolean — True ou False. Toujours avec une majuscule. Résultat de comparaisons logiques."},
+         {kw:'type()',desc:"Fonction qui retourne le type d'une valeur. Utile pour déboguer : type(42) → int."},
+         {kw:'a, b = 1, 2',desc:"Affectation multiple sur une ligne. Pratique pour initialiser plusieurs variables simultanément."}]}
+    ]},
+    {id:'d3',title:"Saisie Utilisateur avec input()",xp:45,steps:[
+      {type:'theory',heading:'⌨️ Rendre les programmes interactifs',
+       html:`La fonction <code>input()</code> permet de <strong>demander une information à l'utilisateur</strong>. Elle affiche un message, attend la frappe, et retourne toujours une <strong>chaîne de caractères</strong>.<br><br>
+Pour utiliser la valeur saisie comme nombre, il faut la <strong>convertir</strong> (cast) :<br>
+• <code>int("42")</code> → convertit en entier<br>
+• <code>float("3.14")</code> → convertit en décimal<br>
+• <code>str(42)</code> → convertit en texte`,
+       box:{type:'warning',label:'⚠️ input() retourne toujours du texte',text:'Si tu fais age = input("Ton âge : ") et que l\'utilisateur tape 25, age vaudra "25" (une string), pas 25 (un int). Pour faire des calculs, utilise int(input(...)).'}},
+      {type:'code',heading:'⌨️ Interagir avec l\'utilisateur',
+       desc:'Dans cette simulation, les valeurs saisies sont indiquées entre crochets ← :',
+       code:`# Demander le nom\nnom = input("Quel est ton prénom ? ")\nprint(f"Bonjour {nom} !")\n\n# Demander l'âge (converti en int)\nage = int(input("Quel est ton âge ? "))\nannee_naissance = 2025 - age\nprint(f"Tu es né(e) vers {annee_naissance}.")\n\n# Calcul avec saisie\nprix = float(input("Prix du produit (€) : "))\nremise = float(input("Remise en % : "))\nprix_final = prix * (1 - remise / 100)\nprint(f"\\nPrix original : {prix:.2f} €")\nprint(f"Remise        : {remise}%")\nprint(f"Prix final    : {prix_final:.2f} €")`,
+       output:`Quel est ton prénom ? ← Marie\nBonjour Marie !\nQuel est ton âge ? ← 20\nTu es né(e) vers 2005.\nPrix du produit (€) : ← 80\nRemise en % : ← 25\n\nPrix original : 80.00 €\nRemise        : 25.0%\nPrix final    : 60.00 €`,
+       explains:[
+         {kw:'input("msg")',desc:"Affiche msg, attend que l'utilisateur tape quelque chose + Entrée, et retourne la saisie en string."},
+         {kw:'int()',desc:"Convertit une valeur en entier. int(\"42\") = 42. Erreur si la valeur n'est pas un nombre valide."},
+         {kw:'float()',desc:"Convertit en nombre décimal. float(\"3.14\") = 3.14. Accepte aussi les entiers : float(5) = 5.0."},
+         {kw:'f"...{var}..."',desc:"F-string (depuis Python 3.6) — insère des variables directement dans le texte avec { }. La méthode moderne recommandée."},
+         {kw:':.2f',desc:"Format dans un f-string : affiche le nombre avec exactement 2 décimales. Ex : {3.14159:.2f} → '3.14'."}]}
+    ]},
+    {id:'d4',title:'Conversion de Types (Casting)',xp:55,steps:[
+      {type:'theory',heading:'🔄 Transformer des données entre types',
+       html:`La <strong>conversion de type</strong> permet de transformer une valeur d'un type vers un autre. Python distingue deux cas :<br><br>
+<strong>Conversion implicite</strong> (automatique) :<br>
+• <code>5 + 2.0 = 7.0</code> — Python convertit int → float automatiquement<br><br>
+<strong>Conversion explicite</strong> (tu en es responsable) :<br>
+• <code>int()</code> — convertit en entier (tronque les décimales)<br>
+• <code>float()</code> — convertit en décimal<br>
+• <code>str()</code> — convertit en texte<br>
+• <code>bool()</code> — convertit en booléen<br>
+• <code>list()</code>, <code>tuple()</code>, <code>set()</code> — entre collections`,
+       box:{type:'warning',label:'⚠️ Valeurs "falsy"',text:'Ces valeurs sont considérées False par bool() : 0, 0.0, "" (vide), [], {}, (), None. TOUT le reste = True. Très utile pour simplifier les conditions : if ma_liste: (au lieu de if len(ma_liste) > 0:)'}},
+      {type:'code',heading:'🔄 Toutes les conversions en pratique',
+       desc:'Maîtrise les conversions pour éviter les erreurs de type :',
+       code:`# Conversion numérique\nprint("=== → int ===")\nprint(int(3.9))           # 3 (troncature, PAS arrondi)\nprint(int("42"))          # 42\nprint(int("0b1010", 2))   # 10 (binaire vers décimal)\nprint(int("FF", 16))      # 255 (hexadécimal vers décimal)\n\nprint("\\n=== → float ===")\nprint(float("3.14"))      # 3.14\nprint(float(42))          # 42.0\nprint(float("inf"))       # infini\n\nprint("\\n=== → str ===")\nprint(str(3.14))          # '3.14'\nprint(str(True))          # 'True'\nprint(str([1, 2, 3]))     # '[1, 2, 3]'\n\nprint("\\n=== bool() — valeurs 'falsy' vs 'truthy' ===")\nfor val in [0, 1, -5, "", "texte", [], [0], None, {}, {0: 0}]:\n    signe = "✅ True " if bool(val) else "❌ False"\n    print(f"  bool({repr(val):<15}) = {signe}")\n\nprint("\\n=== Entre collections ===")\nprint(list("python"))        # ['p','y','t','h','o','n']\nprint(tuple(range(5)))       # (0,1,2,3,4)\nprint(set([1, 2, 2, 3, 3])) # {1,2,3} — sans doublons`,
+       output:`=== → int ===\n3\n42\n10\n255\n\n=== → float ===\n3.14\n42.0\ninf\n\n=== → str ===\n3.14\nTrue\n[1, 2, 3]\n\n=== bool() — valeurs 'falsy' vs 'truthy' ===\n  bool(0              ) = ❌ False\n  bool(1              ) = ✅ True\n  bool(-5             ) = ✅ True\n  bool(''             ) = ❌ False\n  bool('texte'        ) = ✅ True\n  bool([]             ) = ❌ False\n  bool([0]            ) = ✅ True\n  bool(None           ) = ❌ False\n  bool({}             ) = ❌ False\n  bool({0: 0}         ) = ✅ True\n\n=== Entre collections ===\n['p', 'y', 't', 'h', 'o', 'n']\n(0, 1, 2, 3, 4)\n{1, 2, 3}`,
+       explains:[
+         {kw:'int(x)',desc:"Tronque les floats (int(3.9)=3, pas 4). Accepte les bases : int('FF',16)=255, int('0b101',2)=5. Lève ValueError si impossible."},
+         {kw:'float(x)',desc:"Convertit en décimal. float('nan')=NaN, float('inf')=∞. ValueError si la chaîne n'est pas un nombre valide."},
+         {kw:'str(x)',desc:"Convertit n'importe quoi en texte. Utilise __str__ de l'objet. Ne lève jamais d'exception."},
+         {kw:'bool(x)',desc:"False pour 0, None, chaîne vide, liste/dict/set vides. True pour tout le reste. Base des conditions 'pythoniques'."},
+         {kw:'list() tuple() set()',desc:"Convertit n'importe quel itérable. set() supprime les doublons. list(dict) = liste des clés."}]}
+    ]},
+    {id:'d5',title:'Débogage — Lire et Corriger les Erreurs',xp:60,steps:[
+      {type:'theory',heading:'🐛 Comprendre les messages d\'erreur Python',
+       html:`Tout développeur passe du temps à <strong>déboguer</strong>. Python génère des <strong>Tracebacks</strong> très informatifs — apprendre à les lire est une compétence clé.<br><br>
+Les erreurs les plus fréquentes :<br>
+• <code>SyntaxError</code> — code mal écrit (oubli de <code>:</code>, parenthèse non fermée...)<br>
+• <code>NameError</code> — variable non définie ou faute de frappe<br>
+• <code>TypeError</code> — mauvais type dans une opération<br>
+• <code>IndexError</code> — index hors limites d'une liste<br>
+• <code>KeyError</code> — clé absente dans un dict<br>
+• <code>ValueError</code> — valeur incorrecte (ex: <code>int("abc")</code>)<br>
+• <code>ZeroDivisionError</code> — division par zéro<br>
+• <code>AttributeError</code> — attribut ou méthode inexistant`,
+       box:{type:'tip',label:'💡 Méthode de débogage',text:'1. Lis le traceback de BAS en HAUT — la dernière ligne = type + message d\'erreur. 2. Regarde le numéro de ligne indiqué. 3. Utilise des print() pour afficher les valeurs intermédiaires. 4. Divise le problème : teste de petits bouts de code isolément.'}},
+      {type:'code',heading:'🐛 Identifier et corriger chaque type d\'erreur',
+       desc:'Apprenons à lire les erreurs et les corriger :',
+       code:`# NameError — variable inexistante\ntry:\n    print(score_total)  # Non définie !\nexcept NameError as e:\n    print(f"NameError: {e}")\nscore_total = 0  # Solution : définir avant d'utiliser\n\n# TypeError — types incompatibles\ntry:\n    message = "Score : " + 42  # str + int impossible !\nexcept TypeError as e:\n    print(f"TypeError: {e}")\nmessage = "Score : " + str(42)  # Solution\nprint(f"Correct: {message}")\n\n# IndexError — liste trop courte\ntry:\n    notes = [15, 12, 18]\n    print(notes[5])  # Index 5 n'existe pas (0, 1, 2 seulement)\nexcept IndexError as e:\n    print(f"IndexError: {e}")\n    print(f"  Indices valides: 0 à {len(notes)-1}")\n\n# KeyError — clé manquante\ntry:\n    user = {"nom": "Alice", "age": 25}\n    print(user["email"])  # Clé absente !\nexcept KeyError as e:\n    print(f"KeyError: {e}")\nprint(f"Sécurisé: {user.get('email', 'Non renseigné')}")\n\n# ValueError\ntry:\n    age = int("vingt-cinq")  # Pas un nombre !\nexcept ValueError as e:\n    print(f"ValueError: {e}")\n\n# Technique : print() pour déboguer\ndef calculer_moyenne(notes):\n    print(f"  [DEBUG] Reçu: {notes}, type: {type(notes).__name__}")\n    return sum(notes) / len(notes)\n\nprint(f"\\nMoyenne: {calculer_moyenne([12, 15, 18, 9]):.2f}")`,
+       output:`NameError: name 'score_total' is not defined\nTypeError: can only concatenate str (not "int") to str\nCorrect: Score : 42\nIndexError: list index out of range\n  Indices valides: 0 à 2\nKeyError: 'email'\nSécurisé: Non renseigné\nValueError: invalid literal for int() with base 10: 'vingt-cinq'\n\n  [DEBUG] Reçu: [12, 15, 18, 9], type: list\nMoyenne: 13.50`,
+       explains:[
+         {kw:'NameError',desc:"Variable utilisée avant d'être définie, ou faute de frappe dans le nom. Python est sensible à la casse : Total ≠ total."},
+         {kw:'TypeError',desc:"Opération entre types incompatibles. Solution : convertir avec str(), int(), float() avant l'opération."},
+         {kw:'IndexError',desc:"Index hors des limites de la liste. Indices valides pour une liste de n éléments : 0 à n-1 (ou -n à -1)."},
+         {kw:'KeyError',desc:"Clé absente dans un dict. Utilise .get(clé, défaut) pour éviter l'erreur, ou 'clé' in dict pour vérifier avant."},
+         {kw:'as e',desc:"Capture l'objet exception dans e. str(e) donne le message d'erreur. e.args[0] donne le message brut."},
+         {kw:'print() debug',desc:"La technique la plus simple et efficace : affiche les valeurs clés à des points stratégiques du code."}]}
+    ]}
+  ]},
+
+  operateurs:{title:'Opérateurs & Expressions',icon:'⚡',color:'#d97706',bg:'rgba(217,119,6,.15)',lessons:[
+    {id:'o1',title:'Opérateurs Arithmétiques',xp:50,steps:[
+      {type:'theory',heading:'🔢 Python comme calculatrice avancée',
+       html:`Les <strong>opérateurs arithmétiques</strong> permettent d'effectuer des calculs. Python va bien au-delà des 4 opérations de base :<br><br>
+• <code>+</code> Addition &nbsp;&nbsp; • <code>-</code> Soustraction<br>
+• <code>*</code> Multiplication &nbsp;&nbsp; • <code>/</code> Division (retourne un float)<br>
+• <code>//</code> Division entière &nbsp;&nbsp; • <code>%</code> Modulo (reste)<br>
+• <code>**</code> Puissance<br><br>
+Les <strong>opérateurs d'assignation composés</strong> permettent de modifier une variable directement : <code>x += 5</code> équivaut à <code>x = x + 5</code>.`,
+       box:{type:'warning',label:'⚠️ Division en Python',text:'10 / 3 = 3.3333... (float), 10 // 3 = 3 (int arrondi vers le bas), 10 % 3 = 1 (reste). Le modulo est très utile : n % 2 == 0 vérifie si n est pair !'}},
+      {type:'code',heading:'🔢 Tous les opérateurs en action',
+       desc:'Explorons tous les opérateurs arithmétiques de Python :',
+       code:`a, b = 17, 5\n\nprint("=== Opérations de base ===")\nprint(f"{a} + {b}  = {a + b}")\nprint(f"{a} - {b}  = {a - b}")\nprint(f"{a} * {b}  = {a * b}")\nprint(f"{a} / {b}  = {a / b:.4f}")\nprint(f"{a} // {b} = {a // b}  (division entière)")\nprint(f"{a} % {b}  = {a % b}  (reste)")\nprint(f"{a} ** {b} = {a ** b}  (puissance)")\n\nprint("\\n=== Assignation composée ===")\ncompteur = 10\ncompteur += 5   # compteur = 15\ncompteur *= 2   # compteur = 30\ncompteur -= 8   # compteur = 22\nprint(f"Compteur final : {compteur}")\n\nprint("\\n=== Cas pratique ===")\nnombre = 15\nprint("Pair ?" if nombre % 2 == 0 else "Impair !")`,
+       output:`=== Opérations de base ===\n17 + 5  = 22\n17 - 5  = 12\n17 * 5  = 85\n17 / 5  = 3.4000\n17 // 5 = 3  (division entière)\n17 % 5  = 2  (reste)\n17 ** 5 = 1419857  (puissance)\n\n=== Assignation composée ===\nCompteur final : 22\n\n=== Cas pratique ===\nImpair !`,
+       explains:[
+         {kw:'//',desc:"Division entière (floor division) — divise et garde seulement la partie entière. 7//2=3, 17//5=3."},
+         {kw:'%',desc:"Modulo — retourne le RESTE de la division entière. Très utile : pair si n%2==0, divisible par k si n%k==0."},
+         {kw:'**',desc:"Puissance — 2**10=1024, 9**.5=3.0 (racine carrée !). Priorité élevée dans les calculs."},
+         {kw:'+=  -=  *=',desc:"Opérateurs d'assignation composés. x += 5 est un raccourci propre pour x = x + 5."},
+         {kw:'expr if cond else expr2',desc:"Expression ternaire — version courte du if/else sur une ligne. Renvoie la première expr si cond est vraie, sinon la seconde."}]}
+    ]},
+    {id:'o2',title:'Opérateurs de Comparaison & Logiques',xp:50,steps:[
+      {type:'theory',heading:'🔍 Comparer et combiner des conditions',
+       html:`Les <strong>opérateurs de comparaison</strong> comparent deux valeurs et retournent un booléen :<br>
+<code>==</code> égal &nbsp; <code>!=</code> différent &nbsp; <code>></code> supérieur &nbsp; <code><</code> inférieur &nbsp; <code>>=</code> &nbsp; <code><=</code><br><br>
+Les <strong>opérateurs logiques</strong> combinent des conditions :<br>
+• <code>and</code> — vraie si LES DEUX conditions sont vraies<br>
+• <code>or</code> — vraie si AU MOINS UNE condition est vraie<br>
+• <code>not</code> — inverse la valeur booléenne`,
+       box:{type:'tip',label:'✅ Chaîner les comparaisons',text:'Python permet d\'écrire 0 < age < 18 directement, comme en mathématiques ! C\'est plus lisible que age > 0 and age < 18.'}},
+      {type:'code',heading:'🔍 Comparaisons et logique booléenne',
+       desc:'Les opérateurs logiques servent à construire des conditions complexes :',
+       code:`age = 17\nnote = 15.5\nabonnement = True\n\n# Comparaisons de base\nprint("age == 17 :", age == 17)\nprint("note > 20 :", note > 20)\nprint("note >= 10 :", note >= 10)\n\n# Opérateurs logiques\nprint("\\n-- and (ET) --")\nprint("Majeur ET bonne note :", age >= 18 and note >= 10)\nprint("Mineur ET abonné    :", age < 18 and abonnement)\n\nprint("\\n-- or (OU) --")\nprint("Majeur OU abonné :", age >= 18 or abonnement)\n\nprint("\\n-- not (NON) --")\nprint("Non abonné :", not abonnement)\n\n# Chaîner les comparaisons\nprint("\\n-- Chaînage --")\nprint("10 < age < 20 :", 10 < age < 20)\nprint("10 <= note <= 20 :", 10 <= note <= 20)`,
+       output:`age == 17 : True\nnote > 20 : False\nnote >= 10 : True\n\n-- and (ET) --\nMajeur ET bonne note : False\nMineur ET abonné    : True\n\n-- or (OU) --\nMajeur OU abonné : True\n\n-- not (NON) --\nNon abonné : False\n\n-- Chaînage --\n10 < age < 20 : True\n10 <= note <= 20 : True`,
+       explains:[
+         {kw:'==',desc:"Égalité (double =). Retourne True si les deux valeurs sont identiques. Ne pas confondre avec = (assignation) !"},
+         {kw:'!=',desc:"Différence. Retourne True si les valeurs sont DIFFÉRENTES. Équivalent de not (a == b)."},
+         {kw:'and',desc:"ET logique. True seulement si les DEUX conditions sont True. Si la première est False, la seconde n'est pas évaluée."},
+         {kw:'or',desc:"OU logique. True si AU MOINS UNE condition est True. Si la première est True, la seconde n'est pas évaluée."},
+         {kw:'not',desc:"NON logique. Inverse un booléen : not True = False, not False = True."}]}
+    ]},
+    {id:'o3',title:'Priorité des Opérateurs & Walrus (:=)',xp:55,steps:[
+      {type:'theory',heading:'⚖️ Ordre d\'évaluation et opérateur Walrus',
+       html:`Python évalue les expressions selon un ordre de <strong>priorité</strong> strict. De la plus haute à la plus basse :<br><br>
+<code>**</code> &gt; <code>+x -x</code> (unaires) &gt; <code>* / // %</code> &gt; <code>+ -</code> &gt; comparaisons &gt; <code>not</code> &gt; <code>and</code> &gt; <code>or</code><br><br>
+L'<strong>opérateur Walrus</strong> <code>:=</code> (Python 3.8+) permet d'<strong>assigner et utiliser</strong> une valeur dans la même expression, évitant les répétitions.`,
+       box:{type:'tip',label:'💡 Parenthèses = clarté',text:'En cas de doute sur la priorité, utilise des parenthèses. Le code est plus lisible et les erreurs subtiles disparaissent. "Explicit is better than implicit" — Zen of Python.'}},
+      {type:'code',heading:'⚖️ Priorités et Walrus en pratique',
+       desc:'Comprends l\'ordre d\'évaluation pour éviter les bugs subtils :',
+       code:`# Priorité des opérateurs\nprint("=== Priorité ===")\nprint(2 + 3 * 4)         # 14 (pas 20 !)\nprint((2 + 3) * 4)       # 20\nprint(2 ** 3 ** 2)       # 512 (3**2=9, 2**9=512 — ** associe à droite)\nprint(10 - 4 - 2)        # 4 (gauche à droite : (10-4)-2)\n\n# Opérateurs logiques et comparaisons\nprint("\\n=== Logique ===")\nprint(not 5 > 3)          # False (not appliqué après >)\nprint(not 5 > 3 and True) # False\nprint(5 > 3 or 1 > 10 and 2 > 1)  # True (and avant or)\n\n# Comparaisons chaînées (Python uniquement)\nx = 7\nprint(f"\\n1 < {x} < 10   : {1 < x < 10}")\nprint(f"5 <= {x} <= 10 : {5 <= x <= 10}")\n\n# Opérateur Walrus := (Python 3.8+)\nprint("\\n=== Walrus := ===")\n\n# Cas 1 : simplifier une condition\ndonnees = [3, 14, 7, 22, 5, 19]\ngrand = [d for d in donnees if (double := d * 2) > 20]\nprint("Valeurs dont le double > 20 :", grand)\n\n# Cas 2 : dans un while\nimport random\nrandom.seed(1)\nprint("Recherche d'un multiple de 7 :")\nwhile (n := random.randint(1, 50)) % 7 != 0:\n    print(f"  {n} — non")\nprint(f"  {n} — TROUVÉ !")\n\n# Cas 3 : éviter un double calcul\ntexte = "  Bonjour Python  "\nif (t := texte.strip()) and len(t) > 5:\n    print(f"\\nTexte valide: '{t}' ({len(t)} chars)")`,
+       output:`=== Priorité ===\n14\n20\n512\n4\n\n=== Logique ===\nFalse\nFalse\nTrue\n\n1 < 7 < 10   : True\n5 <= 7 <= 10 : True\n\n=== Walrus := ===\nValeurs dont le double > 20 : [14, 22, 19]\nRecherche d'un multiple de 7 :\n  6 — non\n  19 — non\n  14 — TROUVÉ !\n\nTexte valide: 'Bonjour Python' (14 chars)`,
+       explains:[
+         {kw:'Priorité',desc:"** > unaires > */% > +- > comparaisons > not > and > or. Parenthèses = priorité absolue. En cas de doute, ajoute des parenthèses !"},
+         {kw:':= (walrus)',desc:"Assigne ET retourne une valeur dans une expression. Évite de calculer deux fois la même chose."},
+         {kw:'while (n := expr):',desc:"Pattern classique avec walrus : calcule n, vérifie la condition, utilise n dans le corps de la boucle."},
+         {kw:'[x for x if (y:=f(x)) > v]',desc:"Walrus dans une compréhension : calcule y une seule fois pour le filtre ET l'expression."},
+         {kw:'a < x < b',desc:"Comparaison chaînée Python — plus lisible et plus efficace que a < x and x < b."}]}
+    ]}
+  ]},
+
+  strings:{title:'Chaînes de Caractères',icon:'📝',color:'#0891b2',bg:'rgba(8,145,178,.15)',lessons:[
+    {id:'s1',title:'Créer et Indexer les Strings',xp:55,steps:[
+      {type:'theory',heading:'📝 Les strings — séquences de caractères',
+       html:`En Python, une <strong>chaîne de caractères (string)</strong> est une séquence immuable de caractères. On peut y accéder caractère par caractère ou par tranches (slicing).<br><br>
+L'<strong>indexation</strong> fonctionne ainsi :<br>
+• Index positifs : de gauche à droite, commençant à <code>0</code><br>
+• Index négatifs : de droite à gauche, commençant à <code>-1</code><br><br>
+Le <strong>slicing</strong> <code>[début:fin:pas]</code> extrait une sous-chaîne.`,
+       box:{type:'info',label:'📌 Immutabilité',text:'Les strings sont IMMUABLES — on ne peut pas modifier un caractère directement. Pour "modifier" une string, on crée une nouvelle variable avec la valeur modifiée.'}},
+      {type:'code',heading:'📝 Indexation et slicing',
+       desc:'Apprenons à naviguer dans une chaîne de caractères :',
+       code:`mot = "Python"\n\n# Longueur\nprint("Longueur :", len(mot))\n\n# Indexation positive (gauche → droite)\nprint("\\n-- Index positifs --")\nprint(f"[0] = {mot[0]}")  # P\nprint(f"[1] = {mot[1]}")  # y\nprint(f"[5] = {mot[5]}")  # n\n\n# Indexation négative (droite → gauche)\nprint("\\n-- Index négatifs --")\nprint(f"[-1] = {mot[-1]}")  # n\nprint(f"[-2] = {mot[-2]}")  # o\n\n# Slicing [début:fin] (fin exclue)\nprint("\\n-- Slicing --")\nprint(mot[0:3])    # Pyt\nprint(mot[2:])     # thon\nprint(mot[:4])     # Pyth\nprint(mot[::2])    # Pto  (un caractère sur deux)\nprint(mot[::-1])   # nohtyP (renversé)`,
+       output:`Longueur : 6\n\n-- Index positifs --\n[0] = P\n[1] = y\n[5] = n\n\n-- Index négatifs --\n[-1] = n\n[-2] = o\n\n-- Slicing --\nPyt\nthon\nPyth\nPto\nnohtyP`,
+       explains:[
+         {kw:'len()',desc:"Retourne le nombre de caractères. len(\"Python\") = 6. Fonctionne aussi sur listes, tuples, etc."},
+         {kw:'[i]',desc:"Accès au caractère à l'index i. [0] = premier, [-1] = dernier. Erreur IndexError si hors limites."},
+         {kw:'[a:b]',desc:"Slice de a (inclus) à b (exclu). [2:5] retourne les caractères aux positions 2, 3, 4."},
+         {kw:'[::2]',desc:"Slice avec pas. [::2] = un sur deux, [::-1] = renversé. Très puissant pour manipuler les séquences."}]}
+    ]},
+    {id:'s2',title:'Méthodes des Strings & F-strings',xp:60,steps:[
+      {type:'theory',heading:'🔧 Transformer et formater du texte',
+       html:`Les strings ont de nombreuses <strong>méthodes intégrées</strong> accessibles avec la syntaxe <code>texte.méthode()</code>.<br><br>
+Les plus importantes :<br>
+• <code>.upper()</code> / <code>.lower()</code> / <code>.capitalize()</code> / <code>.title()</code><br>
+• <code>.strip()</code> / <code>.lstrip()</code> / <code>.rstrip()</code> — supprimer espaces<br>
+• <code>.replace(a, b)</code> — remplacer<br>
+• <code>.split(sep)</code> — découper en liste<br>
+• <code>.join(liste)</code> — fusionner une liste<br>
+• <code>.startswith()</code> / <code>.endswith()</code> / <code>.count()</code> / <code>.find()</code>`,
+       box:{type:'tip',label:'💡 F-strings (Python 3.6+)',text:'Les f-strings sont la façon MODERNE de formater du texte. Plus lisibles et plus rapides que + et format(). Syntaxe : f"Bonjour {nom}, tu as {age} ans."'}},
+      {type:'code',heading:'🔧 Méthodes et f-strings en pratique',
+       desc:'Découvrons les méthodes essentielles des strings :',
+       code:`texte = "  Bonjour, Python est SUPER !  "\n\n# Nettoyage\nprint(texte.strip())          # Supprime espaces\nprint(texte.strip().lower())  # Tout en minuscule\nprint(texte.strip().title())  # Chaque Mot En Majuscule\n\n# Modification\nclean = texte.strip()\nprint(clean.replace("SUPER", "génial"))\n\n# Découpage\nphrase = "pomme,banane,cerise,mangue"\nfruits = phrase.split(",")\nprint("\\nFruits :", fruits)\nprint("Rejoints :", " | ".join(fruits))\n\n# F-strings avancés\nnom = "Alice"\nnote = 17.666\nprint(f"\\n{nom.upper()} a eu {note:.1f}/20")\nprint(f"{'Résultat':>15} : {note:.2f}")\n\n# Recherche\nphrase2 = "Python est super et Python est populaire"\nprint(f"\\nOccurrences de 'Python': {phrase2.count('Python')}")`,
+       output:`Bonjour, Python est SUPER !\nbonjour, python est super !\nBonjour, Python Est Super !\nBonjour, Python est génial !\n\nFruits : ['pomme', 'banane', 'cerise', 'mangue']\nRejoints : pomme | banane | cerise | mangue\n\nALICE a eu 17.7/20\n       Résultat : 17.67\n\nOccurrences de 'Python': 2`,
+       explains:[
+         {kw:'.strip()',desc:"Supprime les espaces (et \\n, \\t) en début et fin. .lstrip() = seulement gauche, .rstrip() = seulement droite."},
+         {kw:'.replace(a,b)',desc:"Remplace TOUTES les occurrences de a par b. Non destructif : retourne une nouvelle string."},
+         {kw:'.split(sep)',desc:"Découpe la string en liste en utilisant sep comme séparateur. \"a,b,c\".split(\",\") = [\"a\",\"b\",\"c\"]."},
+         {kw:'sep.join(liste)',desc:"Fusionne une liste en string avec sep entre chaque élément. \" | \".join([\"a\",\"b\"]) = \"a | b\"."},
+         {kw:'f\"{val:.2f}\"',desc:"Format numérique dans f-string. :.2f = 2 décimales, :>15 = aligné à droite sur 15 caractères."}]}
+    ]},
+    {id:'s3',title:'Expressions Régulières (Regex)',xp:85,steps:[
+      {type:'theory',heading:'🔍 Chercher et valider du texte avec les regex',
+       html:`Les <strong>expressions régulières</strong> (regex) sont un mini-langage pour décrire des <strong>motifs de texte</strong>. Indispensables pour valider, extraire et transformer du texte complexe.<br><br>
+Caractères spéciaux essentiels :<br>
+• <code>.</code> n'importe quel car. &nbsp; <code>*</code> 0 ou plus &nbsp; <code>+</code> 1 ou plus &nbsp; <code>?</code> optionnel<br>
+• <code>\\d</code> chiffre &nbsp; <code>\\w</code> mot &nbsp; <code>\\s</code> espace &nbsp; <code>\\D \\W \\S</code> (inverses)<br>
+• <code>[abc]</code> un parmi &nbsp; <code>[a-z]</code> plage &nbsp; <code>[^abc]</code> sauf<br>
+• <code>^</code> début &nbsp; <code>$</code> fin &nbsp; <code>{n,m}</code> entre n et m fois<br>
+• <code>(groupe)</code> capture &nbsp; <code>a|b</code> OU`,
+       box:{type:'tip',label:'💡 Tester ses regex',text:'Va sur regex101.com — tu peux tester tes expressions en temps réel avec coloration, explication détaillée et match groupes. Indispensable pour apprendre les regex !'}},
+      {type:'code',heading:'🔍 Module re — les fonctions essentielles',
+       desc:'Apprends les 4 fonctions principales du module re :',
+       code:`import re\n\n# re.search() — trouve la 1ère occurrence\ntexte = "Contact: alice@example.com et bob.dev@test.fr"\npattern_email = r"[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,6}"\n\nm = re.search(pattern_email, texte)\nprint("1er email:", m.group() if m else "Aucun")\n\n# re.findall() — TOUTES les occurrences\nemails = re.findall(pattern_email, texte)\nprint("Tous:", emails)\n\n# re.sub() — remplacer\nmasque = re.sub(pattern_email, "[EMAIL]", texte)\nprint("Masqué:", masque)\n\n# re.match() — seulement en début de chaîne\nprint("\\n=== Validation ===")\ndef valider_cp(cp):\n    """Valide un code postal français (5 chiffres)."""\n    return bool(re.match(r"^\\d{5}$", cp))\n\ndef valider_tel(tel):\n    """Valide un numéro de téléphone français."""\n    propre = tel.replace(" ", "").replace("-", "")\n    return bool(re.match(r"^(?:\\+33|0033|0)[1-9]\\d{8}$", propre))\n\nfor cp in ["75001", "750", "7500A", "00100"]:\n    print(f"  CP '{cp}' : {'✅' if valider_cp(cp) else '❌'}")\n\nfor tel in ["06 12 34 56 78", "+33612345678", "0612345678", "123"]:\n    print(f"  Tel '{tel}' : {'✅' if valider_tel(tel) else '❌'}")\n\n# Groupes de capture\nprint("\\n=== Groupes ===")\ndate_str = "Rendez-vous le 15/04/2026 à 14h30"\nm = re.search(r"(\\d{2})/(\\d{2})/(\\d{4})", date_str)\nif m:\n    j, mo, a = m.groups()\n    print(f"Jour={j}, Mois={mo}, Année={a}")`,
+       output:`1er email: alice@example.com\nTous: ['alice@example.com', 'bob.dev@test.fr']\nMasqué: Contact: [EMAIL] et [EMAIL]\n\n=== Validation ===\n  CP '75001' : ✅\n  CP '750' : ❌\n  CP '7500A' : ❌\n  CP '00100' : ✅\n  Tel '06 12 34 56 78' : ✅\n  Tel '+33612345678' : ✅\n  Tel '0612345678' : ✅\n  Tel '123' : ❌\n\n=== Groupes ===\nJour=15, Mois=04, Année=2026`,
+       explains:[
+         {kw:'r"pattern"',desc:"Raw string — les \\ ne sont pas interprétés par Python. TOUJOURS utiliser r\"...\" pour les regex (\\d reste \\d, pas un caractère spécial)."},
+         {kw:'re.search(p, s)',desc:"Cherche le pattern n'importe où dans s. Retourne un objet Match ou None. .group() = texte trouvé, .start()/.end() = positions."},
+         {kw:'re.findall(p, s)',desc:"Retourne une liste de toutes les correspondances. Si le pattern a des groupes, retourne une liste de tuples."},
+         {kw:'re.sub(p, r, s)',desc:"Remplace toutes les occurrences de p par r dans s. r peut être une string ou une fonction."},
+         {kw:'\\d{5}',desc:"\\d = un chiffre, {5} = exactement 5 fois. {2,6} = entre 2 et 6. {2,} = au moins 2."},
+         {kw:'match.groups()',desc:"Retourne un tuple de tous les groupes capturés. .group(1) = 1er groupe, .group(0) = tout le match."}]}
+    ]},
+    {id:'s4',title:'Formatage Avancé et Chaînes Multilignes',xp:65,steps:[
+      {type:'theory',heading:'🎨 Maîtriser le formatage professionnel',
+       html:`Le mini-langage de format des f-strings <code>{valeur:spec}</code> permet de créer des sorties impeccables.<br><br>
+Spécifications de format :<br>
+• <code>:.2f</code> — 2 décimales &nbsp; <code>:,</code> — séparateur milliers<br>
+• <code>:e</code> — scientifique &nbsp; <code>:.1%</code> — pourcentage<br>
+• <code>:<10</code> — aligné gauche sur 10 chars &nbsp; <code>:>10</code> droite &nbsp; <code>:^10</code> centré<br>
+• <code>:0>5</code> — rempli de zéros &nbsp; <code>:+</code> — signe toujours<br>
+• <code>:b</code> binaire &nbsp; <code>:x</code> hexa &nbsp; <code>:o</code> octal<br><br>
+Les <code>"""chaînes multilignes"""</code> conservent les retours à la ligne.`,
+       box:{type:'info',label:'📌 Chaînes multilignes',text:'Les triple guillemets """...""" créent des chaînes sur plusieurs lignes. Parfaites pour les templates de messages, la documentation (docstrings), les requêtes SQL, etc.'}},
+      {type:'code',heading:'🎨 Formats avancés et tableaux console',
+       desc:'Crée des sorties formatées professionnellement :',
+       code:`# Formatage numérique complet\nprix = 1234567.89\nprint(f"Standard      : {prix}")\nprint(f"2 décimales   : {prix:.2f}")\nprint(f"Milliers      : {prix:,.2f}")\nprint(f"Scientifique  : {prix:.2e}")\nprint(f"Pourcentage   : {0.1567:.1%}")\nprint(f"Toujours signe: {42:+d} et {-42:+d}")\n\n# Bases numériques\nn = 255\nprint(f"\\nDécimal : {n:d}  |  Hexa: {n:#x}  |  Binaire: {n:#b}  |  Octal: {n:#o}")\n\n# Alignement — tableaux console\nprint("\\n=== Catalogue Produits ===")\nprint(f"{'Produit':<18} {'Prix':>9} {'Stock':>6} {'Total':>10}")\nprint("─" * 45)\ndonnees = [\n    ("Ordinateur portable", 899.99, 12),\n    ("Souris ergonomique",   34.99, 87),\n    ("Clavier mécanique",   129.99, 34),\n    ("Écran 27 pouces",     349.99,  5),\n]\nfor nom, pu, qte in donnees:\n    total = pu * qte\n    print(f"{nom:<18} {pu:>9,.2f} {qte:>6} {total:>10,.2f}")\n\n# Chaîne multiligne (template)\nnom, score, date = "Alice", 1_850, "08/04/2026"\nrapport = f"""\n╔══════════════════════════╗\n║   RAPPORT DE SESSION     ║\n╠══════════════════════════╣\n║ Joueur  : {nom:<16}║\n║ Score   : {score:<16,}║\n║ Date    : {date:<16}║\n╚══════════════════════════╝"""\nprint(rapport)`,
+       output:`Standard      : 1234567.89\n2 décimales   : 1234567.89\nMilliers      : 1,234,567.89\nScientifique  : 1.23e+06\nPourcentage   : 15.7%\nToujours signe: +42 et -42\n\nDécimal : 255  |  Hexa: 0xff  |  Binaire: 0b11111111  |  Octal: 0o377\n\n=== Catalogue Produits ===\nProduit             Prix  Stock      Total\n─────────────────────────────────────────────\nOrdinateur portabl 899.99     12  10,799.88\nSouris ergonomique  34.99     87   3,044.13\nClavier mécanique  129.99     34   4,419.66\nÉcran 27 pouces    349.99      5   1,749.95\n\n╔══════════════════════════╗\n║   RAPPORT DE SESSION     ║\n╠══════════════════════════╣\n║ Joueur  : Alice           ║\n║ Score   : 1,850           ║\n║ Date    : 08/04/2026      ║\n╚══════════════════════════╝`,
+       explains:[
+         {kw:'{n:,.2f}',desc:"Nombre avec séparateur milliers (,) et 2 décimales. {1234567.89:,.2f} → '1,234,567.89'."},
+         {kw:'{s:<15}',desc:"Alignement : < gauche, > droite, ^ centré, sur 15 caractères. Le caractère avant = remplissage (0 pour zéros)."},
+         {kw:'{n:.1%}',desc:"Format pourcentage : multiplie par 100 et ajoute %. {0.1567:.1%} → '15.7%'."},
+         {kw:'{n:#x}  {n:#b}',desc:"Bases avec préfixe (# = préfixe) : 0xff, 0b11111111. Sans # : ff, 11111111."},
+         {kw:'\"\"\"..\"\"\"',desc:"Triple guillemets = chaîne multiligne. Conserve exactement les retours à la ligne et espaces. Indentation incluse !"}]}
+    ]}
+  ]},
+
+  collections:{title:'Collections Python',icon:'🗂️',color:'#0d9488',bg:'rgba(13,148,136,.15)',lessons:[
+    {id:'c1',title:'Les Listes',xp:70,steps:[
+      {type:'theory',heading:'📋 La collection la plus utilisée',
+       html:`Une <strong>liste</strong> est une collection ordonnée et <strong>mutable</strong> (modifiable) d'éléments. Elle peut contenir des éléments de types différents.<br><br>
+Caractéristiques clés :<br>
+• <strong>Ordonnée</strong> — les éléments ont un ordre défini<br>
+• <strong>Mutable</strong> — on peut ajouter, modifier, supprimer<br>
+• <strong>Indexée</strong> — accès par position<br>
+• <strong>Doublons autorisés</strong> — [1, 1, 2] est valide`,
+       box:{type:'info',label:'📌 Syntaxe',text:'Les listes utilisent les crochets [ ]. Éléments séparés par des virgules. Peut être vide : []. Peut contenir n\'importe quel type, même d\'autres listes !'}},
+      {type:'code',heading:'📋 Créer et manipuler des listes',
+       desc:'Les listes ont une multitude de méthodes pratiques :',
+       code:`# Création\nfruits = ["pomme", "banane", "cerise"]\nnombres = [3, 1, 4, 1, 5, 9, 2, 6]\nmelange = ["Alice", 25, True, 3.14]  # Types mixtes\n\n# Accès\nprint(fruits[0])    # Premier\nprint(fruits[-1])   # Dernier\nprint(fruits[1:])   # Slice\n\n# Modification\nfruits.append("mangue")      # Ajouter en fin\nfruits.insert(1, "kiwi")     # Insérer à l'index 1\nfruits[0] = "poire"          # Modifier\ndel fruits[2]                # Supprimer par index\n\nprint("\\nListe modifiée :", fruits)\nprint("Longueur :", len(fruits))\n\n# Méthodes utiles\nprint("\\nNombres :", nombres)\nnombres.sort()\nprint("Triés :", nombres)\nprint("Max :", max(nombres), "| Min :", min(nombres))\nprint("Somme :", sum(nombres))`,
+       output:`pomme\ncerise\n['banane', 'cerise']\n\nListe modifiée : ['poire', 'kiwi', 'cerise', 'mangue']\nLongueur : 4\n\nNombres : [3, 1, 4, 1, 5, 9, 2, 6]\nTriés : [1, 1, 2, 3, 4, 5, 6, 9]\nMax : 9 | Min : 1\nSomme : 31`,
+       explains:[
+         {kw:'.append(x)',desc:"Ajoute x à la FIN de la liste. Modifie la liste en place. O(1) en complexité."},
+         {kw:'.insert(i, x)',desc:"Insère x à la position i. Les éléments suivants sont décalés. .insert(0, x) = ajouter au début."},
+         {kw:'del liste[i]',desc:"Supprime l'élément à l'index i. Aussi : liste.pop(i) qui retourne et supprime l'élément."},
+         {kw:'.sort()',desc:"Trie la liste EN PLACE (modifie la liste). sorted(liste) crée une nouvelle liste triée sans modifier l'originale."},
+         {kw:'max() min() sum()',desc:"Fonctions intégrées pour les listes numériques. max([]) lève ValueError si la liste est vide !"}]}
+    ]},
+    {id:'c2',title:'Les Tuples',xp:55,steps:[
+      {type:'theory',heading:'🔒 Collections immuables — les tuples',
+       html:`Un <strong>tuple</strong> est comme une liste, mais <strong>immuable</strong> — on ne peut pas le modifier après sa création. On utilise les <strong>parenthèses</strong> <code>( )</code>.<br><br>
+Quand utiliser un tuple plutôt qu'une liste ?<br>
+• Données qui ne doivent <strong>pas changer</strong> (coordonnées GPS, couleurs RGB, jours de la semaine...)<br>
+• Retourner <strong>plusieurs valeurs</strong> depuis une fonction<br>
+• Clés de <strong>dictionnaire</strong> (les listes ne peuvent pas l'être)<br>
+• Un peu plus <strong>rapide</strong> et moins de mémoire qu'une liste`,
+       box:{type:'tip',label:'💡 Packing & Unpacking',text:'Python permet de "dépackager" un tuple : a, b = (1, 2). Très utilisé pour retourner plusieurs valeurs d\'une fonction et l\'affectation multiple.'}},
+      {type:'code',heading:'🔒 Tuples — immuabilité et utilité',
+       desc:'Les tuples ont des cas d\'usage bien précis :',
+       code:`# Créer un tuple\ncouleurs_rgb = (255, 128, 0)  # Orange\ncoordonnees = (48.8566, 2.3522)  # Paris\njours = ("Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim")\n\n# Accès (identique aux listes)\nprint("Rouge :", couleurs_rgb[0])\nprint("Latitude :", coordonnees[0])\nprint("Jours [1:5] :", jours[1:5])\n\n# Unpacking\nr, g, b = couleurs_rgb\nprint(f"\\nR={r}, G={g}, B={b}")\n\nlat, lon = coordonnees\nprint(f"Paris: {lat}°N, {lon}°E")\n\n# Infos\nprint("\\nLongueur :", len(jours))\nprint("'Mer' est dedans :", 'Mer' in jours)\nprint("Index de 'Ven' :", jours.index('Ven'))\n\n# Tuple avec un seul élément (virgule obligatoire)\nunique = (42,)\nprint("\\nTuple unique :", unique, "| Type :", type(unique))`,
+       output:`Rouge : 255\nLatitude : 48.8566\nJours [1:5] : ('Mar', 'Mer', 'Jeu', 'Ven')\n\nR=255, G=128, B=0\nParis: 48.8566°N, 2.3522°E\n\nLongueur : 7\n'Mer' est dedans : True\nIndex de 'Ven' : 4\n\nTuple unique : (42,) | Type : <class 'tuple'>`,
+       explains:[
+         {kw:'(a, b, c)',desc:"Crée un tuple avec parenthèses. On peut aussi omettre les parenthèses : a, b = 1, 2 est un tuple."},
+         {kw:'a, b = tuple',desc:"Unpacking — distribue les valeurs du tuple dans des variables. Nombre de variables doit correspondre."},
+         {kw:'x in tuple',desc:"Vérifie si x est dans le tuple. Retourne True ou False. Fonctionne aussi sur listes et strings."},
+         {kw:'.index(x)',desc:"Retourne l'index de la PREMIÈRE occurrence de x. ValueError si x est absent."},
+         {kw:'(42,)',desc:"Tuple à UN élément : la virgule finale est OBLIGATOIRE. (42) = int 42, (42,) = tuple contenant 42."}]}
+    ]},
+    {id:'c3',title:'Les Dictionnaires',xp:75,steps:[
+      {type:'theory',heading:'📖 Données structurées : clé → valeur',
+       html:`Un <strong>dictionnaire</strong> stocke des données sous forme de paires <strong>clé : valeur</strong>. Chaque clé est unique.<br><br>
+Caractéristiques :<br>
+• <strong>Ordonné</strong> (Python 3.7+) — l'ordre d'insertion est préservé<br>
+• <strong>Mutable</strong> — on peut ajouter/modifier/supprimer<br>
+• <strong>Clés uniques</strong> — pas de doublons<br>
+• <strong>Valeurs libres</strong> — n'importe quel type, même des listes ou d'autres dicts`,
+       box:{type:'tip',label:'💡 Cas d\'usage',text:'Les dictionnaires sont parfaits pour représenter des objets du monde réel : utilisateur = {\"nom\": \"Alice\", \"age\": 25}, config = {\"debug\": True}, compteur de mots, etc.'}},
+      {type:'code',heading:'📖 Maîtriser les dictionnaires',
+       desc:'Les dictionnaires sont omniprésents en Python :',
+       code:`# Création\nuser = {\n    "prenom":  "Alice",\n    "age":     25,\n    "ville":   "Lyon",\n    "hobbies": ["Python", "Musique", "Voyage"],\n    "actif":   True\n}\n\n# Lecture\nprint(user["prenom"])\nprint(user["hobbies"][0])\nprint(user.get("email", "Non renseigné"))  # Valeur par défaut\n\n# Modification\nuser["age"] = 26\nuser["email"] = "alice@mail.com"\ndel user["actif"]\n\n# Parcourir\nprint("\\n=== Fiche Utilisateur ===")\nfor cle, valeur in user.items():\n    print(f"  {cle:<10}: {valeur}")\n\n# Infos utiles\nprint("\\nClés  :", list(user.keys()))\nprint("'age' présent :", 'age' in user)\nprint("Nb champs :", len(user))`,
+       output:`Alice\nPython\nNon renseigné\n\n=== Fiche Utilisateur ===\n  prenom    : Alice\n  age       : 26\n  ville     : Lyon\n  hobbies   : ['Python', 'Musique', 'Voyage']\n  email     : alice@mail.com\n\nClés  : ['prenom', 'age', 'ville', 'hobbies', 'email']\n'age' présent : True\nNb champs : 5`,
+       explains:[
+         {kw:'d["clé"]',desc:"Accède à la valeur. Lève KeyError si la clé n'existe pas. Préférer .get() pour être sécurisé."},
+         {kw:'.get(clé, défaut)',desc:"Accède à la valeur OU retourne défaut si la clé est absente. Évite les erreurs KeyError."},
+         {kw:'.items()',desc:"Retourne tous les couples (clé, valeur). Idéal pour for cle, val in d.items()."},
+         {kw:'.keys()  .values()',desc:".keys() = toutes les clés, .values() = toutes les valeurs. list() pour convertir en liste."},
+         {kw:'"clé" in d',desc:"Vérifie si la clé existe dans le dictionnaire. Rapide (O(1) en moyenne)."}]}
+    ]},
+    {id:'c4',title:'Les Sets (Ensembles)',xp:55,steps:[
+      {type:'theory',heading:'🔵 Ensembles — unicité garantie',
+       html:`Un <strong>set</strong> (ensemble) est une collection <strong>non ordonnée</strong> sans doublons. Python supprime automatiquement les duplicates.<br><br>
+Opérations mathématiques entre sets :<br>
+• <code>|</code> ou <code>.union()</code> — réunion<br>
+• <code>&</code> ou <code>.intersection()</code> — intersection<br>
+• <code>-</code> ou <code>.difference()</code> — différence<br>
+• <code>^</code> ou <code>.symmetric_difference()</code> — différence symétrique`,
+       box:{type:'tip',label:'💡 Quand utiliser un set ?',text:'Pour supprimer les doublons d\'une liste : list(set(ma_liste)). Pour vérifier l\'appartenance rapidement : x in mon_set est O(1) vs O(n) pour une liste.'}},
+      {type:'code',heading:'🔵 Sets et opérations ensemblistes',
+       desc:'Les sets sont parfaits pour les opérations sur des ensembles de données :',
+       code:`# Création — les doublons sont automatiquement supprimés\nnombres = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3}\nprint("Nombres (sans doublons) :", nombres)\n\n# Supprimer les doublons d'une liste\nprenoms_avec_doublons = ["Alice","Bob","Alice","Charlie","Bob","Alice"]\nprenoms_uniques = list(set(prenoms_avec_doublons))\nprint("Prénoms uniques :", prenoms_uniques)\n\n# Opérations ensemblistes\npython_devs = {"Alice", "Bob", "Charlie", "Diana"}\njs_devs     = {"Bob", "Diana", "Eve", "Frank"}\n\nprint("\\n=== Opérations ===" )\nprint("Réunion       :", python_devs | js_devs)\nprint("Intersection  :", python_devs & js_devs)\nprint("Python only   :", python_devs - js_devs)\nprint("Diff. symétrique:", python_devs ^ js_devs)\n\n# Appartenance (très rapide)\nprint("\\n'Alice' dans python_devs :", "Alice" in python_devs)\nprint("'Eve' dans python_devs   :", "Eve" in python_devs)`,
+       output:`Nombres (sans doublons) : {1, 2, 3, 4, 5, 6, 9}\nPrénoms uniques : ['Bob', 'Charlie', 'Alice']\n\n=== Opérations ===\nRéunion       : {'Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank'}\nIntersection  : {'Bob', 'Diana'}\nPython only   : {'Alice', 'Charlie'}\nDiff. symétrique: {'Alice', 'Charlie', 'Eve', 'Frank'}\n\n'Alice' dans python_devs : True\n'Eve' dans python_devs   : False`,
+       explains:[
+         {kw:'{a, b, c}',desc:"Crée un set avec accolades. Les doublons sont ignorés automatiquement. set() crée un set vide (pas {} qui est un dict vide)."},
+         {kw:'set(liste)',desc:"Convertit une liste en set, supprimant les doublons. list(set(lst)) = liste sans doublons."},
+         {kw:'|  &  -  ^',desc:"Opérateurs ensemblistes : union (|), intersection (&), différence (-), différence symétrique (^)."},
+         {kw:'x in set',desc:"Vérification d'appartenance en O(1) en moyenne — bien plus rapide que x in liste (O(n))."}]}
+    ]}
+  ]},
+
+  flux:{title:'Contrôle du Flux',icon:'🔀',color:'#7c2d12',bg:'rgba(124,45,18,.15)',lessons:[
+    {id:'f1',title:'Les Conditions (if / elif / else)',xp:70,steps:[
+      {type:'theory',heading:'🔀 Prendre des décisions dans le code',
+       html:`Les <strong>conditions</strong> permettent d'exécuter du code <strong>seulement si une condition est vraie</strong>. C'est le cœur de la logique de programmation.<br><br>
+Structure :<br>
+<code>if</code> condition1: → <code>elif</code> condition2: → <code>else</code>:<br><br>
+En Python, l'<strong>indentation (4 espaces)</strong> délimite les blocs — c'est obligatoire et remplace les <code>{ }</code> d'autres langages.`,
+       box:{type:'warning',label:'⚠️ Indentation obligatoire !',text:'Une erreur d\'indentation = IndentationError. Python est strict là-dessus. Utilisez TOUJOURS 4 espaces (ou 1 Tab) de manière cohérente.'}},
+      {type:'code',heading:'🔀 if / elif / else et opérateur ternaire',
+       desc:'Les conditions sont la base de tout programme :',
+       code:`# Structure if/elif/else\ntemperature = 22\n\nif temperature < 0:\n    print("Il gèle ! 🧊")\nelif temperature < 10:\n    print("Il fait froid. 🧥")\nelif temperature < 20:\n    print("Il fait frais. 🌤️")\nelif temperature < 30:\n    print("Agréable ! ☀️")\nelse:\n    print("Il fait très chaud ! 🔥")\n\n# Conditions imbriquées\nage = 20\npermis = True\n\nif age >= 18:\n    if permis:\n        print("\\nTu peux conduire !")\n    else:\n        print("\\nTu es majeur mais sans permis.")\nelse:\n    print("\\nTu es mineur.")\n\n# Opérateur ternaire (sur une ligne)\nstock = 0\nstatut = "En stock" if stock > 0 else "Rupture de stock"\nprint(f"\\nStatut : {statut}")`,
+       output:`Agréable ! ☀️\n\nTu peux conduire !\n\nStatut : Rupture de stock`,
+       explains:[
+         {kw:'if condition:',desc:"Exécute le bloc indenté si la condition est True. La condition peut être n'importe quelle expression évaluée en bool."},
+         {kw:'elif condition:',desc:"'Else if' — vérifié seulement si tous les if/elif précédents étaient False. On peut en mettre autant qu'on veut."},
+         {kw:'else:',desc:"Exécuté si AUCUNE condition précédente n'était True. Optionnel, toujours en dernier."},
+         {kw:'val if cond else val2',desc:"Opérateur ternaire — expression sur une ligne. Retourne val si cond True, sinon val2. Évite 4 lignes de if/else."}]}
+    ]},
+    {id:'f2',title:'La Boucle for',xp:75,steps:[
+      {type:'theory',heading:'🔄 Parcourir des séquences avec for',
+       html:`La boucle <code>for</code> <strong>itère sur une séquence</strong> (liste, tuple, string, range...). Elle exécute le bloc une fois pour chaque élément.<br><br>
+Fonctions et mots-clés importants avec for :<br>
+• <code>range(début, fin, pas)</code> — génère une séquence de nombres<br>
+• <code>enumerate()</code> — retourne index + valeur<br>
+• <code>zip()</code> — parcourt plusieurs séquences en parallèle<br>
+• <code>break</code> — sort de la boucle<br>
+• <code>continue</code> — passe à l'itération suivante`,
+       box:{type:'tip',label:'✅ range() en détail',text:'range(5) = 0,1,2,3,4 | range(1,6) = 1,2,3,4,5 | range(0,10,2) = 0,2,4,6,8 | range(5,0,-1) = 5,4,3,2,1'}},
+      {type:'code',heading:'🔄 La boucle for dans tous ses états',
+       desc:'La boucle for est l\'outil de base pour parcourir des données :',
+       code:`# for sur une liste\nfruits = ["🍎 Pomme", "🍌 Banane", "🍒 Cerise"]\nfor fruit in fruits:\n    print(f"  - {fruit}")\n\n# enumerate() — index + valeur\nprint("\\nAvec enumerate:")\nfor i, fruit in enumerate(fruits, start=1):\n    print(f"  {i}. {fruit}")\n\n# range() — compter\nprint("\\nCarrés de 1 à 5:")\nfor n in range(1, 6):\n    print(f"  {n}² = {n**2}")\n\n# zip() — deux listes en parallèle\nnoms  = ["Alice", "Bob", "Charlie"]\nnotes = [18, 14, 16]\nprint("\\nNotes:")\nfor nom, note in zip(noms, notes):\n    print(f"  {nom:<10}: {note}/20")\n\n# break et continue\nprint("\\nNombres pairs jusqu'à 20 (stop à 12):")\nfor n in range(0, 21, 2):\n    if n == 14:\n        break\n    print(n, end=" ")`,
+       output:`  - 🍎 Pomme\n  - 🍌 Banane\n  - 🍒 Cerise\n\nAvec enumerate:\n  1. 🍎 Pomme\n  2. 🍌 Banane\n  3. 🍒 Cerise\n\nCarrés de 1 à 5:\n  1² = 1\n  2² = 4\n  3² = 9\n  4² = 16\n  5² = 25\n\nNotes:\n  Alice     : 18/20\n  Bob       : 14/20\n  Charlie   : 16/20\n\nNombres pairs jusqu'à 20 (stop à 12):\n0 2 4 6 8 10 12`,
+       explains:[
+         {kw:'for x in seq:',desc:"Parcourt chaque élément de seq. x prend la valeur de chaque élément à tour de rôle."},
+         {kw:'enumerate(seq, start=0)',desc:"Retourne des tuples (index, valeur). Évite d'avoir à gérer un compteur manuel."},
+         {kw:'zip(a, b)',desc:"Parcourt a et b en parallèle. S'arrête quand la séquence la plus courte est épuisée."},
+         {kw:'range(a, b, pas)',desc:"Génère a, a+pas, a+2*pas... jusqu'à b (exclu). Pas peut être négatif pour compter à rebours."},
+         {kw:'break',desc:"Quitte la boucle immédiatement. L'exécution reprend après le bloc for."},
+         {kw:'print(x, end=\" \")',desc:"Le paramètre end remplace le \\n par défaut. Ici, affiche les valeurs sur la même ligne."}]}
+    ]},
+    {id:'f3',title:'La Boucle while',xp:65,steps:[
+      {type:'theory',heading:'⏳ Répéter tant qu\'une condition est vraie',
+       html:`La boucle <code>while</code> répète un bloc de code <strong>tant qu'une condition reste vraie</strong>. Elle est idéale quand on ne connaît pas à l'avance le nombre d'itérations.<br><br>
+<strong>Attention aux boucles infinies !</strong> Si la condition ne devient jamais False, le programme tourne indéfiniment. Prévois toujours une condition de sortie.<br><br>
+<code>break</code> et <code>continue</code> fonctionnent aussi dans while.`,
+       box:{type:'warning',label:'⚠️ Boucle infinie',text:'while True: ... est une boucle infinie intentionnelle. Elle doit contenir un break pour s\'arrêter. Si ton programme "freezes", c\'est probablement une boucle infinie accidentelle.'}},
+      {type:'code',heading:'⏳ Boucles while — cas concrets',
+       desc:'La boucle while brille quand la condition d\'arrêt est dynamique :',
+       code:`# Compte à rebours\ncompteur = 5\nprint("Compte à rebours :")\nwhile compteur > 0:\n    print(f"  {compteur}...")\n    compteur -= 1\nprint("  🚀 DÉCOLLAGE !")\n\n# Calculer une somme jusqu'à dépasser un seuil\ntotal = 0\ni = 1\nwhile total < 50:\n    total += i\n    i += 1\nprint(f"\\nSomme de 1+2+...+{i-1} = {total} (dépasse 50)")\n\n# Validation de saisie (simulée)\nimport random\ncible = 42  # Nombre à deviner (simulé)\ntentatives = 0\nnombres_essayes = []\n\nwhile True:\n    nombre = random.choice([10, 30, 42, 55, 70])  # Simulation\n    tentatives += 1\n    nombres_essayes.append(nombre)\n    if nombre == cible:\n        print(f"\\nTrouvé {cible} en {tentatives} essais !")\n        print(f"Essais : {nombres_essayes}")\n        break\n    elif nombre < cible:\n        print(f"Essai {tentatives}: {nombre} → Trop petit")\n    else:\n        print(f"Essai {tentatives}: {nombre} → Trop grand")`,
+       output:`Compte à rebours :\n  5...\n  4...\n  3...\n  2...\n  1...\n  🚀 DÉCOLLAGE !\n\nSomme de 1+2+...+10 = 55 (dépasse 50)\n\nEssai 1: 10 → Trop petit\nEssai 2: 30 → Trop petit\nTrouvé 42 en 3 essais !\nEssais : [10, 30, 42]`,
+       explains:[
+         {kw:'while condition:',desc:"Répète le bloc tant que condition est True. La condition est vérifiée AVANT chaque itération."},
+         {kw:'while True:',desc:"Boucle infinie contrôlée. On sort UNIQUEMENT avec break. Utile pour les menus, serveurs, boucles d'événements."},
+         {kw:'break',desc:"Sort de la boucle while (ou for) immédiatement. Sans break dans un while True, le programme ne s'arrête jamais."},
+         {kw:'continue',desc:"Passe directement à la prochaine vérification de condition, en ignorant le reste du bloc courant."},
+         {kw:'import random',desc:"Importe le module random. random.choice(liste) retourne un élément aléatoire de la liste."}]}
+    ]},
+    {id:'f4',title:'Pattern Matching — match/case (Python 3.10+)',xp:75,steps:[
+      {type:'theory',heading:'🎯 Correspondance de motifs structurels',
+       html:`Le <strong>pattern matching</strong> (<code>match/case</code>), introduit en Python 3.10, va bien au-delà d'un simple switch/case. Il peut correspondre sur :<br><br>
+• Des <strong>valeurs littérales</strong> (<code>case 42:</code>)<br>
+• Des <strong>séquences</strong> (<code>case [a, b, *reste]:</code>)<br>
+• Des <strong>dictionnaires</strong> (<code>case {"type": t}:</code>)<br>
+• Des <strong>types</strong> (<code>case int(n):</code>)<br>
+• Des <strong>alternances</strong> avec <code>|</code><br>
+• Des <strong>conditions supplémentaires</strong> (guards) avec <code>if</code><br>
+• La <strong>wildcard</strong> <code>_</code> (correspond à tout)`,
+       box:{type:'info',label:'📌 Python 3.10+',text:'match/case nécessite Python 3.10 ou supérieur. Vérifie avec python --version. Sur Python plus ancien, utilise if/elif/else. La lisibilité est nettement supérieure pour les branchements complexes.'}},
+      {type:'code',heading:'🎯 match/case — du simple au complexe',
+       desc:'Découvrons la puissance du pattern matching Python :',
+       code:`# 1. Valeurs littérales\ndef categorie_age(age):\n    match age:\n        case n if n < 0: return "Invalide"\n        case 0: return "Nouveau-né"\n        case n if n < 13: return f"Enfant ({n} ans)"\n        case n if n < 18: return f"Adolescent ({n} ans)"\n        case n if n < 65: return f"Adulte ({n} ans)"\n        case _: return "Senior"\n\nfor a in [0, 8, 15, 30, 70]:\n    print(f"  {a} ans → {categorie_age(a)}")\n\n# 2. Séquences\ndef analyser_commande(commande):\n    match commande.split():\n        case ["aide"] | ["help"]:\n            return "Commandes: bonjour, ajouter <a> <b>, quitter"\n        case ["bonjour", nom]:\n            return f"Bonjour {nom} !"\n        case ["ajouter", a, b] if a.isdigit() and b.isdigit():\n            return f"{a} + {b} = {int(a) + int(b)}"\n        case ["quitter"]:\n            return "Au revoir !"\n        case _:\n            return f"Commande inconnue : {commande!r}"\n\nprint()\nfor cmd in ["aide", "bonjour Alice", "ajouter 10 25", "supprimer fichier"]:\n    print(f"  > {analyser_commande(cmd)}")\n\n# 3. Dictionnaires (événements UI)\ndef traiter_event(evt):\n    match evt:\n        case {"action": "clic", "x": x, "y": y} if x >= 0:\n            return f"Clic ({x}, {y})"\n        case {"action": "texte", "valeur": str(v)} if v:\n            return f"Saisie: '{v}'"\n        case {"action": str(a)}:\n            return f"Action: {a}"\n\nevents = [{"action":"clic","x":42,"y":18}, {"action":"texte","valeur":"Python"}, {"action":"fermer"}]\nprint()\nfor e in events:\n    print(f"  → {traiter_event(e)}")`,
+       output:`  0 ans → Nouveau-né\n  8 ans → Enfant (8 ans)\n  15 ans → Adolescent (15 ans)\n  30 ans → Adulte (30 ans)\n  70 ans → Senior\n\n  > Commandes: bonjour, ajouter <a> <b>, quitter\n  > Bonjour Alice !\n  > 10 + 25 = 35\n  > Commande inconnue : 'supprimer fichier'\n\n  → Clic (42, 18)\n  → Saisie: 'Python'\n  → Action: fermer`,
+       explains:[
+         {kw:'match valeur:',desc:"Évalue valeur et la compare avec chaque case. Le PREMIER case qui correspond est exécuté, puis on sort."},
+         {kw:'case _:',desc:"Wildcard — correspond à n'importe quoi. Équivalent du else. Toujours placé en dernier."},
+         {kw:'case a | b:',desc:"Alternance : correspond si la valeur est a OU b. Fonctionne aussi avec des séquences complexes."},
+         {kw:'case [a, b, *reste]:',desc:"Séquence : capure le 1er dans a, 2ème dans b, le reste dans reste. *_ pour ignorer le reste."},
+         {kw:'case {\"k\": v}:',desc:"Dict : vérifie que la clé 'k' existe et capture sa valeur dans v. Le dict peut avoir d'autres clés."},
+         {kw:'case ... if condition:',desc:"Guard — condition supplémentaire. Le case correspond seulement si la guard est True."}]}
+    ]},
+    {id:'f5',title:'Générateurs et yield',xp:85,steps:[
+      {type:'theory',heading:'⚡ Itération paresseuse avec yield',
+       html:`Un <strong>générateur</strong> est une fonction qui utilise <code>yield</code> pour produire des valeurs <strong>une par une</strong>, à la demande. Contrairement à une liste, il ne génère pas tout en mémoire.<br><br>
+Avantages :<br>
+• <strong>Économique en mémoire</strong> — traite des millions d'éléments sans problème<br>
+• <strong>Paresseux (lazy)</strong> — calcule uniquement quand nécessaire<br>
+• <strong>Peut être infini</strong> — séquence sans fin possible<br>
+• <strong>Composable</strong> — les générateurs se chaînent efficacement<br><br>
+Les <strong>expressions génératrices</strong> <code>(x for x in ...)</code> sont des générateurs en syntaxe compacte.`,
+       box:{type:'info',label:'📌 yield vs return',text:'return termine la fonction. yield suspend la fonction, retourne une valeur, et reprend là où elle s\'était arrêtée au prochain appel. La fonction "mémorise" son état entre les appels.'}},
+      {type:'code',heading:'⚡ Générateurs en pratique',
+       desc:'Les générateurs transforment la façon de traiter les données :',
+       code:`# Générateur basique avec yield\ndef compter(n):\n    """Génère les entiers de 0 à n-1."""\n    i = 0\n    while i < n:\n        yield i\n        i += 1\n\nprint("Généré:", list(compter(6)))\n\n# Générateur de Fibonacci (infini !)\ndef fibonacci():\n    a, b = 0, 1\n    while True:  # Boucle infinie — le générateur ne s'arrête jamais\n        yield a\n        a, b = b, a + b\n\nfib = fibonacci()\nprint("10 premiers Fibonacci:")\nprint([next(fib) for _ in range(10)])\n\n# Générateur vs liste — mémoire\nimport sys\nn = 1_000_000\nliste    = [x**2 for x in range(n)]      # Crée tout en mémoire\ngen_expr = (x**2 for x in range(n))     # Crée rien, calcule à la demande\nprint(f"\\nListe 1M : {sys.getsizeof(liste):,} octets")\nprint(f"Générateur: {sys.getsizeof(gen_expr)} octets")\nprint(f"Somme (gen): {sum(x**2 for x in range(n)):,}")\n\n# Pipeline de générateurs\ndef lire_employes():\n    yield "  alice,DEVELOPPEUR,Paris  "\n    yield "  BOB,Designer,lyon   "\n    yield "  charlie,DevOps,Nice "\n\ndef nettoyer(flux):\n    for ligne in flux:\n        yield ligne.strip()\n\ndef normaliser(flux):\n    for ligne in flux:\n        nom, poste, ville = ligne.split(",")\n        yield {"nom": nom.title(), "poste": poste.title(), "ville": ville.title()}\n\nprint("\\nEmployés (pipeline):")\nfor emp in normaliser(nettoyer(lire_employes())):\n    print(f"  {emp['nom']:<10} | {emp['poste']:<12} | {emp['ville']}")`,
+       output:`Généré: [0, 1, 2, 3, 4, 5]\n10 premiers Fibonacci:\n[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n\nListe 1M : 8,448,728 octets\nGénérateur: 200 octets\nSomme (gen): 333,332,833,333,500,000\n\nEmployés (pipeline):\n  Alice      | Developpeur | Paris\n  Bob        | Designer    | Lyon\n  Charlie    | Devops      | Nice`,
+       explains:[
+         {kw:'yield valeur',desc:"Suspend la fonction, retourne valeur au code appelant, mémorise l'état pour reprendre au prochain next()."},
+         {kw:'next(gen)',desc:"Demande la prochaine valeur. Lève StopIteration quand le générateur est épuisé. for utilise next() automatiquement."},
+         {kw:'(x for x in ...)',desc:"Expression génératrice — parenthèses au lieu de crochets. Même logique que list comprehension mais lazy."},
+         {kw:'sys.getsizeof()',desc:"Retourne la taille en mémoire en octets. Un générateur de 1M d'éléments pèse ~200 octets vs 8MB pour la liste !"},
+         {kw:'Pipeline',desc:"Chaîner des générateurs : chaque étape traite UN élément à la fois. Mémoire constante quelle que soit la taille des données."}]}
+    ]}
+  ]},
+
+  fonctions:{title:'Les Fonctions',icon:'⚙️',color:'#065f46',bg:'rgba(6,95,70,.15)',lessons:[
+    {id:'fn1',title:'Créer ses Propres Fonctions',xp:80,steps:[
+      {type:'theory',heading:'⚙️ Encapsuler du code réutilisable',
+       html:`Une <strong>fonction</strong> est un bloc de code nommé qui effectue une tâche précise. Elle peut recevoir des <strong>paramètres</strong> (données en entrée) et retourner un <strong>résultat</strong>.<br><br>
+Avantages :<br>
+• <strong>Réutilisabilité</strong> — écrire une fois, appeler partout<br>
+• <strong>Lisibilité</strong> — le code se lit comme des phrases<br>
+• <strong>Maintenabilité</strong> — corriger un bug à un seul endroit<br>
+• <strong>Testabilité</strong> — tester chaque fonction individuellement`,
+       box:{type:'info',label:'💡 Principe DRY',text:'"Don\'t Repeat Yourself" — si tu te répètes 3 fois, crée une fonction. Si elle fait plus d\'une chose, divise-la en plusieurs fonctions.'}},
+      {type:'code',heading:'⚙️ Définir et appeler des fonctions',
+       desc:'Explorons la syntaxe complète des fonctions Python :',
+       code:`# Fonction simple\ndef saluer(prenom):\n    """Retourne un message de bienvenue."""\n    return f"Bonjour, {prenom} ! 👋"\n\nprint(saluer("Alice"))\nprint(saluer("Bob"))\n\n# Paramètres avec valeurs par défaut\ndef calculer_remise(prix, taux=10):\n    """Calcule le prix après remise."""\n    remise = prix * taux / 100\n    prix_final = prix - remise\n    return prix_final\n\nprint(f"\\n100€ remise 10% : {calculer_remise(100):.2f}€")\nprint(f"100€ remise 25% : {calculer_remise(100, 25):.2f}€")\n\n# Plusieurs valeurs de retour\ndef min_max_moy(liste):\n    """Retourne le min, max et la moyenne."""\n    return min(liste), max(liste), sum(liste)/len(liste)\n\nnotes = [12, 17, 9, 15, 18, 11]\nmi, ma, mo = min_max_moy(notes)\nprint(f"\\nNotes : {notes}")\nprint(f"Min={mi} | Max={ma} | Moy={mo:.2f}")`,
+       output:`Bonjour, Alice ! 👋\nBonjour, Bob ! 👋\n\n100€ remise 10% : 90.00€\n100€ remise 25% : 75.00€\n\nNotes : [12, 17, 9, 15, 18, 11]\nMin=9 | Max=18 | Moy=13.67`,
+       explains:[
+         {kw:'def nom(params):',desc:"Déclare une fonction. def = define. Le corps est indenté de 4 espaces. La fonction n'est PAS exécutée à la déclaration."},
+         {kw:'"""docstring"""',desc:"Documentation de la fonction entre triple guillemets. Bonne pratique : explique ce que fait la fonction, ses paramètres et ce qu'elle retourne."},
+         {kw:'return valeur',desc:"Retourne une valeur et TERMINE la fonction immédiatement. Sans return, la fonction retourne None."},
+         {kw:'param=défaut',desc:"Paramètre avec valeur par défaut. Si non fourni lors de l'appel, la valeur par défaut est utilisée."},
+         {kw:'return a, b, c',desc:"Python peut retourner plusieurs valeurs sous forme de tuple. Utilise mi, ma, mo = fonction() pour les récupérer."}]}
+    ]},
+    {id:'fn2',title:'Arguments Avancés (*args, **kwargs)',xp:75,steps:[
+      {type:'theory',heading:'🎛️ Fonctions ultra-flexibles',
+       html:`Python offre des mécanismes puissants pour créer des fonctions très flexibles :<br><br>
+• <code>*args</code> — accepte un nombre <strong>variable d'arguments positionnels</strong>, regroupés dans un tuple<br>
+• <code>**kwargs</code> — accepte un nombre <strong>variable d'arguments nommés</strong>, regroupés dans un dictionnaire<br>
+• Arguments <strong>keyword-only</strong> — après *, doivent être passés par nom<br><br>
+Ordre obligatoire : <code>def f(positionnels, *args, keyword_only, **kwargs)</code>`,
+       box:{type:'tip',label:'💡 Mémoire mnémotechnique',text:'* pour les args (comme une étoile qui capture plusieurs choses), ** pour les kwargs (comme une double étoile pour les paires clé=valeur). args et kwargs sont des noms de convention, pas obligatoires.'}},
+      {type:'code',heading:'🎛️ *args et **kwargs en pratique',
+       desc:'Créons des fonctions qui acceptent n\'importe quoi :',
+       code:`# *args — arguments positionnels variables\ndef somme_tout(*args):\n    """Additionne tous les arguments."""\n    return sum(args)\n\nprint(somme_tout(1, 2))\nprint(somme_tout(1, 2, 3, 4, 5))\nprint(somme_tout(10, 20, 30, 40))\n\n# **kwargs — arguments nommés variables\ndef afficher_profil(**kwargs):\n    """Affiche un profil avec des infos variables."""\n    print("\\n=== Profil ===")\n    for cle, val in kwargs.items():\n        print(f"  {cle:<15}: {val}")\n\nafficher_profil(nom="Alice", age=25, ville="Paris", passion="Python")\n\n# Combinaison complète\ndef tout_en_un(obligatoire, *args, separateur="\\n", **kwargs):\n    print(f"Obligatoire : {obligatoire}")\n    print(f"Args extras : {args}")\n    print(f"Sep         : {repr(separateur)}")\n    print(f"Kwargs      : {kwargs}")\n\ntout_en_un("test", 1, 2, 3, separateur=", ", x=True, y=42)`,
+       output:`3\n15\n100\n\n=== Profil ===\n  nom            : Alice\n  age            : 25\n  ville          : Paris\n  passion        : Python\nObligatoire : test\nArgs extras : (1, 2, 3)\nSep         : ', '\nKwargs      : {'x': True, 'y': 42}`,
+       explains:[
+         {kw:'*args',desc:"Capture tous les arguments positionnels supplémentaires dans un TUPLE nommé args. Peut être vide si aucun argument extra."},
+         {kw:'**kwargs',desc:"Capture tous les arguments nommés supplémentaires dans un DICT nommé kwargs. Très utilisé pour les APIs flexibles."},
+         {kw:'def f(a, *args, kw=v)',desc:"Paramètre après * = keyword-only, doit être passé par nom lors de l'appel : f(1, 2, 3, kw=42)."},
+         {kw:'sum(args)',desc:"sum() fonctionne sur n'importe quel itérable de nombres. sum((1,2,3)) = 6."}]}
+    ]},
+    {id:'fn3',title:'Fonctions Lambda & Ordre Supérieur',xp:70,steps:[
+      {type:'theory',heading:'λ Fonctions anonymes et fonctions d\'ordre supérieur',
+       html:`Une <strong>fonction lambda</strong> est une fonction anonyme définie en une ligne : <code>lambda params: expression</code>.<br><br>
+Les <strong>fonctions d'ordre supérieur</strong> prennent d'autres fonctions en argument :<br>
+• <code>map(func, liste)</code> — applique func à chaque élément<br>
+• <code>filter(func, liste)</code> — garde les éléments où func retourne True<br>
+• <code>sorted(liste, key=func)</code> — trie selon une clé<br>
+• <code>functools.reduce(func, liste)</code> — réduit à une valeur`,
+       box:{type:'tip',label:'💡 Lambda vs def',text:'Utilise lambda pour des fonctions courtes et simples, surtout comme argument d\'une autre fonction. Pour tout ce qui est plus complexe, utilise def avec une docstring.'}},
+      {type:'code',heading:'λ Lambda, map, filter, sorted',
+       desc:'Les lambdas simplifient l\'utilisation des fonctions d\'ordre supérieur :',
+       code:`# Lambda basique\ncarre = lambda x: x ** 2\nadditionner = lambda a, b: a + b\n\nprint(carre(5))\nprint(additionner(3, 4))\n\n# map() — transformer\nnombres = [1, 2, 3, 4, 5]\ncarres = list(map(lambda x: x**2, nombres))\nprint("\\nCarrés :", carres)\n\n# filter() — filtrer\nnombres2 = range(1, 21)\npairs = list(filter(lambda x: x % 2 == 0, nombres2))\nprint("Pairs   :", pairs)\n\n# sorted() avec clé\netudiants = [\n    {"nom": "Alice", "note": 17},\n    {"nom": "Bob",   "note": 12},\n    {"nom": "Carol", "note": 19},\n    {"nom": "Dave",  "note": 14},\n]\npar_note = sorted(etudiants, key=lambda e: e["note"], reverse=True)\nprint("\\n=== Classement ===")\nfor rang, e in enumerate(par_note, 1):\n    print(f"  {rang}. {e['nom']:<8} : {e['note']}/20")`,
+       output:`25\n7\n\nCarrés : [1, 4, 9, 16, 25]\nPairs   : [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]\n\n=== Classement ===\n  1. Carol    : 19/20\n  2. Alice    : 17/20\n  3. Dave     : 14/20\n  4. Bob      : 12/20`,
+       explains:[
+         {kw:'lambda p: expr',desc:"Fonction anonyme sur une ligne. lambda x: x*2 est équivalent à def f(x): return x*2."},
+         {kw:'map(f, lst)',desc:"Applique la fonction f à CHAQUE élément de lst. Retourne un objet map → entourer de list() pour voir."},
+         {kw:'filter(f, lst)',desc:"Garde seulement les éléments pour lesquels f(elem) retourne True. Retourne un objet filter."},
+         {kw:'sorted(lst, key=f)',desc:"Trie lst selon la valeur retournée par f(elem). reverse=True pour trier en ordre décroissant."},
+         {kw:'e[\"note\"]',desc:"Accès à la valeur 'note' dans un dictionnaire. Dans une lambda, on peut accéder aux attributs/clés normalement."}]}
+    ]},
+    {id:'fn4',title:'Décorateurs — @decorator',xp:90,steps:[
+      {type:'theory',heading:'🎩 Enrichir des fonctions sans les modifier',
+       html:`Un <strong>décorateur</strong> est une fonction qui prend une autre fonction et retourne une version <strong>enrichie ou modifiée</strong> de cette fonction.<br><br>
+<code>@mon_deco<br>def ma_fonction():</code><br>
+est exactement équivalent à :<br>
+<code>ma_fonction = mon_deco(ma_fonction)</code><br><br>
+Applications courantes :<br>
+• ⏱ Mesure du temps d'exécution<br>
+• 📝 Journalisation (logging) automatique<br>
+• 🔐 Vérification des droits d'accès<br>
+• 🗃 Mise en cache (mémoïsation)<br>
+• ✅ Validation des arguments`,
+       box:{type:'tip',label:'💡 @functools.wraps',text:'Utilise toujours @functools.wraps(func) dans ton wrapper. Sans ça, ma_fonction.__name__ retourne "wrapper" et la docstring est perdue. Ce décorateur préserve les métadonnées de la fonction originale.'}},
+      {type:'code',heading:'🎩 Créer et appliquer des décorateurs',
+       desc:'Les décorateurs rendent le code plus propre et réutilisable :',
+       code:`import time, functools\n\n# Décorateur simple : chronomètre\ndef chronometrer(func):\n    @functools.wraps(func)  # Préserve nom et docstring\n    def wrapper(*args, **kwargs):\n        debut = time.perf_counter()\n        resultat = func(*args, **kwargs)\n        duree = (time.perf_counter() - debut) * 1000\n        print(f"  ⏱ {func.__name__}() → {duree:.2f}ms")\n        return resultat\n    return wrapper\n\n@chronometrer\ndef somme_carres(n):\n    """Calcule la somme des carrés jusqu'à n."""\n    return sum(x**2 for x in range(n))\n\nresultat = somme_carres(500_000)\nprint(f"  Résultat: {resultat:,}\\n")\n\n# Décorateur avec paramètre\ndef repeter(n):\n    def decorateur(func):\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            for _ in range(n):\n                resultat = func(*args, **kwargs)\n            return resultat\n        return wrapper\n    return decorateur\n\n@repeter(3)\ndef dire_bonjour(nom):\n    print(f"  Salut {nom} !")\n\ndire_bonjour("Alice")\n\n# Décorateur de validation\ndef valider_types(*types_attendus):\n    def decorateur(func):\n        @functools.wraps(func)\n        def wrapper(*args):\n            for arg, typ in zip(args, types_attendus):\n                if not isinstance(arg, typ):\n                    raise TypeError(f"Attendu {typ.__name__}, reçu {type(arg).__name__}")\n            return func(*args)\n        return wrapper\n    return decorateur\n\n@valider_types(str, int)\ndef afficher_note(nom, note):\n    print(f"\\n  {nom}: {note}/20")\n\nafficher_note("Bob", 15)\ntry:\n    afficher_note("Bob", "15")\nexcept TypeError as e:\n    print(f"  Erreur: {e}")`,
+       output:`  ⏱ somme_carres() → 42.15ms\n  Résultat: 41,666,416,750,000\n\n  Salut Alice !\n  Salut Alice !\n  Salut Alice !\n\n  Bob: 15/20\n  Erreur: Attendu int, reçu str`,
+       explains:[
+         {kw:'def deco(func):',desc:"Un décorateur reçoit la fonction originale. Il retourne un wrapper qui sera exécuté à la place."},
+         {kw:'def wrapper(*args, **kwargs):',desc:"Accepte n'importe quels arguments pour pouvoir décorer n'importe quelle fonction, quel que soit sa signature."},
+         {kw:'@functools.wraps(func)',desc:"Copie __name__, __doc__, __module__ de func vers wrapper. Essentiel pour que l'introspection reste correcte."},
+         {kw:'@repeter(3)',desc:"Décorateur avec paramètre : repeter(3) retourne un décorateur. C'est donc une fonction à 3 niveaux d'imbrication."},
+         {kw:'isinstance(arg, typ)',desc:"Vérifie si arg est une instance du type typ. Plus robuste que type(arg) == typ car accepte les sous-classes."}]}
+    ]},
+    {id:'fn5',title:'Closures et Portée des Variables (LEGB)',xp:80,steps:[
+      {type:'theory',heading:'🔭 Comprendre la portée des variables',
+       html:`La <strong>portée</strong> (scope) détermine où une variable est accessible. Python suit la règle <strong>LEGB</strong> pour résoudre un nom :<br><br>
+• <strong>L</strong>ocal — variables de la fonction courante<br>
+• <strong>E</strong>nclosing — variables des fonctions englobantes (closures)<br>
+• <strong>G</strong>lobal — variables du module<br>
+• <strong>B</strong>uilt-in — fonctions intégrées Python (print, len...)<br><br>
+Une <strong>closure</strong> est une fonction qui "capture" et mémorise des variables de son contexte de définition, même après que ce contexte ait disparu.`,
+       box:{type:'warning',label:'⚠️ global et nonlocal',text:'global x = "utilise la variable globale x". nonlocal x = "utilise la variable de la fonction englobante". À utiliser avec parcimonie — les closures et les classes sont souvent de meilleures solutions.'}},
+      {type:'code',heading:'🔭 LEGB, nonlocal et closures pratiques',
+       desc:'La portée et les closures permettent des patterns puissants :',
+       code:`# Règle LEGB illustrée\nx = "GLOBAL"\n\ndef externe():\n    x = "ENGLOBANT"\n    def interne():\n        x = "LOCAL"\n        print(f"  interne: {x}")   # LOCAL\n    interne()\n    print(f"  externe: {x}")       # ENGLOBANT\n\nexterne()\nprint(f"module: {x}")              # GLOBAL\n\n# nonlocal — modifier la variable englobante\ndef creer_compteur(debut=0):\n    compte = debut\n    def incrementer(pas=1):\n        nonlocal compte  # Réfère à compte de creer_compteur\n        compte += pas\n        return compte\n    def reset():\n        nonlocal compte\n        compte = debut\n    incrementer.reset = reset  # Attache reset à incrementer\n    return incrementer\n\nc1 = creer_compteur(10)\nc2 = creer_compteur(0)\nprint(f"\\nc1: {c1()}, {c1()}, {c1(5)}")\nprint(f"c2: {c2()}, {c2()}, {c2()}")\nc1.reset()\nprint(f"c1 après reset: {c1()}")\n\n# Closure "factory" — multiplicateur configurable\ndef fabriquer_multiplicateur(facteur):\n    """Retourne une fonction qui multiplie par facteur."""\n    return lambda x: x * facteur  # facteur est capturé\n\ndoubler = fabriquer_multiplicateur(2)\ntripler = fabriquer_multiplicateur(3)\npar10   = fabriquer_multiplicateur(10)\n\nnombres = [1, 2, 3, 5, 8]\nprint(f"\\nOriginaux : {nombres}")\nprint(f"Doublés   : {list(map(doubler, nombres))}")\nprint(f"Triplés   : {list(map(tripler, nombres))}")`,
+       output:`  interne: LOCAL\n  externe: ENGLOBANT\nmodule: GLOBAL\n\nc1: 11, 12, 17\nc2: 1, 2, 3\nc1 après reset: 11\n\nOriginaux : [1, 2, 3, 5, 8]\nDoublés   : [2, 4, 6, 10, 16]\nTriplés   : [3, 6, 9, 15, 24]`,
+       explains:[
+         {kw:'LEGB',desc:"Ordre de résolution : Local → Enclosing → Global → Built-in. Python cherche d'abord localement, puis remonte."},
+         {kw:'nonlocal x',desc:"Dans une fonction imbriquée, déclare que x est la variable de la fonction parente (pas une nouvelle locale)."},
+         {kw:'Closure',desc:"Fonction qui mémorise des variables de son contexte d'origine. c1 et c2 ont chacun leur propre compte indépendant."},
+         {kw:'lambda x: x * facteur',desc:"facteur est capturé par la lambda depuis fabriquer_multiplicateur. Chaque lambda a sa propre copie de facteur."},
+         {kw:'incrementer.reset = reset',desc:"On peut attacher des fonctions à d'autres fonctions comme attributs. Alternative légère aux classes pour petits états."}]}
+    ]}
+  ]},
+
+  avance:{title:'Programmation Avancée',icon:'🔬',color:'#be185d',bg:'rgba(190,24,93,.15)',lessons:[
+    {id:'a1',title:'Compréhensions de Listes',xp:80,steps:[
+      {type:'theory',heading:'⚡ Créer des listes en une ligne',
+       html:`La <strong>compréhension de liste</strong> est une syntaxe compacte pour créer des listes à partir d'une séquence. C'est l'une des fonctionnalités les plus "pythonesques".<br><br>
+Syntaxe : <code>[expression for élément in séquence if condition]</code><br><br>
+Il existe aussi :<br>
+• <strong>Compréhension de dictionnaire</strong> : <code>{k: v for ...}</code><br>
+• <strong>Compréhension de set</strong> : <code>{expr for ...}</code><br>
+• <strong>Expression génératrice</strong> : <code>(expr for ...)</code>`,
+       box:{type:'tip',label:'💡 Performance',text:'Les compréhensions sont plus rapides que les boucles for équivalentes car optimisées en C en interne. Mais ne sacrifie pas la lisibilité : si c\'est trop complexe, utilise une boucle.'}},
+      {type:'code',heading:'⚡ Compréhensions en pratique',
+       desc:'Remplaçons les boucles verboses par des compréhensions élégantes :',
+       code:`# Équivalent boucle for → compréhension\n# AVANT:\ncarres_boucle = []\nfor x in range(1, 6):\n    carres_boucle.append(x**2)\n\n# APRÈS:\ncarres = [x**2 for x in range(1, 6)]\nprint("Carrés :", carres)\n\n# Avec condition (filtre)\npairs = [x for x in range(20) if x % 2 == 0]\nprint("Pairs  :", pairs)\n\n# Transformation de strings\nprenoms = [\"alice\", \"BOB\", \"charlie\", \"DIANA\"]\npropre = [p.capitalize() for p in prenoms]\nprint("Prénoms :", propre)\n\n# Compréhension de dictionnaire\nnotes = {\"Alice\": 17, \"Bob\": 12, \"Carol\": 19}\nmaj = {nom: note >= 14 for nom, note in notes.items()}\nprint("\\nAdmis :", maj)\n\n# Imbriqué — matrice 3x3\nmatrice = [[i*j for j in range(1, 4)] for i in range(1, 4)]\nprint("\\nMatrice 3x3:")\nfor ligne in matrice:\n    print(" ", ligne)`,
+       output:`Carrés : [1, 4, 9, 16, 25]\nPairs  : [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]\nPrénoms : ['Alice', 'Bob', 'Charlie', 'Diana']\n\nAdmis : {'Alice': True, 'Bob': False, 'Carol': True}\n\nMatrice 3x3:\n  [1, 2, 3]\n  [2, 4, 6]\n  [3, 6, 9]`,
+       explains:[
+         {kw:'[expr for x in seq]',desc:"Compréhension de base. Crée une liste en appliquant expr à chaque x de seq."},
+         {kw:'[expr for x in seq if cond]',desc:"Avec filtre. Seulement les x pour lesquels cond est True sont traités."},
+         {kw:'{k: v for ...}',desc:"Compréhension de dictionnaire. Crée un dict en une ligne. Même syntaxe qu'une liste mais avec k: v."},
+         {kw:'[[...] for ...]',desc:"Compréhension imbriquée. Génère une liste de listes (matrice 2D). Attention à la lisibilité !"}]}
+    ]},
+    {id:'a2',title:'Gestion des Erreurs (try / except)',xp:80,steps:[
+      {type:'theory',heading:'🛡️ Rendre son code robuste',
+       html:`Les <strong>exceptions</strong> sont des erreurs qui se produisent à l'exécution. Sans gestion, elles arrêtent le programme. Avec <code>try/except</code>, on peut les intercepter et réagir.<br><br>
+Structure complète :<br>
+<code>try</code> → essaie le code<br>
+<code>except TypeErreur</code> → si cette erreur survient<br>
+<code>except (E1, E2)</code> → plusieurs types<br>
+<code>else</code> → si aucune erreur<br>
+<code>finally</code> → toujours exécuté`,
+       box:{type:'warning',label:'⚠️ Ne pas attraper trop large',text:'Évite except: (sans type) ou except Exception: sauf cas extrêmes. Attrape le type d\'erreur précis pour ne pas masquer d\'autres bugs.'}},
+      {type:'code',heading:'🛡️ Gérer les exceptions proprement',
+       desc:'Construisons du code qui ne "plante" jamais brutalement :',
+       code:`# Erreurs communes\ndef diviser(a, b):\n    try:\n        resultat = a / b\n    except ZeroDivisionError:\n        print(f"⚠️ Division par zéro impossible !")\n        return None\n    else:\n        print(f"✅ {a} / {b} = {resultat}")\n        return resultat\n    finally:\n        print("   (calcul terminé)\\n")\n\ndiviser(10, 2)\ndiviser(10, 0)\n\n# Plusieurs types d'exceptions\ndef convertir_age(valeur):\n    try:\n        age = int(valeur)\n        if age < 0 or age > 150:\n            raise ValueError(f"Age invalide : {age}")\n        return age\n    except ValueError as e:\n        print(f"❌ Erreur : {e}")\n        return None\n    except TypeError:\n        print("❌ Type incorrect (attendu : str ou int)")\n        return None\n\nprint(convertir_age("25"))\nprint(convertir_age("abc"))\nprint(convertir_age(-5))`,
+       output:`✅ 10 / 2 = 5.0\n   (calcul terminé)\n\n⚠️ Division par zéro impossible !\n   (calcul terminé)\n\n25\n❌ Erreur : invalid literal for int() with base 10: 'abc'\nNone\n❌ Erreur : Age invalide : -5\nNone`,
+       explains:[
+         {kw:'try:',desc:"Essaie d'exécuter le bloc. Si une exception se produit, saute au bloc except correspondant."},
+         {kw:'except TypeErreur:',desc:"Intercepte l'exception du type indiqué. ZeroDivisionError, ValueError, TypeError, IndexError, KeyError..."},
+         {kw:'except E as e:',desc:"Capture l'exception dans la variable e pour accéder au message d'erreur : str(e)."},
+         {kw:'else:',desc:"Exécuté seulement si AUCUNE exception n'a été levée. Utile pour le code qui ne devrait tourner qu'en cas de succès."},
+         {kw:'finally:',desc:"TOUJOURS exécuté, exception ou pas. Idéal pour fermer des fichiers, libérer des ressources."},
+         {kw:'raise ValueError(msg)',desc:"Lève une exception manuellement. Utile pour valider des données et signaler des erreurs logiques."}]}
+    ]},
+    {id:'a3',title:'Les Modules et la Bibliothèque Standard',xp:70,steps:[
+      {type:'theory',heading:'📦 Utiliser et importer des modules',
+       html:`Un <strong>module</strong> est un fichier Python contenant du code réutilisable (fonctions, classes, variables). Python vient avec une <strong>bibliothèque standard</strong> très riche.<br><br>
+Syntaxes d'import :<br>
+• <code>import module</code> — importe le module entier<br>
+• <code>from module import fonction</code> — importe une fonction spécifique<br>
+• <code>from module import *</code> — importe tout (déconseillé)<br>
+• <code>import module as alias</code> — avec un alias`,
+       box:{type:'info',label:'📌 Modules essentiels',text:'math (calculs), random (aléatoire), datetime (dates), os (système de fichiers), json (JSON), re (expressions régulières), collections, itertools...'}},
+      {type:'code',heading:'📦 La bibliothèque standard en action',
+       desc:'Découvrons les modules les plus utiles :',
+       code:`import math\nimport random\nfrom datetime import datetime, timedelta\n\n# Module math\nprint("=== math ===")\nprint(f"pi      = {math.pi:.6f}")\nprint(f"sqrt(2) = {math.sqrt(2):.4f}")\nprint(f"ceil(3.1) = {math.ceil(3.1)}")\nprint(f"floor(3.9) = {math.floor(3.9)}")\nprint(f"pow(2,10) = {math.pow(2,10):.0f}")\n\n# Module random\nprint("\\n=== random ===")\nprint("Entier 1-10 :", random.randint(1, 10))\nfruits = ["pomme","banane","cerise","kiwi"]\nprint("Choix aléatoire :", random.choice(fruits))\ncards = list(range(1, 6))\nrandom.shuffle(cards)\nprint("Mélangé :", cards)\n\n# Module datetime\nprint("\\n=== datetime ===")\nmaintenant = datetime.now()\nprint("Maintenant :", maintenant.strftime("%d/%m/%Y à %H:%M"))\ndans10jours = maintenant + timedelta(days=10)\nprint("Dans 10 jours :", dans10jours.strftime("%d/%m/%Y"))`,
+       output:`=== math ===\npi      = 3.141593\nsqrt(2) = 1.4142\nceil(3.1) = 4\nfloor(3.9) = 3\npow(2,10) = 1024\n\n=== random ===\nEntier 1-10 : 7\nChoix aléatoire : cerise\nMélangé : [3, 1, 5, 2, 4]\n\n=== datetime ===\nMaintenant : 08/04/2026 à 14:30\nDans 10 jours : 18/04/2026`,
+       explains:[
+         {kw:'import math',desc:"Importe le module math. Accès avec math.fonction(). Propre car tout est dans l'espace de noms math."},
+         {kw:'from datetime import ...',desc:"Importe seulement ce dont on a besoin. Évite d'écrire datetime.datetime.now() à chaque fois."},
+         {kw:'math.pi  math.sqrt()',desc:"Constantes et fonctions mathématiques : pi, e, sqrt, log, sin, cos, tan, ceil, floor..."},
+         {kw:'random.randint(a, b)',desc:"Entier aléatoire entre a et b INCLUS. random.random() = float entre 0 et 1."},
+         {kw:'datetime.now()',desc:"Date et heure actuelles. .strftime(format) formate la date en string. %d=jour, %m=mois, %Y=année, %H:%%M=heure."}]}
+    ]},
+    {id:'a4',title:'Lecture et Écriture de Fichiers',xp:75,steps:[
+      {type:'theory',heading:'📁 Travailler avec les fichiers',
+       html:`Python permet de <strong>lire et écrire des fichiers</strong> facilement. On utilise la fonction <code>open()</code> avec un mode :<br><br>
+• <code>"r"</code> — lecture (read) — erreur si le fichier n'existe pas<br>
+• <code>"w"</code> — écriture (write) — crée ou écrase le fichier<br>
+• <code>"a"</code> — ajout (append) — ajoute à la fin<br>
+• <code>"r+"</code> — lecture + écriture<br><br>
+Toujours utiliser <code>with open(...) as f:</code> — ferme automatiquement le fichier.`,
+       box:{type:'tip',label:'✅ Bonne pratique : with',text:'Le gestionnaire de contexte with garantit que le fichier est fermé même si une exception se produit. Plus sûr que f = open() ... f.close() manuel.'}},
+      {type:'code',heading:'📁 Lire et écrire des fichiers',
+       desc:'Simulation de lecture/écriture de fichiers Python (résultats pré-calculés) :',
+       code:`# === ÉCRITURE ===\ncontenu = """Ligne 1 : Bonjour Python !\nLigne 2 : J'apprends à travailler avec les fichiers.\nLigne 3 : C'est très utile en pratique.\n"""\n\n# Écrire dans un fichier\nwith open("notes.txt", "w", encoding="utf-8") as f:\n    f.write(contenu)\nprint("✅ Fichier 'notes.txt' créé.")\n\n# === LECTURE COMPLÈTE ===\nwith open("notes.txt", "r", encoding="utf-8") as f:\n    texte = f.read()\nprint("\\n--- Contenu complet ---")\nprint(texte)\n\n# === LECTURE LIGNE PAR LIGNE ===\nwith open("notes.txt", "r", encoding="utf-8") as f:\n    for i, ligne in enumerate(f, 1):\n        print(f"Ligne {i}: {ligne.strip()}")\n\n# === AJOUT (append) ===\nwith open("notes.txt", "a", encoding="utf-8") as f:\n    f.write("Ligne 4 : Ajoutée après coup !\\n")\nprint("\\n✅ Ligne ajoutée.")`,
+       output:`✅ Fichier 'notes.txt' créé.\n\n--- Contenu complet ---\nLigne 1 : Bonjour Python !\nLigne 2 : J'apprends à travailler avec les fichiers.\nLigne 3 : C'est très utile en pratique.\n\nLigne 1: Ligne 1 : Bonjour Python !\nLigne 2: Ligne 2 : J'apprends à travailler avec les fichiers.\nLigne 3: Ligne 3 : C'est très utile en pratique.\n\n✅ Ligne ajoutée.`,
+       explains:[
+         {kw:'open(fichier, mode)',desc:"Ouvre un fichier. Retourne un objet fichier. Modes : 'r' lecture, 'w' écriture (écrase), 'a' ajout, 'rb'/'wb' binaire."},
+         {kw:'with open(...) as f:',desc:"Gestionnaire de contexte. Ferme automatiquement le fichier à la fin du bloc, même en cas d'erreur."},
+         {kw:'f.write(texte)',desc:"Écrit du texte dans le fichier. N'ajoute PAS de \\n automatiquement — à toi de l'inclure si nécessaire."},
+         {kw:'f.read()',desc:"Lit tout le contenu du fichier en une seule string. f.readlines() retourne une liste de lignes."},
+         {kw:'encoding=\"utf-8\"',desc:"Spécifie l'encodage. Toujours préciser utf-8 pour éviter les problèmes avec les accents et caractères spéciaux."}]}
+    ]}
+  ]},
+
+  poo:{title:'Programmation Orientée Objet',icon:'🏗️',color:'#1e3a8a',bg:'rgba(30,58,138,.15)',lessons:[
+    {id:'p1',title:'Classes et Objets',xp:90,steps:[
+      {type:'theory',heading:'🏗️ La POO — modéliser le monde réel',
+       html:`La <strong>Programmation Orientée Objet (POO)</strong> organise le code autour d'<strong>objets</strong> qui combinent données (attributs) et comportements (méthodes).<br><br>
+Concepts fondamentaux :<br>
+• <strong>Classe</strong> — le plan/moule (comme un blueprint)<br>
+• <strong>Objet/Instance</strong> — la réalisation concrète d'une classe<br>
+• <strong>Attributs</strong> — les données de l'objet (nom, age...)<br>
+• <strong>Méthodes</strong> — les fonctions de l'objet (parler, marcher...)<br>
+• <strong>__init__</strong> — constructeur, appelé à la création`,
+       box:{type:'info',label:'💡 self',text:'self est une référence à l\'instance courante de la classe. Toutes les méthodes d\'une classe reçoivent self en premier paramètre. Lors de l\'appel, Python le passe automatiquement.'}},
+      {type:'code',heading:'🏗️ Créer et utiliser une classe',
+       desc:'Modélisons un compte bancaire avec la POO :',
+       code:`class CompteBancaire:\n    """Représente un compte bancaire simple."""\n\n    # Variable de classe (partagée par toutes les instances)\n    banque = "PyBank"\n\n    def __init__(self, titulaire, solde_initial=0):\n        """Constructeur — appelé à la création."""\n        self.titulaire = titulaire\n        self.solde = solde_initial\n        self.historique = []\n\n    def deposer(self, montant):\n        """Dépose de l'argent sur le compte."""\n        if montant > 0:\n            self.solde += montant\n            self.historique.append(f"+{montant}€")\n            print(f"✅ Dépôt de {montant}€. Solde : {self.solde}€")\n\n    def retirer(self, montant):\n        """Retire de l'argent du compte."""\n        if montant > self.solde:\n            print(f"❌ Fonds insuffisants ! Solde : {self.solde}€")\n        else:\n            self.solde -= montant\n            self.historique.append(f"-{montant}€")\n            print(f"✅ Retrait de {montant}€. Solde : {self.solde}€")\n\n    def afficher(self):\n        print(f"\\n{'='*30}")\n        print(f"  {self.banque} — {self.titulaire}")\n        print(f"  Solde : {self.solde}€")\n        print(f"  Historique : {self.historique}")\n        print(f"{'='*30}")\n\n# Utilisation\ncompte = CompteBancaire("Alice", 1000)\ncompte.deposer(500)\ncompte.retirer(200)\ncompte.retirer(2000)\ncompte.afficher()`,
+       output:`✅ Dépôt de 500€. Solde : 1500€\n✅ Retrait de 200€. Solde : 1300€\n❌ Fonds insuffisants ! Solde : 1300€\n\n==============================\n  PyBank — Alice\n  Solde : 1300€\n  Historique : ['+500€', '-200€']\n==============================`,
+       explains:[
+         {kw:'class NomClasse:',desc:"Déclare une classe. La convention est PascalCase : CompteBancaire, not compte_bancaire."},
+         {kw:'def __init__(self, ...)',desc:"Constructeur — méthode spéciale appelée automatiquement lors de la création de l'objet avec Classe()."},
+         {kw:'self.attribut = val',desc:"Crée un attribut d'instance. Chaque objet a sa propre copie des attributs d'instance."},
+         {kw:'objet = Classe(args)',desc:"Crée une instance (objet) de la classe. __init__ est appelé avec les arguments fournis."},
+         {kw:'objet.methode()',desc:"Appelle une méthode sur l'objet. Python passe automatiquement self = objet en premier argument."}]}
+    ]},
+    {id:'p2',title:'Héritage et Polymorphisme',xp:90,steps:[
+      {type:'theory',heading:'🧬 Réutiliser et spécialiser des classes',
+       html:`L'<strong>héritage</strong> permet à une classe <em>enfant</em> d'hériter des attributs et méthodes d'une classe <em>parent</em>.<br><br>
+• La classe enfant <strong>étend</strong> la classe parent<br>
+• Elle peut <strong>surcharger</strong> (override) les méthodes<br>
+• <code>super()</code> permet d'appeler la méthode parente<br><br>
+Le <strong>polymorphisme</strong> signifie que des objets de classes différentes peuvent répondre au même appel de méthode différemment.`,
+       box:{type:'info',label:'💡 "is-a" relationship',text:'L\'héritage modélise une relation "est-un" : un Chien EST-UN Animal. Si cette relation ne tient pas, utilise la composition ("a-un") plutôt que l\'héritage.'}},
+      {type:'code',heading:'🧬 Héritage et polymorphisme en Python',
+       desc:'Créons une hiérarchie de classes Animaux :',
+       code:`class Animal:\n    """Classe de base pour tous les animaux."""\n\n    def __init__(self, nom, age):\n        self.nom = nom\n        self.age = age\n\n    def se_presenter(self):\n        return f"Je suis {self.nom}, j'ai {self.age} ans."\n\n    def faire_son(self):\n        return "..."\n\n    def __str__(self):\n        return f"{type(self).__name__}({self.nom})"\n\n\nclass Chien(Animal):\n    def __init__(self, nom, age, race):\n        super().__init__(nom, age)  # Appel du parent\n        self.race = race\n\n    def faire_son(self):  # Override\n        return "🐕 Woof woof !"\n\n    def rapporter(self, objet):\n        return f"{self.nom} rapporte {objet} !"\n\n\nclass Chat(Animal):\n    def faire_son(self):  # Override\n        return "🐈 Miaou !"\n\n    def ronronner(self):\n        return f"{self.nom} ronronne... 😸"\n\n\n# Polymorphisme\nanimaux = [Chien("Rex", 3, "Labrador"), Chat("Whiskers", 5), Chien("Buddy", 2, "Beagle")]\n\nfor animal in animaux:\n    print(f"{animal} → {animal.faire_son()}")`,
+       output:`Chien(Rex) → 🐕 Woof woof !\nChat(Whiskers) → 🐈 Miaou !\nChien(Buddy) → 🐕 Woof woof !`,
+       explains:[
+         {kw:'class Enfant(Parent):',desc:"L'enfant hérite de tous les attributs et méthodes du parent. Peut en ajouter ou en surcharger."},
+         {kw:'super().__init__(...)',desc:"Appelle le constructeur de la classe parente. Essentiel pour initialiser correctement les attributs hérités."},
+         {kw:'def faire_son(self):',desc:"Override (surcharge) — redéfinit une méthode héritée. La version de la classe enfant est utilisée."},
+         {kw:'type(self).__name__',desc:"Retourne le nom de la VRAIE classe de l'objet (pas la classe parent). Utile dans __str__."},
+         {kw:'Polymorphisme',desc:"Plusieurs classes répondent au même appel (faire_son()) chacune à sa façon. C'est la puissance de la POO."}]}
+    ]},
+    {id:'p3',title:'Méthodes Spéciales (Dunder)',xp:85,steps:[
+      {type:'theory',heading:'✨ Les méthodes magiques Python',
+       html:`Les <strong>méthodes spéciales</strong> (ou "dunder methods", pour double underscore) permettent de définir le comportement des objets avec les opérateurs et fonctions intégrées Python.<br><br>
+Les principales :<br>
+• <code>__str__</code> — print(obj) et str(obj)<br>
+• <code>__repr__</code> — représentation officielle<br>
+• <code>__len__</code> — len(obj)<br>
+• <code>__add__</code> — obj1 + obj2<br>
+• <code>__eq__</code> — obj1 == obj2<br>
+• <code>__lt__</code> — obj1 < obj2<br>
+• <code>__getitem__</code> — obj[i]`,
+       box:{type:'tip',label:'💡 __repr__ vs __str__',text:'__str__ = version lisible pour les humains (utilisée par print). __repr__ = version non-ambiguë pour les développeurs (utilisée dans la console interactive). Si seul __repr__ est défini, il sert aussi pour str().'}},
+      {type:'code',heading:'✨ Créer une classe complète avec dunders',
+       desc:'Implémentons une classe Vecteur qui se comporte comme un vrai vecteur mathématique :',
+       code:`import math\n\nclass Vecteur2D:\n    """Vecteur 2D avec opérations mathématiques."""\n\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f"Vecteur({self.x}, {self.y})"\n\n    def __repr__(self):\n        return f"Vecteur2D(x={self.x}, y={self.y})"\n\n    def __add__(self, autre):  # v1 + v2\n        return Vecteur2D(self.x + autre.x, self.y + autre.y)\n\n    def __mul__(self, scalaire):  # v * n\n        return Vecteur2D(self.x * scalaire, self.y * scalaire)\n\n    def __eq__(self, autre):  # v1 == v2\n        return self.x == autre.x and self.y == autre.y\n\n    def __len__(self):  # Arrondi de la norme\n        return int(self.norme())\n\n    def norme(self):\n        return math.sqrt(self.x**2 + self.y**2)\n\n\nv1 = Vecteur2D(3, 4)\nv2 = Vecteur2D(1, 2)\n\nprint(f"v1 = {v1}")\nprint(f"v2 = {v2}")\nprint(f"v1 + v2 = {v1 + v2}")\nprint(f"v1 * 3  = {v1 * 3}")\nprint(f"Norme v1 = {v1.norme():.2f}")\nprint(f"v1 == v2 = {v1 == v2}")\nprint(f"v1 == Vecteur2D(3,4) = {v1 == Vecteur2D(3,4)}")`,
+       output:`v1 = Vecteur(3, 4)\nv2 = Vecteur(1, 2)\nv1 + v2 = Vecteur(4, 6)\nv1 * 3  = Vecteur(9, 12)\nNorme v1 = 5.00\nv1 == v2 = False\nv1 == Vecteur2D(3,4) = True`,
+       explains:[
+         {kw:'__str__(self)',desc:"Appelé par print(obj) et str(obj). Doit retourner une string lisible pour les humains."},
+         {kw:'__add__(self, autre)',desc:"Définit le comportement de +. Quand tu écris v1 + v2, Python appelle v1.__add__(v2)."},
+         {kw:'__mul__(self, n)',desc:"Définit *. __rmul__ pour n * v (ordre inversé). Similaire pour - (__sub__), / (__truediv__), etc."},
+         {kw:'__eq__(self, autre)',desc:"Définit ==. Sans __eq__, Python compare les identités des objets (référence mémoire), pas les valeurs."},
+         {kw:'__len__(self)',desc:"Définit len(obj). Doit retourner un entier. Utilisé aussi par bool(obj) — False si len == 0."}]}
+    ]}
+  ]}
+};
+
+/* ══════════════════════════════════════════════
+   SUCCÈS
+══════════════════════════════════════════════ */
+const ACHIEVEMENTS=[
+  {id:'first',icon:'target_arrow',name:'Premier pas',cond:d=>d.done>=1},
+  {id:'streak3',icon:'local_fire_department',name:'3 jours',cond:d=>d.streak>=3},
+  {id:'streak7',icon:'whatshot',name:'7 jours',cond:d=>d.streak>=7},
+  {id:'xp100',icon:'bolt',name:'100 XP',cond:d=>d.xp>=100},
+  {id:'xp500',icon:'star',name:'500 XP',cond:d=>d.xp>=500},
+  {id:'debut',icon:'rocket_launch',name:'Débuts',cond:d=>moduleComplete('debut',d)},
+  {id:'ops',icon:'calculate',name:'Opérateurs',cond:d=>moduleComplete('operateurs',d)},
+  {id:'collections',icon:'dataset',name:'Collections',cond:d=>moduleComplete('collections',d)},
+  {id:'fonctions',icon:'functions',name:'Fonctions',cond:d=>moduleComplete('fonctions',d)},
+  {id:'poo',icon:'architecture',name:'POO',cond:d=>moduleComplete('poo',d)},
+  {id:'streak30',icon:'emoji_events',name:'30 jours',cond:d=>d.streak>=30},
+  {id:'master',icon:'workspace_premium',name:'Maîtrise',cond:d=>d.done>=24},
+];
+function moduleComplete(key,data){return CUR[key]?.lessons.every(l=>data.completedLessons.includes(l.id))??false}
+
+/* ══════════════════════════════════════════════
+   ⚙️  CONFIGURATION SUPABASE
+   ──────────────────────────────────────────────
+   1. Va sur https://app.supabase.com
+   2. Sélectionne ton projet → Settings → API
+   3. Copie "Project URL" et "anon public key"
+   4. Remplace les valeurs ci-dessous
+══════════════════════════════════════════════ */
+const SB_URL  = 'https://nbuylffcmxkrqneptatp.supabase.co';
+const SB_KEY  = 'sb_publishable_f4f-lytZQVd9IM7POegQ9Q_S00mVlV_';
+
+/* ── Initialisation du client Supabase ── */
+let SB = null;
+(function initSB(){
+  try{
+    if(typeof supabase !== 'undefined' && !SB_URL.includes('XXXXXXX')){
+      SB = supabase.createClient(SB_URL, SB_KEY);
+      console.log('✅ Supabase initialisé');
+    } else {
+      console.info('ℹ️ Supabase non configuré — mode localStorage activé');
+    }
+  } catch(e){ console.warn('Supabase init failed:', e.message) }
+})();
+
+/* ══════════════════════════════════════════════
+   AVATARS
+══════════════════════════════════════════════ */
+const AVATARS=['🧑‍💻','👨‍💻','👩‍💻','🦊','🐺','🐼','🦁','🐯','🦋','🔮','⚡','🌸','🎮','🚀','🤖','🎯'];
+
+/* ══════════════════════════════════════════════
+   ÉTAT
+══════════════════════════════════════════════ */
+let CU=null; // Current User
+let PROG={xp:0,level:1,streak:0,completedLessons:[],lastVisit:null};
+let CPAGE='home',CLS_ID=null,CSTEP=0;
+window._outs={};
+
+/* ══════════════════════════════════════════════
+   AUTH SYSTEM — Supabase + localStorage fallback
+══════════════════════════════════════════════ */
+
+/* ── Helpers localStorage (fallback) ── */
+function getUsers(){try{return JSON.parse(localStorage.getItem('pl_users')||'[]')}catch{return[]}}
+function saveUsers(u){localStorage.setItem('pl_users',JSON.stringify(u))}
+function getLocalSession(){try{return JSON.parse(localStorage.getItem('pl_session')||'null')}catch{return null}}
+
+/* ── UI Helpers ── */
+function showAuthErr(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg;el.classList.add('show');
+}
+function clearAuthErr(id){document.getElementById(id).classList.remove('show')}
+
+function setBtnLoading(formId,loading){
+  const btn=document.querySelector(`#${formId} .btn-auth`);
+  if(!btn)return;
+  if(loading){
+    btn._origTxt=btn.innerHTML;
+    btn.innerHTML='<span class="btn-spinner"></span>Chargement...';
+    btn.disabled=true;
+  } else {
+    btn.innerHTML=btn._origTxt||'Envoyer';
+    btn.disabled=false;
+  }
+}
+
+function translateSBError(err){
+  const m=err?.message||'';
+  if(m.includes('already registered')||m.includes('User already registered'))return 'Cet email est déjà utilisé.';
+  if(m.includes('Invalid login credentials'))return 'Email ou mot de passe incorrect.';
+  if(m.includes('Email not confirmed'))return 'Confirme ton adresse email (vérifie ta boîte mail).';
+  if(m.includes('Password should be at least'))return 'Le mot de passe doit faire au moins 6 caractères.';
+  if(m.includes('Unable to validate'))return 'Adresse email invalide.';
+  if(m.includes('signup disabled'))return 'Les inscriptions sont désactivées sur ce projet Supabase.';
+  if(m.includes('network'))return 'Erreur réseau — vérifie ta connexion internet.';
+  return 'Erreur : '+m;
+}
+
+function updateSyncBadge(mode){
+  // mode: 'cloud' | 'local' | 'syncing'
+  const icn={cloud:'cloud_done',local:'storage',syncing:'sync'};
+  const lbl={cloud:'Cloud',local:'Local',syncing:'Sync...'};
+  [document.getElementById('syncBadge'),document.getElementById('profileSyncBadge')].forEach(el=>{
+    if(!el)return;
+    el.className='sync-badge '+mode;
+    el.innerHTML=`<span class="mi material-symbols-rounded" style="font-size:.8rem;vertical-align:middle;margin-right:2px">${icn[mode]||'storage'}</span>${lbl[mode]||mode}`;
+  });
+  const modeEl=document.getElementById('storageModeEl');
+  const subEl=document.getElementById('storageSubEl');
+  if(modeEl&&subEl){
+    if(mode==='cloud'){
+      modeEl.innerHTML='<span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:5px;color:var(--b4)">cloud_done</span>Mode Cloud (Supabase)';
+      subEl.textContent='Données synchronisées sur le serveur';
+    } else {
+      modeEl.innerHTML='<span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:5px;color:var(--y4)">storage</span>Mode local (navigateur)';
+      subEl.textContent='Données sauvegardées dans ce navigateur uniquement';
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   INSCRIPTION
+══════════════════════════════════════════════ */
+async function handleRegister(e){
+  e.preventDefault();
+  clearAuthErr('registerErr');
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const pwd   = document.getElementById('regPwd').value;
+  const avatar= document.querySelector('.avatar-opt.selected')?.dataset.av||'🧑‍💻';
+  if(!name){showAuthErr('registerErr','Veuillez entrer votre prénom.');return}
+  if(pwd.length<6){showAuthErr('registerErr','Le mot de passe doit faire au moins 6 caractères.');return}
+
+  setBtnLoading('registerForm',true);
+
+  if(SB){
+    /* ─ Mode Supabase ─ */
+    const {data,error}=await SB.auth.signUp({
+      email, password:pwd,
+      options:{data:{name,avatar}}
+    });
+    setBtnLoading('registerForm',false);
+    if(error){showAuthErr('registerErr',translateSBError(error));return}
+    // Le trigger SQL crée automatiquement profiles + user_progress
+    if(data.user){
+      await doLoginSB(data.user,{name,avatar});
+    } else {
+      // Email de confirmation requis
+      showAuthErr('registerErr','📧 Vérifie ta boîte mail pour confirmer ton compte, puis connecte-toi.');
+    }
+  } else {
+    /* ─ Mode localStorage ─ */
+    setBtnLoading('registerForm',false);
+    const users=getUsers();
+    if(users.find(u=>u.email===email)){showAuthErr('registerErr','Cet email est déjà utilisé.');return}
+    const user={id:Date.now().toString(),name,email,password:pwd,avatar,createdAt:new Date().toISOString(),isSB:false};
+    users.push(user);saveUsers(users);
+    doLoginLocal(user);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   CONNEXION
+══════════════════════════════════════════════ */
+async function handleLogin(e){
+  e.preventDefault();
+  clearAuthErr('loginErr');
+  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pwd  =document.getElementById('loginPwd').value;
+
+  setBtnLoading('loginForm',true);
+
+  if(SB){
+    /* ─ Mode Supabase ─ */
+    const {data,error}=await SB.auth.signInWithPassword({email,password:pwd});
+    setBtnLoading('loginForm',false);
+    if(error){showAuthErr('loginErr',translateSBError(error));return}
+    await doLoginSB(data.user);
+  } else {
+    /* ─ Mode localStorage ─ */
+    setBtnLoading('loginForm',false);
+    const users=getUsers();
+    const user=users.find(u=>u.email===email&&u.password===pwd);
+    if(!user){showAuthErr('loginErr','Email ou mot de passe incorrect.');return}
+    doLoginLocal(user);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   LOGIN HELPERS
+══════════════════════════════════════════════ */
+async function doLoginSB(sbUser, fallback=null){
+  updateSyncBadge('syncing');
+  try{
+    // Charger le profil depuis Supabase
+    const {data:prof}=await SB.from('profiles').select('name,avatar').eq('id',sbUser.id).single();
+    const name  = prof?.name   || sbUser.user_metadata?.name   || fallback?.name   || 'Utilisateur';
+    const avatar= prof?.avatar || sbUser.user_metadata?.avatar || fallback?.avatar || '🧑‍💻';
+    CU={id:sbUser.id,name,avatar,email:sbUser.email,isSB:true};
+    // Cacher aussi en local pour un démarrage hors-ligne rapide
+    localStorage.setItem('pl_session', JSON.stringify({userId:sbUser.id,isSB:true}));
+    localStorage.setItem('pl_cu_'+sbUser.id, JSON.stringify(CU));
+    await loadProgSB();
+    updateStreakOnVisit();
+    hideAuth();
+    updateSyncBadge('cloud');
+    initApp();
+  } catch(err){
+    console.warn('Supabase login fallback:', err);
+    // Fallback cache local si offline
+    const cached=localStorage.getItem('pl_cu_'+sbUser.id);
+    if(cached){ CU=JSON.parse(cached); loadProgLocal(); updateStreakOnVisit(); hideAuth(); updateSyncBadge('local'); initApp(); }
+    else{ showAuthErr('loginErr','Connexion échouée. Vérifie ta connexion internet.'); }
+  }
+}
+
+function doLoginLocal(user){
+  CU=user;
+  localStorage.setItem('pl_session',JSON.stringify({userId:user.id,isSB:false}));
+  loadProgLocal();
+  updateStreakOnVisit();
+  hideAuth();
+  updateSyncBadge('local');
+  initApp();
+}
+
+/* ══════════════════════════════════════════════
+   DÉCONNEXION
+══════════════════════════════════════════════ */
+async function logout(){
+  if(SB&&CU?.isSB) await SB.auth.signOut().catch(()=>{});
+  localStorage.removeItem('pl_session');
+  CU=null;
+  PROG={xp:0,level:1,streak:0,completedLessons:[],lastVisit:null};
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('loginForm').reset();
+  document.getElementById('registerForm').reset();
+  document.querySelectorAll('.avatar-opt').forEach(a=>a.classList.remove('selected'));
+  switchTab('login');
+}
+
+function hideAuth(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('loginForm').classList.toggle('active',tab==='login');
+  document.getElementById('registerForm').classList.toggle('active',tab==='register');
+}
+
+/* ══════════════════════════════════════════════
+   PROGRESS MANAGEMENT — Supabase + localStorage
+══════════════════════════════════════════════ */
+
+/* ── localStorage (cache rapide & fallback offline) ── */
+function loadProgLocal(){
+  try{
+    const d=JSON.parse(localStorage.getItem('pl_prog_'+CU.id)||'{}');
+    PROG.xp              = d.xp              || 0;
+    PROG.level           = d.level           || 1;
+    PROG.streak          = d.streak          || 0;
+    PROG.completedLessons= d.completedLessons|| [];
+    PROG.lastVisit       = d.lastVisit       || null;
+  }catch{PROG={xp:0,level:1,streak:0,completedLessons:[],lastVisit:null}}
+}
+
+function saveProgLocal(){
+  try{localStorage.setItem('pl_prog_'+CU.id,JSON.stringify({...PROG}))}catch{}
+}
+
+/* ── Supabase (source de vérité) ── */
+async function loadProgSB(){
+  if(!SB||!CU)return loadProgLocal();
+  try{
+    // Progression globale
+    const {data:p,error:pe}=await SB.from('user_progress')
+      .select('xp,level,streak,last_visit')
+      .eq('user_id',CU.id).single();
+
+    // Leçons terminées
+    const {data:ls,error:le}=await SB.from('completed_lessons')
+      .select('lesson_id')
+      .eq('user_id',CU.id);
+
+    if(pe&&pe.code==='PGRST116'){
+      // Ligne absente (nouvel utilisateur) — créer l'entrée
+      await SB.from('user_progress').insert({user_id:CU.id,xp:0,level:1,streak:0});
+      PROG={xp:0,level:1,streak:0,completedLessons:[],lastVisit:null};
+    } else if(p){
+      PROG.xp              = p.xp      || 0;
+      PROG.level           = p.level   || 1;
+      PROG.streak          = p.streak  || 0;
+      PROG.lastVisit       = p.last_visit || null;
+      PROG.completedLessons= ls ? ls.map(l=>l.lesson_id) : [];
+    }
+    saveProgLocal(); // Cache local mis à jour
+  } catch(e){
+    console.warn('loadProgSB failed, using local cache:', e.message);
+    loadProgLocal();
+  }
+}
+
+/* ── Sauvegarde (local IMMÉDIAT + Supabase async) ── */
+async function saveProgress(){
+  saveProgLocal(); // Instantané — ne jamais bloquer l'UI
+
+  if(!SB||!CU?.isSB) return; // Pas de Supabase configuré
+
+  updateSyncBadge('syncing');
+  try{
+    await SB.from('user_progress').upsert({
+      user_id:   CU.id,
+      xp:        PROG.xp,
+      level:     PROG.level,
+      streak:    PROG.streak,
+      last_visit: PROG.lastVisit
+        ? new Date(PROG.lastVisit).toISOString().slice(0,10)
+        : null
+    },{onConflict:'user_id'});
+    updateSyncBadge('cloud');
+  } catch(e){
+    console.warn('Supabase saveProgress failed:', e.message);
+    updateSyncBadge('local');
+  }
+}
+
+/* ── Calcul du streak ── */
+function updateStreakOnVisit(){
+  const today=new Date().toDateString();
+  const last =PROG.lastVisit;
+  if(!last){ PROG.streak=1 }
+  else if(last===today){ /* même jour — rien */ }
+  else {
+    const diff=(new Date(today)-new Date(last))/(1000*60*60*24);
+    if(diff===1){ PROG.streak++ }
+    else if(diff>1){ PROG.streak=1 }
+  }
+  PROG.lastVisit=today;
+  saveProgress(); // async, ne bloque pas
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg)pg.classList.add('active');
+  CPAGE=name;
+  updateNavHL(name);
+  if(name==='home')renderHome();
+  if(name==='courses')renderCourses();
+  if(name==='profile')renderProfile();
+  window.scrollTo(0,0);
+}
+
+function updateNavHL(pg){
+  ['home','courses','profile'].forEach(p=>{
+    const dk=document.getElementById('dn-'+p);
+    const mb=document.getElementById('mn-'+p);
+    if(dk)dk.classList.toggle('active',p===pg);
+    if(mb)mb.classList.toggle('active',p===pg);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   LESSON LOGIC
+══════════════════════════════════════════════ */
+function openLesson(id){
+  CLS_ID=id;CSTEP=0;
+  const lesson=findLesson(id);
+  if(!lesson)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-lesson').classList.add('active');
+  updateNavHL('courses');
+  renderLesson(lesson);
+  window.scrollTo(0,0);
+}
+
+function findLesson(id){
+  for(const mod of Object.values(CUR)){
+    const l=mod.lessons.find(x=>x.id===id);
+    if(l)return l;
+  }
+  return null;
+}
+
+function renderLesson(lesson){
+  document.getElementById('lsTitle').textContent=lesson.title;
+  refreshProg(lesson);
+  renderStep(lesson,CSTEP);
+}
+
+function refreshProg(lesson){
+  const t=lesson.steps.length,c=CSTEP;
+  document.getElementById('lpFill').style.width=(c/t*100)+'%';
+  document.getElementById('lpLbl').textContent=`Étape ${c+1}/${t}`;
+}
+
+function renderStep(lesson,idx){
+  const step=lesson.steps[idx];
+  if(!step)return;
+  const body=document.getElementById('lsBody');
+  body.innerHTML=step.type==='theory'?buildTheory(step):buildCode(step);
+  document.querySelectorAll('pre code').forEach(el=>hljs.highlightElement(el));
+  renderLsNav(lesson,idx);
+  window.scrollTo(0,0);
+}
+
+function buildTheory(s){
+  const box=s.box?`<div class="ibox ${s.box.type==='tip'?'tip':s.box.type==='warning'?'warning':''}"><div class="ibox-lbl">${s.box.label}</div><p class="ibox-txt">${s.box.text}</p></div>`:'';
+  return`<div class="thy-block"><h2 class="thy-h">${s.heading}</h2><p class="thy-txt">${s.html}</p>${box}</div>`;
+}
+
+function buildCode(s){
+  const uid='e'+Math.random().toString(36).slice(2,8);
+  const cid='con-'+uid;
+  window._outs[cid]=s.output;
+  const xpl=s.explains?`<div class="xpl-box"><div class="xpl-ttl">📘 Décryptage du code</div><div class="xpl-items">${s.explains.map(x=>`<div class="xpl-row"><span class="kwd">${eh(x.kw)}</span><span class="kwd-desc">${x.desc}</span></div>`).join('')}</div></div>`:'';
+  return`<div class="thy-block"><h2 class="thy-h">${s.heading}</h2><p class="thy-txt">${s.desc}</p></div>
+<div class="editor-wrap">
+  <div class="ed-top">
+    <div class="ed-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+    <span class="ed-fname"><span class="material-symbols-rounded" style="font-size:.85rem;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">edit_note</span>main.py</span>
+    <button class="run-btn" id="rb-${uid}" onclick="runCode('${cid}','rb-${uid}')"><span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">play_arrow</span>Exécuter</button>
+  </div>
+  <div class="ed-code"><pre><code class="language-python">${eh(s.code)}</code></pre></div>
+  <div class="con-wrap">
+    <div class="con-top"><div class="con-dot-live"></div><span class="con-lbl"><span class="material-symbols-rounded" style="font-size:.85rem;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">terminal</span>Console Python</span></div>
+    <div class="con-body"><div class="con-out empty" id="${cid}">Clique sur <span class="material-symbols-rounded" style="font-size:.8rem;vertical-align:middle;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">play_arrow</span> Exécuter pour voir le résultat...</div></div>
+  </div>
+</div>${xpl}`;
+}
+
+function renderLsNav(lesson,idx){
+  const total=lesson.steps.length,isLast=idx===total-1,isFirst=idx===0;
+  document.getElementById('lsNav').innerHTML=`
+    ${!isFirst?`<button class="btn-sec" onclick="prevStep()"><span class="material-symbols-rounded" style="font-size:.95rem;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">arrow_back</span>Précédent</button>`:''}
+    <button class="btn-prim" onclick="${isLast?`finishLesson('${lesson.id}',${lesson.xp})`:'nextStep()'}">
+      ${isLast?`<span class="material-symbols-rounded" style="font-size:.95rem;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">check_circle</span>Terminer la leçon`:`Suivant <span class="material-symbols-rounded" style="font-size:.95rem;vertical-align:middle;margin-left:4px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">arrow_forward</span>`}
+    </button>`;
+}
+
+function nextStep(){
+  const l=findLesson(CLS_ID);
+  if(!l||CSTEP>=l.steps.length-1)return;
+  CSTEP++;refreshProg(l);renderStep(l,CSTEP);
+}
+function prevStep(){
+  const l=findLesson(CLS_ID);
+  if(!l||CSTEP<=0)return;
+  CSTEP--;refreshProg(l);renderStep(l,CSTEP);
+}
+
+async function finishLesson(id,xp){
+  const isNew=!PROG.completedLessons.includes(id);
+  if(isNew){
+    PROG.completedLessons.push(id);
+    PROG.xp+=xp;
+    PROG.level=Math.floor(PROG.xp/200)+1;
+    showXp('+'+xp+' XP');
+    showToast('success','Leçon terminée ! +'+xp+' XP gagné');
+
+    // 1. Sauvegarde progression (local + Supabase)
+    await saveProgress();
+
+    // 2. Enregistrer la leçon complétée dans Supabase
+    if(SB&&CU?.isSB){
+      SB.from('completed_lessons').upsert({
+        user_id:  CU.id,
+        lesson_id: id,
+        xp_earned: xp
+      },{onConflict:'user_id,lesson_id',ignoreDuplicates:true})
+      .then(()=>{ updateSyncBadge('cloud') })
+      .catch(e=>{ console.warn('lesson sync failed:',e.message); updateSyncBadge('local') });
+    }
+  }
+  setTimeout(()=>showPage('courses'),1300);
+}
+
+/* ══════════════════════════════════════════════
+   CODE RUNNER
+══════════════════════════════════════════════ */
+function runCode(cid,btnId){
+  const output=window._outs[cid];
+  if(!output)return;
+  const el=document.getElementById(cid);
+  const btn=document.getElementById(btnId);
+  if(!el)return;
+  el.classList.remove('empty');
+  el.innerHTML='<span class="caret"></span>';
+  if(btn){btn.textContent='⏳ En cours...';btn.disabled=true}
+  const lines=output.split('\n');
+  let txt='',li=0,ci=0;
+  setTimeout(()=>{
+    const iv=setInterval(()=>{
+      if(li>=lines.length){
+        clearInterval(iv);
+        el.innerHTML=eh(output).replace(/\n/g,'<br>');
+        if(btn){btn.textContent='▶ Exécuter';btn.disabled=false}
+        return;
+      }
+      const line=lines[li];
+      if(ci<line.length){txt+=line[ci];ci++}
+      else{txt+='\n';li++;ci=0}
+      el.innerHTML=eh(txt).replace(/\n/g,'<br>')+'<span class="caret"></span>';
+    },16);
+  },260);
+}
+
+/* ══════════════════════════════════════════════
+   RENDER HOME
+══════════════════════════════════════════════ */
+function renderHome(){
+  const h=new Date().getHours();
+  const gr=h<5?'Bonsoir':h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
+  document.getElementById('greetTime').textContent=gr+' 👋';
+  document.getElementById('greetName').textContent=CU?.name||'—';
+  document.getElementById('st-xp').textContent=PROG.xp;
+  document.getElementById('st-done').textContent=PROG.completedLessons.length;
+  document.getElementById('st-lvl').textContent=PROG.level;
+  document.getElementById('streakNum').textContent=PROG.streak;
+  renderStreakDays();
+  renderConCard();
+  renderHomeMods();
+}
+
+function renderStreakDays(){
+  const DAYS=['L','M','M','J','V','S','D'];
+  const raw=new Date().getDay(),ti=raw===0?6:raw-1;
+  document.getElementById('streakDays').innerHTML=DAYS.map((d,i)=>{
+    const cl=i<ti?'sday-done':i===ti?'sday-today':'sday-soon';
+    return`<div class="sday ${cl}">${d}</div>`;
+  }).join('');
+}
+
+function renderConCard(){
+  let nextL=null,modT='',li=0;
+  outer:for(const mod of Object.values(CUR)){
+    for(let i=0;i<mod.lessons.length;i++){
+      if(!PROG.completedLessons.includes(mod.lessons[i].id)){
+        nextL=mod.lessons[i];modT=mod.title;li=i+1;break outer;
+      }
+    }
+  }
+  const card=document.getElementById('conCard');
+  if(!nextL){
+    card.innerHTML=`<div style="text-align:center;padding:10px 0;color:var(--g4);font-weight:700;font-size:.95rem">🏆 Tous les cours terminés ! Félicitations !</div>`;
+    card.onclick=null;return;
+  }
+  const mod=Object.values(CUR).find(m=>m.lessons.some(l=>l.id===nextL.id));
+  const done=mod.lessons.filter(l=>PROG.completedLessons.includes(l.id)).length;
+  const pct=Math.round(done/mod.lessons.length*100);
+  document.getElementById('conTitle').textContent=nextL.title;
+  document.getElementById('conSub').textContent=`Module : ${modT} · Leçon ${li}`;
+  document.getElementById('conBar').style.width=pct+'%';
+  card.onclick=()=>openLesson(nextL.id);
+}
+
+function renderHomeMods(){
+  document.getElementById('homeMods').innerHTML=Object.entries(CUR).map(([,mod])=>{
+    const done=mod.lessons.filter(l=>PROG.completedLessons.includes(l.id)).length;
+    const t=mod.lessons.length,pct=Math.round(done/t*100);
+    return`<div class="hm-card" onclick="showPage('courses')">
+      <div class="hm-icon" style="background:${mod.bg}">${mod.icon}</div>
+      <div class="hm-info">
+        <div class="hm-name">${mod.title}</div>
+        <div class="hm-meta">${t} leçons · ${done}/${t} terminées</div>
+        <div class="pbar-bg"><div class="pbar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <span class="chev"><span class="chev-ic material-symbols-rounded" style="font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24">chevron_right</span></span>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   RENDER COURSES
+══════════════════════════════════════════════ */
+function renderCourses(){
+  document.getElementById('coursesMods').innerHTML=Object.entries(CUR).map(([,mod])=>{
+    const done=mod.lessons.filter(l=>PROG.completedLessons.includes(l.id)).length;
+    const items=mod.lessons.map((l,i)=>{
+      const isDone=PROG.completedLessons.includes(l.id);
+      const isCur=!isDone&&(i===0||PROG.completedLessons.includes(mod.lessons[i-1]?.id));
+      const cls=isDone?'lst-done':isCur?'lst-cur':'lst-todo';
+      const ico=isDone
+        ?`<span class="material-symbols-rounded" style="font-size:1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">check_circle</span>`
+        :isCur
+          ?`<span class="material-symbols-rounded" style="font-size:1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">play_circle</span>`
+          :`<span class="material-symbols-rounded" style="font-size:1rem;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24">circle</span>`;
+      return`<div class="litem" onclick="openLesson('${l.id}')">
+        <div class="lst ${cls}">${ico}</div>
+        <div class="linfo"><div class="llbl">${l.title}</div><div class="lxp">+${l.xp} XP</div></div>
+        <span class="chev-ic material-symbols-rounded" style="font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24">chevron_right</span>
+      </div>`;
+    }).join('');
+    return`<div class="course-mod">
+      <div class="mod-hdr">
+        <div class="mod-ico" style="background:${mod.bg};color:${mod.color}">${mod.icon}</div>
+        <div><div class="mod-ttl">${mod.title}</div><div class="mod-cnt">${done}/${mod.lessons.length} leçons terminées</div></div>
+      </div>
+      <div class="lesson-list">${items}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   RENDER PROFILE
+══════════════════════════════════════════════ */
+function renderProfile(){
+  document.getElementById('profAv').textContent=CU?.avatar||'🧑';
+  document.getElementById('profName').textContent=CU?.name||'—';
+  document.getElementById('ps-streak').textContent=PROG.streak;
+  document.getElementById('ps-xp').textContent=PROG.xp;
+  document.getElementById('ps-done').textContent=PROG.completedLessons.length;
+  const ttls=['Débutant','Apprenti','Initié','Praticien','Expert','Maître','Grand Maître'];
+  const t=ttls[Math.min(PROG.level-1,ttls.length-1)];
+  document.getElementById('profLvl').textContent=`Niveau ${PROG.level} · ${t} Pythoniste`;
+  const xpNx=PROG.level*200,xpPv=(PROG.level-1)*200;
+  const pct=Math.min(Math.round((PROG.xp-xpPv)/(xpNx-xpPv)*100),100);
+  document.getElementById('xpFill').style.width=pct+'%';
+  document.getElementById('xpValTxt').textContent=`${PROG.xp}/${xpNx} XP`;
+  document.getElementById('xpHint').textContent=`Encore ${xpNx-PROG.xp} XP pour le Niveau ${PROG.level+1}`;
+  const progData={xp:PROG.xp,streak:PROG.streak,done:PROG.completedLessons.length,completedLessons:PROG.completedLessons};
+  document.getElementById('achGrid').innerHTML=ACHIEVEMENTS.map(a=>{
+    const ok=a.cond(progData);
+    return`<div class="ach-c ${ok?'unlocked':'locked'}"><div class="ach-ico"><span class="material-symbols-rounded" style="font-size:1.5rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">${a.icon}</span></div><div class="ach-nm">${a.name}</div></div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════ */
+function eh(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function showToast(ico,msg){
+  const icoEl=document.getElementById('tIco');
+  // Si l'ico est un nom d'icône Material, l'afficher avec le composant
+  const matIcons={success:'check_circle',error:'error',info:'info',warn:'warning','🎉':'celebration','⚠️':'warning'};
+  const matName=matIcons[ico];
+  if(matName){
+    icoEl.innerHTML=`<span class="material-symbols-rounded" style="font-size:1rem;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">${matName}</span>`;
+  } else {
+    icoEl.textContent=ico;
+  }
+  document.getElementById('tMsg').textContent=msg;
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function showXp(txt){
+  const p=document.getElementById('xpPop');
+  p.innerHTML=`<span class="material-symbols-rounded" style="font-size:1rem;vertical-align:middle;margin-right:3px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">bolt</span>${txt}`;
+  p.classList.add('show');
+  setTimeout(()=>p.classList.remove('show'),2000);
+}
+
+/* ══════════════════════════════════════════════
+   PARTICLES
+══════════════════════════════════════════════ */
+function createParticles(){
+  const c=document.getElementById('particles');
+  if(!c)return;
+  const cols=['#7c3aed','#8b5cf6','#a78bfa','#ec4899','#6d28d9'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');
+    p.className='ptcl';
+    const sz=Math.random()*3+1;
+    p.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${cols[~~(Math.random()*cols.length)]};animation-duration:${Math.random()*18+10}s;animation-delay:${Math.random()*14}s;opacity:${Math.random()*.6}`;
+    c.appendChild(p);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   INIT APP (after login)
+══════════════════════════════════════════════ */
+function initApp(){
+  createParticles();
+  // Update desktop nav user info
+  if(document.getElementById('ndAvatar'))document.getElementById('ndAvatar').textContent=CU.avatar;
+  if(document.getElementById('ndName'))document.getElementById('ndName').textContent=CU.name;
+  showPage('home');
+}
+
+/* ══════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════ */
+(async function boot(){
+  // Construire la grille d'avatars
+  document.getElementById('avatarGrid').innerHTML=
+    AVATARS.map(av=>`<div class="avatar-opt${av===AVATARS[0]?' selected':''}" data-av="${av}" onclick="selectAvatar(this)">${av}</div>`).join('');
+
+  if(SB){
+    /* ── Mode Supabase ── */
+    SB.auth.onAuthStateChange(async(event,session)=>{
+      if(event==='SIGNED_IN'&&session&&!CU){
+        await doLoginSB(session.user);
+      }
+    });
+    const {data:{session}}=await SB.auth.getSession();
+    if(session){ await doLoginSB(session.user); return; }
+
+    // Fallback cache local (hors-ligne)
+    const cached=getLocalSession();
+    if(cached?.isSB){
+      const cu=localStorage.getItem('pl_cu_'+cached.userId);
+      if(cu){
+        CU=JSON.parse(cu); loadProgLocal(); updateStreakOnVisit();
+        hideAuth(); updateSyncBadge('local'); initApp();
+        showToast('warn','Mode hors-ligne — reconnecte-toi pour synchroniser');
+        return;
+      }
+    }
+  } else {
+    /* ── Mode localStorage pur ── */
+    const session=getLocalSession();
+    if(session&&!session.isSB){
+      const users=getUsers();
+      const user=users.find(u=>u.id===session.userId);
+      if(user){ CU=user; loadProgLocal(); updateStreakOnVisit(); hideAuth(); updateSyncBadge('local'); initApp(); return; }
+    }
+  }
+  document.getElementById('authScreen').style.display='flex';
+})();
+
+function selectAvatar(el){
+  document.querySelectorAll('.avatar-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>
