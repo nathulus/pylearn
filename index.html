@@ -2175,18 +2175,27 @@ async function handleLogin(e){
   try{
     if(SB){
       /* ─ Mode Supabase ─ */
-      let data,error;
+      let data,error,timedOut=false;
       try{
         ({data,error}=await withTimeout(
           SB.auth.signInWithPassword({email,password:pwd}),
-          8000
+          12000  // 12s pour laisser le temps au projet de se réveiller
         ));
       }catch(timeoutErr){
-        // Timeout : essayer le cache local
-        const users=getUsers();
-        const cached=users.find(u=>u.email===email&&u.password===pwd);
-        if(cached){showAuthErr('loginErr','⚠️ Supabase inaccessible — connexion avec le compte local en cache.');setTimeout(()=>doLoginLocal(cached),1200);}
-        else{showAuthErr('loginErr','Supabase inaccessible et aucun compte local trouvé. Vérifie ta connexion.');}
+        timedOut=true;
+      }
+
+      if(timedOut){
+        // Cherche dans TOUS les caches locaux possibles
+        const localByEmail = _findLocalByEmail(email, pwd);
+        if(localByEmail){
+          showAuthErr('loginErr','⚠️ Supabase inaccessible — connecté avec le compte local en cache.');
+          setTimeout(()=>doLoginLocal(localByEmail), 1200);
+        } else {
+          showAuthErr('loginErr',
+            '🔴 Supabase inaccessible — le projet est peut-être en veille.\n' +
+            'Va sur supabase.com → ton projet → clique "Restore" puis réessaie dans 1 minute.');
+        }
         return;
       }
       if(error){showAuthErr('loginErr',translateSBError(error));return}
@@ -2194,8 +2203,7 @@ async function handleLogin(e){
       catch{ showAuthErr('loginErr','Connecté mais erreur de chargement du profil. Réessaie.'); }
     } else {
       /* ─ Mode localStorage ─ */
-      const users=getUsers();
-      const user=users.find(u=>u.email===email&&u.password===pwd);
+      const user=_findLocalByEmail(email,pwd);
       if(!user){showAuthErr('loginErr','Email ou mot de passe incorrect.');return}
       doLoginLocal(user);
     }
@@ -2207,31 +2215,89 @@ async function handleLogin(e){
   }
 }
 
+/* Cherche un utilisateur local par email+mdp dans toutes les sources */
+function _findLocalByEmail(email, pwd){
+  // Source 1 : tableau des users locaux
+  const users = getUsers();
+  const fromList = users.find(u=>u.email===email && (u.password===pwd||!pwd));
+  if(fromList) return fromList;
+  // Source 2 : sessions cachées (comptes Supabase dégradés en local)
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(!k?.startsWith('pl_cu_')) continue;
+    try{
+      const u=JSON.parse(localStorage.getItem(k));
+      if(u?.email===email){
+        // Vérifie le mot de passe si dispo, sinon accepte (compte Supabase dégradé)
+        if(!u.password||u.password===pwd) return u;
+      }
+    }catch(_){}
+  }
+  return null;
+}
+
 /* ══════════════════════════════════════════════
    LOGIN HELPERS
 ══════════════════════════════════════════════ */
 async function doLoginSB(sbUser, fallback=null){
   updateSyncBadge('syncing');
   try{
-    // Charger le profil depuis Supabase
-    const {data:prof}=await SB.from('profiles').select('name,avatar').eq('id',sbUser.id).single();
+    // Test rapide : la table profiles existe-t-elle ?
+    const {error:testErr}=await withTimeout(
+      SB.from('profiles').select('id').eq('id',sbUser.id).maybeSingle(),
+      4000
+    );
+    if(testErr?.code==='42P01'||testErr?.message?.includes('does not exist')){
+      // Table absente → SQL pas encore exécuté
+      throw new Error('TABLE_MISSING');
+    }
+
+    const {data:prof}=await withTimeout(
+      SB.from('profiles').select('name,avatar').eq('id',sbUser.id).single(),
+      4000
+    );
     const name  = prof?.name   || sbUser.user_metadata?.name   || fallback?.name   || 'Utilisateur';
     const avatar= prof?.avatar || sbUser.user_metadata?.avatar || fallback?.avatar || '🧑‍💻';
     CU={id:sbUser.id,name,avatar,email:sbUser.email,isSB:true};
-    // Cacher aussi en local pour un démarrage hors-ligne rapide
     localStorage.setItem('pl_session', JSON.stringify({userId:sbUser.id,isSB:true}));
     localStorage.setItem('pl_cu_'+sbUser.id, JSON.stringify(CU));
-    await loadProgSB();
+    await withTimeout(loadProgSB(),5000);
     updateStreakOnVisit();
     hideAuth();
     updateSyncBadge('cloud');
     initApp();
   } catch(err){
-    console.warn('Supabase login fallback:', err);
-    // Fallback cache local si offline
-    const cached=localStorage.getItem('pl_cu_'+sbUser.id);
-    if(cached){ CU=JSON.parse(cached); loadProgLocal(); updateStreakOnVisit(); hideAuth(); updateSyncBadge('local'); initApp(); }
-    else{ showAuthErr('loginErr','Connexion échouée. Vérifie ta connexion internet.'); }
+    console.warn('[doLoginSB] fallback local. Raison:', err?.message||err);
+
+    if(err?.message==='TABLE_MISSING'){
+      // SQL schema non exécuté : utiliser les métadonnées auth
+      const name  = sbUser.user_metadata?.name   || fallback?.name   || 'Utilisateur';
+      const avatar= sbUser.user_metadata?.avatar || fallback?.avatar || '🧑‍💻';
+      CU={id:sbUser.id,name,avatar,email:sbUser.email,isSB:false};
+      localStorage.setItem('pl_session',JSON.stringify({userId:sbUser.id,isSB:false}));
+      localStorage.setItem('pl_cu_'+sbUser.id,JSON.stringify(CU));
+      loadProgLocal();updateStreakOnVisit();hideAuth();
+      updateSyncBadge('local');initApp();
+      showToast('warn','Tables SQL manquantes — exécute supabase_schema.sql dans Supabase');
+      return;
+    }
+
+    // Fallback cache local si hors-ligne ou projet Supabase en pause
+    const name  = fallback?.name   || sbUser.user_metadata?.name   || 'Utilisateur';
+    const avatar= fallback?.avatar || sbUser.user_metadata?.avatar || '🧑‍💻';
+    CU={id:sbUser.id,name,avatar,email:sbUser.email,isSB:false};
+    // Sauvegarder dans les deux caches pour que la connexion locale fonctionne ensuite
+    localStorage.setItem('pl_session',JSON.stringify({userId:sbUser.id,isSB:false}));
+    localStorage.setItem('pl_cu_'+sbUser.id,JSON.stringify(CU));
+    // Ajouter aussi dans getUsers() si absent
+    const users=getUsers();
+    if(!users.find(u=>u.id===sbUser.id)){
+      users.push({...CU,password:'__sb__',createdAt:new Date().toISOString()});
+      saveUsers(users);
+    }
+    loadProgLocal();updateStreakOnVisit();hideAuth();
+    updateSyncBadge('local');initApp();
+    showToast('warn','Supabase inaccessible — mode local activé');
   }
 }
 
@@ -2722,12 +2788,21 @@ function initApp(){
         await doLoginSB(session.user);
       }
     });
-    const {data:{session}}=await SB.auth.getSession();
+
+    // getSession avec timeout court pour ne pas bloquer au démarrage
+    let session=null;
+    try{
+      const res=await withTimeout(SB.auth.getSession(),4000);
+      session=res?.data?.session||null;
+    }catch(e){
+      console.warn('[boot] getSession timeout/erreur — mode local');
+    }
+
     if(session){ await doLoginSB(session.user); return; }
 
-    // Fallback cache local (hors-ligne)
+    // Fallback cache local (projet Supabase en pause ou hors-ligne)
     const cached=getLocalSession();
-    if(cached?.isSB){
+    if(cached){
       const cu=localStorage.getItem('pl_cu_'+cached.userId);
       if(cu){
         CU=JSON.parse(cu); loadProgLocal(); updateStreakOnVisit();
@@ -2739,7 +2814,7 @@ function initApp(){
   } else {
     /* ── Mode localStorage pur ── */
     const session=getLocalSession();
-    if(session&&!session.isSB){
+    if(session){
       const users=getUsers();
       const user=users.find(u=>u.id===session.userId);
       if(user){ CU=user; loadProgLocal(); updateStreakOnVisit(); hideAuth(); updateSyncBadge('local'); initApp(); return; }
